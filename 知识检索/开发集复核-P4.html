@@ -1,0 +1,273 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>开发集正例复核　·　P4</title><style>
+:root{--bg:#f5f7f5;--card:#fff;--ink:#1a1f1c;--body:#3d453f;--muted:#7a827c;
+--line:#dee4de;--green:#2f6b57;--rust:#b0502a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);font-size:15px;
+line-height:1.7;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 90px}
+h1{font-size:24px;color:var(--ink);margin:0 0 6px}
+.rule{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin:18px 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
+.card header{padding:10px 16px;border-bottom:1px solid var(--line);background:#fafbfa}
+.num{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--green)}
+.pair{display:grid;grid-template-columns:1fr 1fr}
+.pair section{padding:14px 16px}
+.pair section:first-child{border-right:1px solid var(--line);background:#fcfcfb}
+h4{margin:0 0 8px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:13.5px;line-height:1.65;
+font-family:inherit;max-height:340px;overflow:auto}
+.card footer{display:flex;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.note{flex:1;min-width:200px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font:inherit;font-size:13px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+padding:12px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
+button{padding:9px 22px;border:0;border-radius:5px;background:var(--green);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{background:#bbb;cursor:not-allowed}
+#out{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-top:24px;display:none}
+textarea{width:100%;height:220px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.bad{color:var(--rust);font-weight:600}.ok{color:var(--green)}
+@media(max-width:760px){.pair{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>开发集正例复核</h1>
+<div class="rule"><b>判断标准（《冲突判定标注规范》v1.0.1 §五）：「后」是否让「前」里的某个说法不再成立？</b>
+<ul><li><b>冲突</b> —— 前说 A，后说「A 是错的 / 已过时 / 更正为 B」</li>
+<li><b>不是冲突</b> —— 纯追加（前仍成立）／润色（信息没变）／部分推翻但核心用途未变／两段不是一件事</li></ul>
+<b>注意</b>：本轮不显示时间戳与任何既往裁决。就按 §五 的流程判，不要去猜「这条以前被判成什么」。</div>
+
+<article class="card"><header><span class="num">01</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [PTTime 做种](pttime-seedbox.md) — 📐开头有整体架构总览(切session先看)；VM100 qbit-pt+阿里云反向隧道，底仓保护已取消，PTT-Self保护尼古喵喵/media库</pre></section>
+<section><h4>后</h4><pre>- [PTTime 做种](pttime-seedbox.md) — ⚠️2026-07-31做种盘已拔除，16个种子全missingFiles，PT做种事实停摆(架构总览记录的是拔盘前状态)</pre></section></div>
+<footer>
+<label><input type="radio" name="q1" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q1" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">02</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [J盘希捷老盘濒死](seagate-j-drive-failing.md) — 做种盘实为2009年ST9500325AS，自检失败/147不可纠正错误，疑翻新盘维权；磁盘取证别凭DiskN编号跨期归因</pre></section>
+<section><h4>后</h4><pre>- [J盘希捷老盘濒死](seagate-j-drive-failing.md) — ✅已物理拔除退役(SMART本判死刑+PVE断电SATA失联)；磁盘取证别凭DiskN编号跨期归因</pre></section></div>
+<footer>
+<label><input type="radio" name="q2" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q2" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">03</span></header>
+<div class="pair"><section><h4>前</h4><pre>## ⚠️ 两个必须处理的数据特性</pre></section>
+<section><h4>后</h4><pre>## 🔴🔴 死链问题——**索引里近一半是失效链接**（2026-07-17 用户发现风骚律师链接失效后查证）
+- **抽样 39 个（2024/25/26 各13）：失效率 46%**。按年份：**2024 约62% / 2025 约62% / 2026 约15%**——**越老死得越多**。
+- **判活方法（不用登录，实测准确）**：GET `https://pan.baidu.com/s/&lt;surl&gt;`（不带 pwd）：
+  - **死链** → 标题 `百度网盘-链接不存在`，**`errno = -7`**，不跳转
+  - **活链** → 302 到 `/share/init?s</pre></section></div>
+<footer>
+<label><input type="radio" name="q3" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q3" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">04</span></header>
+<div class="pair"><section><h4>前</h4><pre>① 固化(CP4)已完成(2026-07-15):`sudo ostree admin undeploy 0` 删掉了干净的 `.2` 槽,现 `* .1 Unlocked:hotfix` 为默认启动槽、`.0` 为 pinned 干净回滚 → 重启会正确进 `.1`,成果保留。</pre></section>
+<section><h4>后</h4><pre>① ⚠️**重大教训(2026-07-28 验证)**:`unshare -m` 装的东西是**临时层,重启全部蒸发**(embedding/runtime/sshd 都没了、退回出厂 base 版,emb_test 报 undefined symbol)。&quot;固化&quot;只保证了开机进 `.1`(这点成功),但**覆盖层内容不持久**——写入进了临时层而非持久的 `usr-upper`(重启后 usr-upper 是空的)。且重启后 hotfix 变&quot;假解锁&quot;:flag=Unlocked:hotfix 但 `/usr` 挂成 **ro**,`ostree admin` **无 lock 子命令**、</pre></section></div>
+<footer>
+<label><input type="radio" name="q4" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q4" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">05</span></header>
+<div class="pair"><section><h4>前</h4><pre>**用户选择（2026-07-05）**：群聊+私聊都要；群里「消息都尝试响应」→ 配 `groups.requireMention:false`（但受上面@-only限制）。用户**自己去 q.qq.com 注册**，稍后给我 AppID/AppSecret。
+
+**待办 Part B（拿到凭证后我执行）**：① `openclaw plugins install @openclaw/qqbot` ② `qqbot` 加进 `plugins.allow` ③ 写 `plugins.entries.qqbot`（appId + clientSecretFile[chmod 600] + gro</pre></section>
+<section><h4>后</h4><pre>**✅ 已完成接入（2026-07-05）**：AppID `[REDACTED_APPID]`，AppSecret 存 `/root/.openclaw/credentials/qqbot-main.secret`(chmod 600)。配置在**顶层 `channels.qqbot.accounts.main`**（appId + clientSecretFile + groups.default.requireMention:false），`qqbot` 已入 `plugins.allow`。日志确认 `Access token obtained` + `WebSocket connec</pre></section></div>
+<footer>
+<label><input type="radio" name="q5" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q5" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">06</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3 上 CloudDrive2 挂百度网盘当片库(不用买硬盘)，虚机加 [REDACTED_IP] 网卡让电视能连，实测 6.7-11MB/s；+ AutoBangumi/qB 自动追番(蜜柑RSS)，FakeIP×SSRF、qB须root等五大坑；+ 电视[REDACTED_IP]开机ADB自动进Jellyfin；+ ✅字幕预热自动化(收藏范围/0-6点窗口)根治&quot;获取额外数据&quot;卡5-10分钟；+ PT打工号(500G盘/qbit-pt就绪)撞上联通CGNAT大内网</pre></section>
+<section><h4>后</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3上CloudDrive2挂百度网盘当片库；追番/字幕预热自动化跑通；❌tv-autostart已停用(用户不要了)；⚠️疯狂动物城2/Lucky S1因PT盘拔除从库消失(未决定是否找回)</pre></section></div>
+<footer>
+<label><input type="radio" name="q6" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q6" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">07</span></header>
+<div class="pair"><section><h4>前</h4><pre>**为 QQ 群新建的 agent**：id `mako`，显示名**常陆茉子**🥷，workspace `/root/.openclaw/workspace-mako`，模型 maxthinking。纯娱乐群 bot。</pre></section>
+<section><h4>后</h4><pre>**为 QQ 群新建的 agent**：id `mako`，显示名**常陆茉子**🥷，workspace `/root/.openclaw/workspace-mako`，模型 **`catie-sukaka-v1/gcli-gemini-3.1-pro-preview`**（2026-07-09 从 maxthinking 换成中等档 pro-preview，中转/密钥不变；改 agent.model 字符串→config validate→重启）。纯娱乐群 bot。</pre></section></div>
+<footer>
+<label><input type="radio" name="q7" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q7" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">08</span></header>
+<div class="pair"><section><h4>前</h4><pre>**实测数据**（决定方案可行性）：
+- 百度网盘经 CloudDrive2 拉流：冷读 **6.7 MB/s**，seek 后 **11.3 MB/s**，seek 延迟 603ms。**超级会员没被严重限速**。
+- 结论：1080P/普通4K **流畅无压力**；**4K 蓝光原盘(50Mbps+)会卡，别下**。
+- Jellyfin `DirectPlay=True` → **不转码**，电视自己解码。所以虚机**没核显也无所谓**，不需要折腾核显直通。</pre></section>
+<section><h4>后</h4><pre>**实测数据**（决定方案可行性）：
+- 百度网盘经 CloudDrive2 拉流：冷读 **6.7 MB/s**，seek 后 **11.3 MB/s**，seek 延迟 603ms。**超级会员没被严重限速**。
+- Jellyfin `DirectPlay=True` → **不转码**，电视自己解码。所以虚机**没核显也无所谓**，不需要折腾核显直通。
+
+## 🎯 码率天花板——2026-07-17 电视端实测校准（这是硬数据，别再拍脑袋）
+- **网盘实测吞吐 8.8 MB/s = 70.4 Mbps**（`dd` 冷读和 seek 后都是 8.8，很稳定）。
+- **电视实测**：</pre></section></div>
+<footer>
+<label><input type="radio" name="q8" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q8" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">09</span></header>
+<div class="pair"><section><h4>前</h4><pre>**动机**：用户讨厌国内流媒体的臃肿界面，又嫌 Netflix 中文字幕缺失/机翻。自建 Jellyfin + 国内压制资源（人工精校中字）是唯一能同时满足两者的方案。他是&quot;精选型&quot;观众（不天天刷），所以**不需要** PT 站 / Radarr 全自动流水线。</pre></section>
+<section><h4>后</h4><pre>**动机**：用户讨厌国内流媒体的臃肿界面，又嫌 Netflix 中文字幕缺失/机翻。自建 Jellyfin + 国内压制资源（人工精校中字）是唯一能同时满足两者的方案。
+
+&gt; ⚠️ **2026-07-17 用户亲自纠正了上面这段的两处理解偏差，务必按新的来**：
+&gt; 1. **&quot;臃肿&quot;指的是国产系统嵌套广告和一堆商业内容，NOT 指内容/库存多**。Jellyfin 自动化**已经解决了这个问题**。
+&gt; 2. **他要的就是库存多！** 目的是**家人想看新剧时能直接进 Jellyfin 找到、直接看**（配合 [[butler-anime-bot]] 的家庭点播）。**库存大是功能，不</pre></section></div>
+<footer>
+<label><input type="radio" name="q9" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q9" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">10</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — ✅已接入，新建 agent「常陆茉子」(mako)、cron工具schema坑、群@-only限制</pre></section>
+<section><h4>后</h4><pre>- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — ✅已接入，新建 agent「常陆茉子」(mako)、cron工具schema坑、群@-only限制
+- [Z-Image-Turbo 生图部署](zimage-turbo-deploy.md) — G盘 ComfyUI+diffusers 双路，8GB显存跑通，魔搭/阿里云镜像，uv缓存移G盘避免C盘爆</pre></section></div>
+<footer>
+<label><input type="radio" name="q10" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q10" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">11</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [PTTime 做种](pttime-seedbox.md) — ✅2026-07-26迁移到VM100(500G盘SATA直通+cron自动化)，笔记本自动化已停；qbit-pt容器、Docker绑定挂载不感知新mount的坑</pre></section>
+<section><h4>后</h4><pre>- [PTTime 做种](pttime-seedbox.md) — 📐开头有整体架构总览(切session先看)；VM100 qbit-pt+阿里云反向隧道，底仓保护已取消，PTT-Self保护尼古喵喵/media库</pre></section></div>
+<footer>
+<label><input type="radio" name="q11" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q11" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">12</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3 上 CloudDrive2 挂百度网盘当片库(不用买硬盘)，虚机加 [REDACTED_IP] 网卡让电视能连，实测 6.7-11MB/s；+ AutoBangumi/qB 自动追番(蜜柑RSS)，FakeIP×SSRF、qB须root等五大坑；+ 电视[REDACTED_IP]开机ADB自动进Jellyfin；+ PT打工号(500G盘/qbit-pt就绪)撞上联通CGNAT大内网</pre></section>
+<section><h4>后</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3 上 CloudDrive2 挂百度网盘当片库(不用买硬盘)，虚机加 [REDACTED_IP] 网卡让电视能连，实测 6.7-11MB/s；+ AutoBangumi/qB 自动追番(蜜柑RSS)，FakeIP×SSRF、qB须root等五大坑；+ 电视[REDACTED_IP]开机ADB自动进Jellyfin；+ ✅字幕预热自动化(收藏范围/0-6点窗口)根治&quot;获取额外数据&quot;卡5-10分钟；+ PT打工号(500G盘/qbit-pt就绪)撞上联通CGNAT大内网</pre></section></div>
+<footer>
+<label><input type="radio" name="q12" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q12" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">13</span></header>
+<div class="pair"><section><h4>前</h4><pre>**为 QQ 群新建的 agent**：id `mako`，显示名**常陆茉子**⛩️，workspace `/root/.openclaw/workspace-mako`，模型 maxthinking。人设=《千恋万花》常陆茉子**前期人设**+严格防剧透（写在 SOUL.md）。纯娱乐群 bot。</pre></section>
+<section><h4>后</h4><pre>**为 QQ 群新建的 agent**：id `mako`，显示名**常陆茉子**🥷，workspace `/root/.openclaw/workspace-mako`，模型 maxthinking。纯娱乐群 bot。人设写在 workspace 的 SOUL.md/IDENTITY.md/USER.md（每次开会话自动读取，改文件即生效、无需重启）。
+
+**正确人设（用户 2026-07-05 亲自改定，别用错）**：《千恋＊万花》常陆茉子**前期公开人设**——朝武芳乃的护卫/见习忍者、将臣青梅竹马；**爱恶作剧开玩笑、游刃有余、爱捉弄人、偶尔开恋爱玩笑/小黄腔**；核心萌点**「攻高防</pre></section></div>
+<footer>
+<label><input type="radio" name="q13" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q13" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">14</span></header>
+<div class="pair"><section><h4>前</h4><pre>Ubuntu 虚机（hostname `device_e`，IP `[REDACTED_IP]`，SSH 用户 `user_a`/密码[REDACTED_SECRET] sudo）上跑着 **OpenClaw**（AI Agent 框架，`/usr/local/bin/openclaw`，手动安装非包管理器，版本 2026.4.23）。见 [[server-pve-network]]。</pre></section>
+<section><h4>后</h4><pre>Ubuntu 虚机（hostname `device_e`，IP `[REDACTED_IP]`，SSH 用户 `user_a`/密码[REDACTED_SECRET] sudo）上跑着 **OpenClaw**（AI Agent 框架）。见 [[server-pve-network]]。
+
+**安装方式**：其实是 **npm 全局包 `openclaw`**，装在独立 node `/opt/node-v24.16.0-linux-x64`（node v24.16.0 / npm 11.13.0）下，`/usr/local/bin/openclaw` → 该 node 的 bin 软链。升级</pre></section></div>
+<footer>
+<label><input type="radio" name="q14" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q14" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">15</span></header>
+<div class="pair"><section><h4>前</h4><pre>**下一步**：①盯Lionheart下到数据后↑上传是否经隧道涨起来(验证firewalled+隧道方案，硬指标)；②下载28.92GB考核项需另下50%/普通种(免费不计)；③催发号人5000魔力。</pre></section>
+<section><h4>后</h4><pre>**进展(2026-07-19)**：方案验证成功——上传涨到1.20GB、可连接=是、**魔力考核已通过**(4565.6)。上传还需28.8G、下载还需16.62G。**下载项：免费种其实照样计入下载量**(下载从1.08→13.38G，Godless/Lionheart都算了)，之前&quot;免费不计下载&quot;判断有误。
+
+**⚠️血泪坑：thin池写爆搞崩VM100(我的判断失误)**。VM根盘195G&quot;117G空闲&quot;是**精简置备虚数**——底层 `pve/data` thin池仅155G且早已100%超额分配(vm-100-disk-1占200G写了56%≈113G，加vm-101/102超额</pre></section></div>
+<footer>
+<label><input type="radio" name="q15" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q15" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">16</span></header>
+<div class="pair"><section><h4>前</h4><pre>### 开机自动进 Jellyfin（2026-07-17 建成并实测通过）</pre></section>
+<section><h4>后</h4><pre>### 开机自动进 Jellyfin（2026-07-17 建成，**❌ 2026-07-31 用户明确表示不再需要，已停用**）
+
+**现状**：`tv-autostart.service` 现在是 `disabled + inactive`。这次会话现场核查发现它已经不生效了(此前记录写的&quot;已enable&quot;是过时状态)，问用户是否要恢复，**用户明确答复不需要了**——不要再重新 enable 这个服务，脚本本体`/opt/media-stack/tv-autostart.sh`还留着但不用管它。以下是它当初的建设过程记录，仅供history参考，不代表当前状态：
+</pre></section></div>
+<footer>
+<label><input type="radio" name="q16" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q16" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">17</span></header>
+<div class="pair"><section><h4>前</h4><pre>**下一步（等用户的 PTTime 账号，2-3 天到）**：PTTime 是 **ratioless**（不要求做种）的中文 PT，完美契合&quot;网盘即片库、不做种、不买硬盘&quot;。到了之后：Prowlarr 加 PTTime 索引器（填 cookie/passkey）→ 自动 fullSync 给 Radarr/Sonarr → 稳定全自动 + 内封精校中字。别忘了那时把 BTdirectory 删掉。</pre></section>
+<section><h4>后</h4><pre>**🔴 关于 PTTime 的重大更正（2026-07-14 查证）**：**先前&quot;PTTime 是 ratioless、不用做种&quot;的说法是错的**（那是我 2026-07-13 的错误结论，别再信）。查证结果：
+- PTTime **沿用传统分享率体系**（无 H&amp;R）。**新手考核：30 天内 30GB 上传 + 30GB 下载 + 3000 魔力值，完不成删号**；分享率须 ≥1（官方底线 0.8），过了新手期不达标也封。魔力值靠**做种数×时长×体积**（挂小体积种子刷，做种数最多按 100 个计）。规则要求**关 DHT**、单种上传限速 &lt;100MB/s。
+- **这意味着&quot;网盘即</pre></section></div>
+<footer>
+<label><input type="radio" name="q17" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q17" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">18</span></header>
+<div class="pair"><section><h4>前</h4><pre>① 环境在 OSTree **hotfix 可写覆盖层(`* .1 Unlocked:hotfix`)**,且有 **`.2` pending 槽** → **重启整机可能掉进干净槽、全部丢失**,固化(CP4)未做,只注销别关机重启。② thin pool `pve/data` 已 `lvextend +14G`(→155G)后仍 ~87%,VG 仅剩 ~2G,再开 VM 需加硬盘。</pre></section>
+<section><h4>后</h4><pre>① 固化(CP4)已完成(2026-07-15):`sudo ostree admin undeploy 0` 删掉了干净的 `.2` 槽,现 `* .1 Unlocked:hotfix` 为默认启动槽、`.0` 为 pinned 干净回滚 → 重启会正确进 `.1`,成果保留。② ⚠️ **存储告急**:thin pool `pve/data`(155G)已用 **~94.5%,仅剩 ~8.9G**(CP2 装 runtime+模型实占约 10G);VG 仅剩 ~2G 扩不动;VM100(ubuntu ~105G)无 discard+无 agent 难安全回收,VM102 已 discard</pre></section></div>
+<footer>
+<label><input type="radio" name="q18" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q18" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+<div id="out"></div></div>
+<div class="bar"><span id="prog">0 / 18</span><button id="go" disabled>提交</button></div>
+<script>
+const KEY=[{"n": 1, "id": "K-0024", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 2, "id": "K-0025", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 3, "id": "K-0117", "layer": "DEV", "decoy": true, "who": "P4"}, {"n": 4, "id": "K-0100", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 5, "id": "K-0042", "layer": "DEV", "decoy": true, "who": "P4"}, {"n": 6, "id": "K-0023", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 7, "id": "K-0048", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 8, "id": "K-0078", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 9, "id": "K-0076", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 10, "id": "K-0013", "layer": "DEV", "decoy": true, "who": "P4"}, {"n": 11, "id": "K-0020", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 12, "id": "K-0021", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 13, "id": "K-0044", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 14, "id": "K-0002", "layer": "DEV", "decoy": true, "who": "P4"}, {"n": 15, "id": "K-0123", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 16, "id": "K-0088", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 17, "id": "K-0060", "layer": "DEV", "decoy": false, "who": "P4"}, {"n": 18, "id": "K-0098", "layer": "DEV", "decoy": true, "who": "P4"}], N=18;
+const prog=document.getElementById('prog'), go=document.getElementById('go');
+function upd(){const d=document.querySelectorAll('input[type=radio]:checked').length;
+prog.textContent=d+' / '+N; go.disabled=(d<N);}
+document.addEventListener('change',upd);
+go.onclick=()=>{
+const ans={};document.querySelectorAll('input[type=radio]:checked').forEach(r=>ans[+r.name.slice(1)]=r.value);
+const notes={};document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())notes[i+1]=e.value.trim();});
+let dOK=0,dTot=0;const rows=[];
+KEY.forEach(k=>{const v=ans[k.n];
+ if(k.decoy){dTot++;if(v==='not_conflict')dOK++;}
+ else rows.push({id:k.id,layer:k.layer,verdict:v,note:notes[k.n]||''});});
+const valid=(dOK===dTot);
+let h='<h3>结果</h3><p>诱饵：<b class="'+(valid?'ok':'bad')+'">'+dOK+' / '+dTot+'</b>'+
+ (valid?' —— 本轮有效':' —— <b class="bad">整轮作废，需重做</b>')+'</p>';
+if(valid){
+ const who=(KEY[0]&&KEY[0].who)||'', tag=who?('-'+who):'';
+ h+='<p><b>请把结果文件发回</b>（不要发这个 html —— 答案存在浏览器里，不在文件里）：</p>'+
+   '<p><button id="dl" style="background:#b0502a">下载结果 JSON</button>'+
+   '<span style="margin-left:12px;color:#7a827c;font-size:13px">'+
+   '文件名 裁决'+tag+'.json</span></p>'+
+   '<details><summary style="cursor:pointer;color:#7a827c;font-size:13px">'+
+   '下载不了？点开复制文本</summary>'+
+   '<textarea readonly>'+JSON.stringify(rows,null,1)+'</textarea></details>';
+ setTimeout(()=>{const b=document.getElementById('dl');if(!b)return;
+  b.onclick=()=>{try{
+   const blob=new Blob([JSON.stringify(rows,null,1)],{type:'application/json'});
+   const u=URL.createObjectURL(blob), a=document.createElement('a');
+   a.href=u; a.download='裁决'+tag+'.json'; document.body.appendChild(a);
+   a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1000);
+  }catch(e){alert('下载失败，请展开下方文本框手动复制');}};},0);}
+const o=document.getElementById('out');o.innerHTML=h;o.style.display='block';o.scrollIntoView({behavior:'smooth'});};
+
+// ── 自动保存：每次改动写 localStorage，重开自动恢复 ──────────
+const LSK='devrecheck_20260903_p4';
+function _save(){try{
+  const d={};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r=>d['r'+r.name]=r.value);
+  document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())d['n'+(i+1)]=e.value;});
+  localStorage.setItem(LSK,JSON.stringify(d));
+}catch(e){}}
+function _restore(){try{
+  const d=JSON.parse(localStorage.getItem(LSK)||'{}');let n=0;
+  Object.keys(d).forEach(k=>{
+    if(k[0]==='r'){const el=document.querySelector('input[name="'+k.slice(1)+'"][value="'+d[k]+'"]');
+                   if(el){el.checked=true;n++;}}
+    else{const e=document.querySelectorAll('.note')[(+k.slice(1))-1];if(e)e.value=d[k];}});
+  return n;
+}catch(e){return 0;}}
+document.addEventListener('change',_save);
+document.addEventListener('input',_save);
+(function(){const n=_restore();
+  if(n>0){const b=document.createElement('div');
+    b.style.cssText='background:#e4efea;border:1px solid #bcd4c9;border-radius:5px;padding:10px 16px;margin-bottom:18px;font-size:14px';
+    b.innerHTML='已恢复上次进度：<b>'+n+'</b> 题。继续做完即可；'+
+      '如需从头重来，按 F12 打开控制台执行 <code>localStorage.removeItem("'+LSK+'")</code> 后刷新。';
+    const w=document.querySelector('.wrap');w.insertBefore(b,w.children[2]);}})();
+
+upd();
+</script></body></html>

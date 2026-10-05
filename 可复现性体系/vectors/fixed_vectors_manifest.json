@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-08-05T03:32:58.776809+00:00",
+  "source": "官方麒麟KYSDK embedding（emb_serverd），在 192.168.100.50 上对 知识检索/{cases,workflows,templates}.jsonl 与 评测集/eval_set.jsonl（v1.3.0冻结版）逐条编码后固化导出，生成脚本见同目录 fixate_vectors.py / fixate_query_vectors.py",
+  "docs_tsv": {
+    "file": "docs.tsv",
+    "sha256": "f57904ded9c5539c5f089f93806393a5c243980c701cf16f579e6e4f1f9ad113",
+    "lines": 86
+  },
+  "eval_queries_tsv": {
+    "file": "eval_queries.tsv",
+    "sha256": "4a16ebe9b32394ce3f5aa053ca83b0c410fb214f929dc2e32d7001be494ce7ea",
+    "lines": 227
+  },
+  "eval_set_version": "1.3.0",
+  "eval_set_sha256": "2e198716fa14b587e5832c0eb94a4dca259ec78a8f6d9f2c44e352d5087a21f0",
+  "note": "v1.4.0 整链重跑后重新固化：语料 86 条、评测集 227 题",
+  "refreshed_at": "2026-08-14"
+}

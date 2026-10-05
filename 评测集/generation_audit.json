@@ -1,0 +1,616 @@
+{
+  "schema": "eval-generation-audit/1",
+  "backfilled": false,
+  "run_id": "gen-20260814T085700Z-0b8e6c2382e5",
+  "started_at": "2026-08-14T08:57:00.443238+00:00",
+  "written_at": "2026-08-14T09:30:08.544705+00:00",
+  "generator": {
+    "script": "评测集/generate_eval_candidates.py",
+    "script_sha256": "2da939bf59ae7657b839189f16b09feecf3c8a4ec01e3cbaeff08c12e8860251",
+    "render_units_sha256": "64833e879f7973072591934055a915f648f5409a14ec3b2e2e2d7e2b51dcb750",
+    "limit": null
+  },
+  "model": {
+    "requested": "claude-3-5-sonnet-20241022",
+    "responded": [
+      "openai/gemini-3.1-pro-preview"
+    ],
+    "endpoint": "http://192.168.100.3:8082/v1/messages",
+    "params": {
+      "max_tokens": 1024
+    },
+    "note": "模型输出不确定，本清单不声称重跑能得到同一批题；它记的是这批题产生时的条件，不是可复现的配方。"
+  },
+  "prompt": {
+    "version": "v2",
+    "system_prompt_sha256": "04fade46e210b4060717332db6f79c468d25bc13a89b390ab8d6069420a3cde1",
+    "system_prompt_text": "你在协助构建一个「知识检索」功能的评测集。\n\n背景：这是一个 OS Agent 记忆系统，会把用户过去真实的操作历史（工具调用失败后\n如何修复、用户提出需求后 Agent 执行了哪些步骤）整理成「知识单元」存起来，\n之后用户提问时，系统要能检索到语义相关的知识单元并给出参考。\n\n你的任务：给定一条真实的知识单元，生成用户**可能会怎么问**才会需要用到这条知识——\n换句话说，反向出题：如果这条知识确实有用，用户当时的问题会是什么样子？\n\n严格要求：\n1. 只允许改写「提问方式」，不允许编造知识单元里没有的事实、工具名、错误信息。\n2. 生成三条不同难度的问题，每一档都有具体的\"字面重合度\"目标（生成后会用代码\n   核对，不达标会被打回要求重出，所以务必认真按目标执行，不要只是形式上\n   换几个词）：\n   - \"close\"：复述知识单元的核心事实，可以保留至多1个专有名词（工具名或报错类名），其余用自己的话转述。禁止整段复制原文措辞。目标：query与知识单元原文的字符bigram覆盖率 ≤ 0.45。\n   - \"paraphrase\"：用完全不同的措辞描述同一个问题，不得出现知识单元原文中的任何工具名、命令名、路径、报错类名——改用功能性描述替代（比如把'pscp'说成'从本地往服务器传文件的命令'，把'ModuleNotFoundError'说成'提示模块找不到'）。目标：bigram覆盖率落在 0.10~0.30 之间。\n   - \"hard\"：站在遇到同类问题、但不知道具体术语的用户视角提问，只描述现象与想达成的目标，完全不涉及知识单元里的具体工具/命令/专有名词。目标：bigram覆盖率 ≤ 0.10。\n3. 问题要像真实用户会打出来的中文口语化短句——可以不完整、可以简略，\n   参考风格：\"pytest命令找不到\"、\"帮我检查jellyfin\"、\"ssh连接被拒绝怎么办\"，\n   不要写成书面语或客服话术。\n4. 如果这条知识单元的内容本身就很含糊、不足以支撑一个清晰的问题\n   （比如意图是\"继续\"这种没有信息量的内容），如实说明，不要硬造问题。\n\n只输出 JSON，不要有任何其他文字、不要用 markdown 代码块包裹，格式：\n{\"questions\": [{\"query\": \"...\", \"difficulty\": \"close\"}, {\"query\": \"...\", \"difficulty\": \"paraphrase\"}, {\"query\": \"...\", \"difficulty\": \"hard\"}],\n \"unanswerable_reason\": null}\n\n如果第 4 条触发（知识单元不足以出题），则：\n{\"questions\": [], \"unanswerable_reason\": \"具体原因\"}\n",
+    "user_prompt_template": "知识单元类型：{type}\n知识单元内容：{context_json}\n\n请按要求生成问题。",
+    "user_prompt_template_sha256": "2fa58551d9cf2885ff9c7a1c64d7224e1f9433c15c3b68fcfb348109df85c4e4",
+    "difficulty_specs": {
+      "close": "复述知识单元的核心事实，可以保留至多1个专有名词（工具名或报错类名），其余用自己的话转述。禁止整段复制原文措辞。目标：query与知识单元原文的字符bigram覆盖率 ≤ 0.45。",
+      "paraphrase": "用完全不同的措辞描述同一个问题，不得出现知识单元原文中的任何工具名、命令名、路径、报错类名——改用功能性描述替代（比如把'pscp'说成'从本地往服务器传文件的命令'，把'ModuleNotFoundError'说成'提示模块找不到'）。目标：bigram覆盖率落在 0.10~0.30 之间。",
+      "hard": "站在遇到同类问题、但不知道具体术语的用户视角提问，只描述现象与想达成的目标，完全不涉及知识单元里的具体工具/命令/专有名词。目标：bigram覆盖率 ≤ 0.10。"
+    },
+    "difficulty_tiers": [
+      "close",
+      "hard",
+      "paraphrase"
+    ],
+    "coverage_bounds": {
+      "close": [
+        0.0,
+        0.45
+      ],
+      "paraphrase": [
+        0.1,
+        0.3
+      ],
+      "hard": [
+        0.0,
+        0.1
+      ]
+    },
+    "max_retries_on_coverage": 3
+  },
+  "knowledge_base": {
+    "dir": "知识检索",
+    "files": {
+      "cases.jsonl": {
+        "sha256": "cba294b498e93434e19a08fa2a98fd199ef0cadd697bf32048df37623098a3d1",
+        "sha256_raw": "ab42d314ba846ace073b76dc13f9cb4736cb6dfe08a7dda4dfcc34d4390400a8",
+        "lines": 31
+      },
+      "workflows.jsonl": {
+        "sha256": "4e24a6e781ad0f59f0867044a26ea4e84f23f1755a288befe09095965f5366e5",
+        "sha256_raw": "0fc530279e9c343583fd18ad65cdd5b2c7006af82104e42c7234d017fa37cd2c",
+        "lines": 54
+      },
+      "templates.jsonl": {
+        "sha256": "159161cb2fbf58d391f9a71d38e7e287e99e98ceed8ad124f78b1f4ff54d6c16",
+        "sha256_raw": "a467ad511f0acb444ae2ed50485fe404c2a3a2ea6f90f68bb0c906444bd8d635",
+        "lines": 1
+      }
+    },
+    "doc_id_space": [
+      0,
+      85
+    ],
+    "unit_count": 86
+  },
+  "units": [
+    {
+      "doc_id": 0,
+      "type": "case",
+      "unit_sha256": "bba2795d96c9b60f058f60f0c03956981eb5576e32eb93226689735971204393",
+      "rendered_sha256": "92c37235d87d8d0383d7349b153f4e72ebced7720704e1cf12d3f489c1b2671f"
+    },
+    {
+      "doc_id": 1,
+      "type": "case",
+      "unit_sha256": "5d5e618eea0db0e6f15f3a3550bd4315f3550073f81b5ec1fa8371f4a7dbbb15",
+      "rendered_sha256": "c5546230a5eb7472fb4e78db072a37580063855eab6df4a3e33fa8898936a9ca"
+    },
+    {
+      "doc_id": 2,
+      "type": "case",
+      "unit_sha256": "df1096f46b338842ab2bd00367fdf70e444698d7dafd975e61c5072d6bbf8386",
+      "rendered_sha256": "7340535a6e48625fd7d160c4480bb8f3d3a14d239f8c83e6dec4d2ca2f1ec9e1"
+    },
+    {
+      "doc_id": 3,
+      "type": "case",
+      "unit_sha256": "a9251f82f9a10fcc9754f4202beb2cbf29bbfc57f1fb60602c503019bfa263ee",
+      "rendered_sha256": "74f60719d3d2f384b42340b38bc8f25b9ca8d380d2183d5fefb72c91d4ccf2dd"
+    },
+    {
+      "doc_id": 4,
+      "type": "case",
+      "unit_sha256": "4eafb6a9dc9e510b5bec0ba5f267d4a58f4af3030132dc121c3ca9cf8a6ee72f",
+      "rendered_sha256": "80ee5f6eb03ed9d7a49b8fea357df088c7202507e0400c1ee522e8c94310ccc9"
+    },
+    {
+      "doc_id": 5,
+      "type": "case",
+      "unit_sha256": "bffc28bf4ac4bbcd7b4e6bf865dbc698ee95c4edaee2c337aa95258331cf8429",
+      "rendered_sha256": "a3ed2163922280d5fd0f90e369a9e6770db87d67c7c0c9ed3f3956fd33118148"
+    },
+    {
+      "doc_id": 6,
+      "type": "case",
+      "unit_sha256": "a3d2f4cbfe5771bddd12121de6f2bc2cdf3bf3a36d5b4a98634533f174df396e",
+      "rendered_sha256": "b6a9974ad16bf1940ed416ab88020e8d976c52e9076dd46e8cde6260f85c6e3f"
+    },
+    {
+      "doc_id": 7,
+      "type": "case",
+      "unit_sha256": "fec2b4f078fac27dbecccb60c0fce5fddd8323bda269a1d35a9b5bb285ed1af6",
+      "rendered_sha256": "38098e7cbb314e77e2c5c7aa5b1b6e2233f076bb55315e85caff155ff0851601"
+    },
+    {
+      "doc_id": 8,
+      "type": "case",
+      "unit_sha256": "bf4816550269fb9c1efb367e13672d771d376fe35f814af8d49ee5f7212cd58a",
+      "rendered_sha256": "d70c2488ad65f8be3b6bfead1ab2468cba08714acc3cbd3315f055ce47fb1856"
+    },
+    {
+      "doc_id": 9,
+      "type": "case",
+      "unit_sha256": "45f070e93a9a2c00b004f3988c3a3c398afbfab03312209fa6901124c8131360",
+      "rendered_sha256": "141133cd6d8936aab6451fca298442eb02e02c4d79b992e29aaa6eeacd8e2151"
+    },
+    {
+      "doc_id": 10,
+      "type": "case",
+      "unit_sha256": "379eadb66f71ee896e01406be4db773cf43f6f7c581f224a181b5d3d6686b451",
+      "rendered_sha256": "387f9c403bff7ec164459f3a101ca9bdeb351e3a7a32643dc626010434125582"
+    },
+    {
+      "doc_id": 11,
+      "type": "case",
+      "unit_sha256": "a8531f467bd514c66aca533cd21ba39300c5f91de54699686aaa954dd2e79e98",
+      "rendered_sha256": "c16ed522d7644b05d906b98996302ab7924a2e97cc929294e34ef276f85e4e94"
+    },
+    {
+      "doc_id": 12,
+      "type": "case",
+      "unit_sha256": "438e71beccba32b6667ad03323b6fcf19399c2625e752b0b5c90a0d8ea267992",
+      "rendered_sha256": "3b338338bae8bb49eae5b83f6f03e424b22038aca8e7e0e396bb8d48d36b0f94"
+    },
+    {
+      "doc_id": 13,
+      "type": "case",
+      "unit_sha256": "2c611b7bdedaa51a69194db1de28c4586546f7668250c7d168d19a0d4ef2aceb",
+      "rendered_sha256": "69ec86ec0a648349835cdbb4ffcf0ce5a930481120ad9ebc4ec5e64f4db2f665"
+    },
+    {
+      "doc_id": 14,
+      "type": "case",
+      "unit_sha256": "a44da2ffc31cad5058c3aaa8ba1a03f50aba53f5bcd493e57992087921b870b0",
+      "rendered_sha256": "49728bea2de4e0ba6fb559b490340e005b186952828e9936e7e4c0310d5da8c3"
+    },
+    {
+      "doc_id": 15,
+      "type": "case",
+      "unit_sha256": "a6429a708c0d885057594904f0a264bffcfe49569b4fa49bf602022d13933ae5",
+      "rendered_sha256": "9756d4478fb82f7d22696d5f7bb65cc3bca32d1c93b2d79a7d27f9a9cac7690e"
+    },
+    {
+      "doc_id": 16,
+      "type": "case",
+      "unit_sha256": "64e43c935541153753a6c79ce52c28e570a9f0ba62d5199ea5439aebd873670f",
+      "rendered_sha256": "96688cf384544157a601142c45927776dd2eeef5ce15e54ba92f1c727a1ca6eb"
+    },
+    {
+      "doc_id": 17,
+      "type": "case",
+      "unit_sha256": "4128b285e6ccaaa20f4c08cc6afa922ecc1d4049166b23fc98448c20a055d77e",
+      "rendered_sha256": "cc4e71f748f987b1623c8620f0c13c26f863d0e02d0b9d1990d1abe6932178ca"
+    },
+    {
+      "doc_id": 18,
+      "type": "case",
+      "unit_sha256": "bac227960adafbb8edf91831249036ec5b69bb23fab314ead927dc292f251f5e",
+      "rendered_sha256": "ee0d49d83bb9ab2e11d873e15415c637c1cef598d2ef8a7b41469b2450e0b8d1"
+    },
+    {
+      "doc_id": 19,
+      "type": "case",
+      "unit_sha256": "7b10cf4efe857cb20431a700562c7de1712496ab4908c75365b3cf1bb4da61aa",
+      "rendered_sha256": "96cee8551b28376364ecd833647df44ea2ea7e5c3489adf1181ea959d169b21c"
+    },
+    {
+      "doc_id": 20,
+      "type": "case",
+      "unit_sha256": "c7bf28f23c64385c83d55be486ee1699ffea055f1fd023a46e18d95836e62ffc",
+      "rendered_sha256": "a3a180387a39cbfd86952ba2bd279656c386a92763bcc50284aa86b1a5293d03"
+    },
+    {
+      "doc_id": 21,
+      "type": "case",
+      "unit_sha256": "327031e9fe9e5ca749c866833e0a200de68dca4218723a93c449e246ae11e47e",
+      "rendered_sha256": "07a2dcf86fd5f9a1725f9ac9e5a89b4f710b72128e9fbfe2ed86b30e27b27f8b"
+    },
+    {
+      "doc_id": 22,
+      "type": "case",
+      "unit_sha256": "132650541a8866a8122440cc8c8056d5ff6074c13ee70eb2e31f4bed60c34d70",
+      "rendered_sha256": "e5aff2e9f0a0d55ff9052c48e5ab90c6536020279ec690728922c69a137bf570"
+    },
+    {
+      "doc_id": 23,
+      "type": "case",
+      "unit_sha256": "77d49f2c18e06f14fd10315aee9ed272b83b6727a979c31d2da1cdb5ba84e38b",
+      "rendered_sha256": "b6e3f05fa1843977bc1be9eb9ce9887c7b689ba7c2fa69cd94f5201c7f4ecd2b"
+    },
+    {
+      "doc_id": 24,
+      "type": "case",
+      "unit_sha256": "1cfdeaca2e3619c96c5c367bdb76f85adbc62c7881438cb47cf259c6bfe8ba62",
+      "rendered_sha256": "4ffc3db720065e1c47482ee1751a8c8d0e173abfc048065b72c42cd538270578"
+    },
+    {
+      "doc_id": 25,
+      "type": "case",
+      "unit_sha256": "e2d0414bd3fb500d074bac64d5f6d6d80bce153c9d28999ee6457d0dd5b3a570",
+      "rendered_sha256": "8a2f9cb8324f531ac21067a9995f101a0cd09bcc948d509d3cce281d10455a9f"
+    },
+    {
+      "doc_id": 26,
+      "type": "case",
+      "unit_sha256": "a6a5f168446d051245357a85de9228162b2a83a7edac2e44d8a6e09f17634ee7",
+      "rendered_sha256": "217a1f7b5a9b8dff4852d8da318b03389ba9987488fe3f412b663778ea0cb76c"
+    },
+    {
+      "doc_id": 27,
+      "type": "case",
+      "unit_sha256": "c6f73d066df434b7b1f5caef071115e9193f26877ff11e107955b1569582d864",
+      "rendered_sha256": "eeec7796bead188177e146f9817fe4ad928e6ffde736539e3ecd1fe84bf2d9e2"
+    },
+    {
+      "doc_id": 28,
+      "type": "case",
+      "unit_sha256": "e3335a12622fda7baf76b8c4ead9148a45e70ecbe84f340c46c30935767e5038",
+      "rendered_sha256": "080cb07fbff37166e8959ef8e3c234b9fa12f8e9d29ca51ba492de412f8efc5e"
+    },
+    {
+      "doc_id": 29,
+      "type": "case",
+      "unit_sha256": "16d5ac5b4fd1637f46325b3ec6e8b74a42d70de3b11f76762cb63dfa07f8391a",
+      "rendered_sha256": "75bbccc2c70bf21d86fd09d53acbb891bbc32edcbf449f502a05050bbb2ad73c"
+    },
+    {
+      "doc_id": 30,
+      "type": "case",
+      "unit_sha256": "63ced9daf63c5f1bd087614d45d40f06c31da34365f1fd7ef03f238b04799f2f",
+      "rendered_sha256": "4c0e4be45d49f245362802eeb388710baf05116f5315b5df22dfd10a2fdeb28a"
+    },
+    {
+      "doc_id": 31,
+      "type": "workflow",
+      "unit_sha256": "458d20d52d3ff9b09d223ced1784813908afb51b59273ad4bf980ffd1d028148",
+      "rendered_sha256": "b3058761604c5eaf660eefd2b80e57c8eb0756e9f2202810b32452cfd1646c13"
+    },
+    {
+      "doc_id": 32,
+      "type": "workflow",
+      "unit_sha256": "afea36c1a32cd56a179836c668d8585b637fe7ab7bfb60c777e5eadfefcb96a7",
+      "rendered_sha256": "e8993d4fc5b623b3e4fb4ffb75147f4819db6961ed44f1d27bc91a0b3134231a"
+    },
+    {
+      "doc_id": 33,
+      "type": "workflow",
+      "unit_sha256": "b73beb93398d832ec150a30c1587fe7893fe765b6009642e1f9a379dce4ceb05",
+      "rendered_sha256": "3ae67b1d099db6a0d788acacbc49fbd3c041790e323c56b4713562c81245a1c6"
+    },
+    {
+      "doc_id": 34,
+      "type": "workflow",
+      "unit_sha256": "f9f3ad030a36735f3508d58d54150edc8c00885d3b4f449fea98fc7672f5c53b",
+      "rendered_sha256": "87a54696c88f41581ba35851008820a5aa4c481fa5d209ad1f11545fb8ea647c"
+    },
+    {
+      "doc_id": 35,
+      "type": "workflow",
+      "unit_sha256": "4bfcda5af8bc38ce34a675cc2db96814c75a4ceb3ffc50b798d71bff112f3e8d",
+      "rendered_sha256": "1e81dca546a302824176776c79c263ef90cfcca09b95be1dadc1bbd13b5a1cb7"
+    },
+    {
+      "doc_id": 36,
+      "type": "workflow",
+      "unit_sha256": "eae4d4c4483b3c428197292bb911e04273f5131988a4941c90b189320d2fa948",
+      "rendered_sha256": "be62eba8b8e952349135c15d86b56f0c55ff65b3221ad798619325e1bbe2a010"
+    },
+    {
+      "doc_id": 37,
+      "type": "workflow",
+      "unit_sha256": "9169a1ba638ac8bbd0f6ec4653b0f7d9b942e4afb6f92e0591864e3d98c2fece",
+      "rendered_sha256": "990ced9a460cb168929b1adacc8fef7db786a7ffddf58df161f9ace173fcc2f4"
+    },
+    {
+      "doc_id": 38,
+      "type": "workflow",
+      "unit_sha256": "f3e6ec25867eda3189e47402e06d8cb42d47ca155a74d1a482e96a4c6b2324d6",
+      "rendered_sha256": "c37a93bedf5f3a5d20794b70bdf074f38632370ddc12521ed816595e1de52a6a"
+    },
+    {
+      "doc_id": 39,
+      "type": "workflow",
+      "unit_sha256": "d4837eeebbdbeeaa776f2c435b22e4060cf52cd7d7f945fd0ddc95f8c7b9cb12",
+      "rendered_sha256": "66bb1765e9a67209f004a62f2e95328f6af1963b7c188b55cfca825b5ab356f2"
+    },
+    {
+      "doc_id": 40,
+      "type": "workflow",
+      "unit_sha256": "b4f86dcfa1fc032328191ed49db367a88c17938b62de554fba106a0bee721053",
+      "rendered_sha256": "c0a016b08ef0f98738c0559516f67bed5783037e54002909d7c6f84456842a3c"
+    },
+    {
+      "doc_id": 41,
+      "type": "workflow",
+      "unit_sha256": "fb4499d27636db34bc00ac94d0eb70e2d1fbe84f48d35c1c08f329109ffee491",
+      "rendered_sha256": "5716cfb8a1fc3e61e9a9d6ad13d54f8bd48b972e550a321c33e87b36dc6d9904"
+    },
+    {
+      "doc_id": 42,
+      "type": "workflow",
+      "unit_sha256": "f1ff516a763d975647f69a75eb4a4cbfeb046f30efbd643cd2cb34d238732e64",
+      "rendered_sha256": "e5f12c8ba248d772b97818723013a630b760830e645fdf04dc3f9ad7d4fbdc68"
+    },
+    {
+      "doc_id": 43,
+      "type": "workflow",
+      "unit_sha256": "6e375b3b03c67eac372b885a0e42dc31597996362c313836690da9d10b00d23a",
+      "rendered_sha256": "8694905d1ca76146fb373224c804f381b99f09209705e89693a8b7bdbb0c53c9"
+    },
+    {
+      "doc_id": 44,
+      "type": "workflow",
+      "unit_sha256": "da3f0f9c3bf6cc46c99a681310763eaf87d305d55c128a0787a2378b5164d956",
+      "rendered_sha256": "7dfd584bb66ec0e549dfc10a695b08dbe40cd3a7d90b7ffa2cb1e1f3eace1139"
+    },
+    {
+      "doc_id": 45,
+      "type": "workflow",
+      "unit_sha256": "fb79159c6c92a8d23a1888beca7d3e64a2f78970641ac7527f5e5d08e6c37bac",
+      "rendered_sha256": "82ebbb7e1c62576f6cfa7a9e8876fffa2a2f5e42f9526762cb5ca838ad2bb9ef"
+    },
+    {
+      "doc_id": 46,
+      "type": "workflow",
+      "unit_sha256": "05eb0417680202e47358256150568ba7aafb721c2d2752b44e970b534cea50f9",
+      "rendered_sha256": "8a9c2ccb3893e8fb7569294046d7883837b0f5c8320ad4943fe74fc91f3e6e92"
+    },
+    {
+      "doc_id": 47,
+      "type": "workflow",
+      "unit_sha256": "e8d70f6bae11f83446357d39898e1e1f8159377b3e4c6f986eb9a80f2a5633f1",
+      "rendered_sha256": "6e4d48a9ec7006bb900bb5b7a0618a58e81e6c8b0634700aa943d597307c30ab"
+    },
+    {
+      "doc_id": 48,
+      "type": "workflow",
+      "unit_sha256": "d3961111f90cb679b78db73bccabb95a7bc60b42fc6df5fe074d5389627855f8",
+      "rendered_sha256": "9cd4b026801686354d18a15eb1218efc1998c4d30fea154103b49872b42ad412"
+    },
+    {
+      "doc_id": 49,
+      "type": "workflow",
+      "unit_sha256": "c0a5d03823529db252d99c8905ab8e0308856fc7c4726b856d6d0b829b36930c",
+      "rendered_sha256": "83536cd6149957f7bd9ea1fbcf773c11a67e3e1e5a24d64af2775d25c586ea99"
+    },
+    {
+      "doc_id": 50,
+      "type": "workflow",
+      "unit_sha256": "ec9df87345413b01c238a71b005bb53dc007a5dd6d7bd4fc153295784baa8d67",
+      "rendered_sha256": "2eccb34b419e21915b281803018aa9a03bab86fd563d89cfdc298214e1cd0505"
+    },
+    {
+      "doc_id": 51,
+      "type": "workflow",
+      "unit_sha256": "764d4c8baf6353e23d81c291fb51f6f2e3fc0416574b24291dec6ec9dfded976",
+      "rendered_sha256": "835d91d0ad3c780b170cb22e05b6d5d37f62e0593aeebffd4e317f118f814d64"
+    },
+    {
+      "doc_id": 52,
+      "type": "workflow",
+      "unit_sha256": "8c84275f0dc6837f8711e8998d8ec1e7308500d5775fe5e4c643d072464cd1ce",
+      "rendered_sha256": "8becdca9a2e50cca8caa4652475f45a5a351e8bebc3bddee7d19cb3c4e0658f3"
+    },
+    {
+      "doc_id": 53,
+      "type": "workflow",
+      "unit_sha256": "93067909a09df8ac78bfd8d8931af16eab1c41fb858204a0a7b65b594952e25f",
+      "rendered_sha256": "f3d679f8b281b3a02ef6ab71b056206bc5e919904ca0e83d8abd44767c877bec"
+    },
+    {
+      "doc_id": 54,
+      "type": "workflow",
+      "unit_sha256": "88195ec2a2e3ce0e6dab4f49d0c3da7ac6b19b5327c27d1c6cef390ecade5690",
+      "rendered_sha256": "a5ff111ff6879194d1989a29bf7ac88240281c0ada49f51d0155ef268eb2e631"
+    },
+    {
+      "doc_id": 55,
+      "type": "workflow",
+      "unit_sha256": "2b0b30125974790d4efa5e70f59d01d2bdde420920c08fb26ec070860ac53b0e",
+      "rendered_sha256": "44db9fc4289390ba6a9d9513ec86bd3e73b3859cf5296fe00e67bbde1f4a4065"
+    },
+    {
+      "doc_id": 56,
+      "type": "workflow",
+      "unit_sha256": "927e27abd39f702137835906e0976a1380936ea1b3db2e59daee68724ae2acd8",
+      "rendered_sha256": "5aafdf851021fb2d65b60fa010cf34dbf2954f3adac00ef15e8f5e51539e2742"
+    },
+    {
+      "doc_id": 57,
+      "type": "workflow",
+      "unit_sha256": "7bea29c4a84e51f68279cae5d2c661c76c8bbdfd629cc828e5d663b2d190d7b3",
+      "rendered_sha256": "f9c7c3455c05b850457c531b11604bbd82d0bf6c2aa630f7cdcda35df9ce1ea3"
+    },
+    {
+      "doc_id": 58,
+      "type": "workflow",
+      "unit_sha256": "852748e604d0ed418b59205d725e5b7e56938ae03e9519e2d31bcf1c516ef4f1",
+      "rendered_sha256": "fda9c875dd44fe0f6b2f7b792415866f6848f26829a417e93456207a363916da"
+    },
+    {
+      "doc_id": 59,
+      "type": "workflow",
+      "unit_sha256": "8d8bb06c1cf7489d4dfc5eacc5f62b60977eea0cc447e03b37c0e215a538b45e",
+      "rendered_sha256": "1d4e3b204f0191aefebb77463c537243e1cf07cbf92d20c28b4d44f2708843b1"
+    },
+    {
+      "doc_id": 60,
+      "type": "workflow",
+      "unit_sha256": "6e017261c286a910990ee1fe0f4f2f3f532a629ac37c04e25917020dc15b24e0",
+      "rendered_sha256": "261c95c483e0d3799d0ef698818fa84c6e411c5e020064c316765004ff8866dc"
+    },
+    {
+      "doc_id": 61,
+      "type": "workflow",
+      "unit_sha256": "33b62e494fcae9161d6adc94b63adf547cabf075fd4b3d37da8e9f37698bbaa4",
+      "rendered_sha256": "ec77b0b60286ebcb5b4eb5f4923b48ae820bc9ea56027a48e1d760237676f8b5"
+    },
+    {
+      "doc_id": 62,
+      "type": "workflow",
+      "unit_sha256": "93ee591e6a6e983ddc78eea855dc4b77643d996805f2e2ed7291ecb5cbe7f2ec",
+      "rendered_sha256": "776ce9137d52861243a3cf67565a84ca4804470ef6b1eee712346722e505f7fc"
+    },
+    {
+      "doc_id": 63,
+      "type": "workflow",
+      "unit_sha256": "d89e4e999826522bd9d891ffa408fa0fbf5c20506045c34ce722c7816875d5e0",
+      "rendered_sha256": "8b2bd191a40ceecf4aa620538ee9a1f558038824c936768e2403fd7b0967e081"
+    },
+    {
+      "doc_id": 64,
+      "type": "workflow",
+      "unit_sha256": "eefc66c0054c3d15466165cd6de45099022cd4c708db961b14922aae97186e0f",
+      "rendered_sha256": "acd63e6fcd38a9e6c3ae9cd42a2ea961667497bae6c4ec9a5e202654e5f85843"
+    },
+    {
+      "doc_id": 65,
+      "type": "workflow",
+      "unit_sha256": "56715190d1060209d1486da1ec7d5722158fdecceb0d85d95f0069ff1e410f73",
+      "rendered_sha256": "8d7d46dc803673a2fe4e2b20ae173f18169d7753ce20cf79ece098986f03d751"
+    },
+    {
+      "doc_id": 66,
+      "type": "workflow",
+      "unit_sha256": "cab5981ca0870a650a6b279c17385bf779d5ccfc0589503c6869d4ddf27883fc",
+      "rendered_sha256": "fc18c852d2d460dcf299b19b0e33c95e544c8f061a7f6d29e31240d690fee4d8"
+    },
+    {
+      "doc_id": 67,
+      "type": "workflow",
+      "unit_sha256": "f11a2a7266a1087d12b4538549295c788ac6cd6733ff5f863a9c05b92070b1cf",
+      "rendered_sha256": "c5d2149ace7121e64bf01a516333fd191ba59e133bbf9ff30216d0a4433426e7"
+    },
+    {
+      "doc_id": 68,
+      "type": "workflow",
+      "unit_sha256": "5c72081be247ad41e572179ee6be1651845e9bcffa2a2b2f8c282af926663a9a",
+      "rendered_sha256": "1235b71c79e9cea80ce75282bcb96338897bf4793bea78c666097a6f3d9b82df"
+    },
+    {
+      "doc_id": 69,
+      "type": "workflow",
+      "unit_sha256": "ba41035bee70a5168a62e99f9f5a851a5ceaef2899534d3f024f28b74fcbff43",
+      "rendered_sha256": "ba26ec9ef6868c4fe49d215484e2f6b7c8856d6f9d3c8af51720eec68ac6d843"
+    },
+    {
+      "doc_id": 70,
+      "type": "workflow",
+      "unit_sha256": "18aba44ee7be5a2c692fdde96752ff622492f9c3b2d2f7286b62b02dc7049715",
+      "rendered_sha256": "5f4d849e43d18072c5854fc2976ecc4d885e3be9fbfd4f058c05083e5add7bdd"
+    },
+    {
+      "doc_id": 71,
+      "type": "workflow",
+      "unit_sha256": "76e90dd328ffe71a738aed9df0457771e4c8b997afa7f165c576c73fb427ea16",
+      "rendered_sha256": "580f6a010232e1493ddfa31ec1f965df26e6e445c016591b3bc7d19a5f260e3c"
+    },
+    {
+      "doc_id": 72,
+      "type": "workflow",
+      "unit_sha256": "48303ef8d7a99c802fb8f06b10231e579269985e9a4600ddeaa9053127303f21",
+      "rendered_sha256": "24ea23472289e7aaa95c35297f1edbbe6aee72c72670265fc120a931838268b2"
+    },
+    {
+      "doc_id": 73,
+      "type": "workflow",
+      "unit_sha256": "9aa6fefefd66339043c02c402247603f169445c845bff855a5b87dc53ec5d0ae",
+      "rendered_sha256": "87a95e4356b0ca80f1343bc8ed85d543fd5ad45d0259774467e8632acc3455dd"
+    },
+    {
+      "doc_id": 74,
+      "type": "workflow",
+      "unit_sha256": "05dde586814b14ca0526313c5baa354d953f2f459947389fc63599928e79cdb2",
+      "rendered_sha256": "f5a62090a5bcd19cf00fb523fb615cae395b35556274f49a0295a5d989379bc5"
+    },
+    {
+      "doc_id": 75,
+      "type": "workflow",
+      "unit_sha256": "0fad0e912e10f5d5061726422e335d65714402f05c11c32cbafa472a4637e6d6",
+      "rendered_sha256": "16e9a0046c76418c948deb28e0e5f2cc49205528aa79d5cbed4ee3c36805be8c"
+    },
+    {
+      "doc_id": 76,
+      "type": "workflow",
+      "unit_sha256": "6616a85adbb65b3215f3fea49f2cc746ba4eeda91c30bcc0dc659585320ed34d",
+      "rendered_sha256": "1409ceb039e0585c2b3087df5169c5cde7e6c42bfeaea116fb79b4b2354b1766"
+    },
+    {
+      "doc_id": 77,
+      "type": "workflow",
+      "unit_sha256": "7671bf7b9b05050d343b4ccf46100d1201651a44d7bbecee472e89acc6dd48a7",
+      "rendered_sha256": "9499e0f2137d11b9f9cc43fe5957e505c71d4340cf39cb07620a80441d85dbf8"
+    },
+    {
+      "doc_id": 78,
+      "type": "workflow",
+      "unit_sha256": "aa8319ead1765eb451b1e0974ec0ba1cd91bbd1ce30a2b50f72bfd3ba911b126",
+      "rendered_sha256": "a9099819c04122db2926a8df2648f8c230fc56aa79b1e47f21ae489be736f237"
+    },
+    {
+      "doc_id": 79,
+      "type": "workflow",
+      "unit_sha256": "e387ae7a5f568952f4cba2d481aa02e399f8a98b2adfd74acf2401cc96c52a48",
+      "rendered_sha256": "af10104d72e9aeb374707da44c3d4f61dac4e127237694df3d3182c1bcff2de3"
+    },
+    {
+      "doc_id": 80,
+      "type": "workflow",
+      "unit_sha256": "b9f6f1bb05670a3d8b79588113b2dda82e7b7ac18f4d47746c292a777415b17c",
+      "rendered_sha256": "9be4642bacc424f8666d7245886bb19dd3a1bc8066cd051049fc115c66da4f3d"
+    },
+    {
+      "doc_id": 81,
+      "type": "workflow",
+      "unit_sha256": "80c8943a8aeec9c0cd0130ef2662e97f076b586ce454a2e7b4a949d89ad919e1",
+      "rendered_sha256": "4352becb099c8fb29d74d2c1076cf59911abfb8df8abfc688f119ceb3ac53ea7"
+    },
+    {
+      "doc_id": 82,
+      "type": "workflow",
+      "unit_sha256": "5ae7c99efb4418c03698207c5a321355e2b6da79e6fcc2af2852d6f665a3f879",
+      "rendered_sha256": "354d402d91899b61b4eb301c6ce6b3048855ffb060a9b1e064bfa3edf92b4e4a"
+    },
+    {
+      "doc_id": 83,
+      "type": "workflow",
+      "unit_sha256": "8b829ff61bb4c90d373a4b97764b0e9a5089b70156df9ab7a410b09109843a1a",
+      "rendered_sha256": "7de24ad85aa2053f3729ddec9298e0e53b72068944ac7e2a72dc1dd4cb14eb2d"
+    },
+    {
+      "doc_id": 84,
+      "type": "workflow",
+      "unit_sha256": "0dd5d7c86be26ed71ddef8ce7dc6a7efd20198c7ef552b062134d766afbe4bf8",
+      "rendered_sha256": "87c753d0038a7feb86d6992123f3e3eca6730fc1e40d37841975c29428d8ac21"
+    },
+    {
+      "doc_id": 85,
+      "type": "template",
+      "unit_sha256": "7535bc9ba421ee07159be7475743e76e7dfb608fcb9847e6a591ef189948718d",
+      "rendered_sha256": "9d8e2c0bdcb7218638cb15a9b56606956e926d2e953d93c744e54f84f0c62883"
+    }
+  ],
+  "artifacts": {
+    "candidates": "eval_candidates.jsonl",
+    "raw_log": "generation_raw_log.jsonl",
+    "skipped": "generation_skipped.jsonl",
+    "counts": {
+      "candidates": 231,
+      "raw_log": 86,
+      "skipped": 9,
+      "coverage_violations": 32
+    }
+  },
+  "run_lineage": [
+    "gen-20260814T045446Z-d1891cfd840f",
+    "gen-20260814T045536Z-d1891cfd840f",
+    "gen-20260814T085700Z-0b8e6c2382e5"
+  ],
+  "run_lineage_note": "本次为断点续跑：上游 Gemini 代理不稳，首轮 86 条中 36 条因 timed out 失败，经 --resume 补齐。产物中因此合法地存在多个 run_id，此处如实登记全部血缘，而不是把它们重写成同一个（那等于把分三次出的题说成一次出的）。"
+}

@@ -1,0 +1,38 @@
+{
+  "record_id": "M-103",
+  "title": "脱敏规则：展平后敏感路径仍被打码",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "e3eccd896edb294c09b0088e026cc4f5b2ae904da934edc347565bef0a48ecd4",
+  "command": "python measure_L1.py M-103",
+  "started_at": "2026-08-14T04:00:26.321282+00:00",
+  "duration_sec": 0.0,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [],
+  "metrics": {
+    "cases_total": {
+      "value": 7,
+      "unit": "条",
+      "repeats": 1
+    },
+    "cases_passed": {
+      "value": 7,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [],
+  "succeeded": true,
+  "raw_stdout": "===== [M-103] 脱敏规则：展平后敏感路径仍被打码  (层级 L1) =====\n  ✅ model                              -> opus\n  ✅ theme                              -> dark\n  ✅ permissions.allow[0]               -> PowerShell(Get-NetIPConfiguration *)\n  ✅ apiKey                             -> [REDACTED_CONFIG_VALUE]\n  ✅ memorySearch.remote.apiKey         -> [REDACTED_CONFIG_VALUE]\n  ✅ auth.token                         -> [REDACTED_CONFIG_VALUE]\n  ✅ db.password                        -> [REDACTED_CONFIG_VALUE]\n"
+}

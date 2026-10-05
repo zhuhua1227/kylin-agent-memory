@@ -1,0 +1,377 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>留出集盲测裁决　·　P4</title><style>
+:root{--bg:#f5f7f5;--card:#fff;--ink:#1a1f1c;--body:#3d453f;--muted:#7a827c;
+--line:#dee4de;--green:#2f6b57;--rust:#b0502a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);font-size:15px;
+line-height:1.7;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 90px}
+h1{font-size:24px;color:var(--ink);margin:0 0 6px}
+.rule{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin:18px 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
+.card header{padding:10px 16px;border-bottom:1px solid var(--line);background:#fafbfa}
+.num{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--green)}
+.pair{display:grid;grid-template-columns:1fr 1fr}
+.pair section{padding:14px 16px}
+.pair section:first-child{border-right:1px solid var(--line);background:#fcfcfb}
+h4{margin:0 0 8px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:13.5px;line-height:1.65;
+font-family:inherit;max-height:340px;overflow:auto}
+.card footer{display:flex;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.note{flex:1;min-width:200px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font:inherit;font-size:13px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+padding:12px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
+button{padding:9px 22px;border:0;border-radius:5px;background:var(--green);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{background:#bbb;cursor:not-allowed}
+#out{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-top:24px;display:none}
+textarea{width:100%;height:220px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.bad{color:var(--rust);font-weight:600}.ok{color:var(--green)}
+@media(max-width:760px){.pair{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>留出集盲测裁决　·　P4</h1>
+<div class="rule"><b>判断标准（《冲突判定标注规范》v1.0.1 §五）：「后」是否让「前」里的某个说法不再成立？</b>
+<ul><li><b>冲突</b> —— 前说 A，后说「A 是错的 / 已过时 / 更正为 B」</li>
+<li><b>不是冲突</b> —— 纯追加（前仍成立）／润色（信息没变）／部分推翻但核心用途未变／两段不是一件事</li></ul>
+<b>注意</b>：本轮不显示时间戳，「同会话同天」那条排除规则由脚本事后套用，你只判语义。</div>
+
+<article class="card"><header><span class="num">01</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，无崩溃（读数：Main PID 143352，启动 2026-08-29 07:03:03 CST，NRestarts=0）</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动 utils 2026-09-02 09-02 boot 内（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q1" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q1" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">02</span></header>
+<div class="pair"><section><h4>前</h4><pre>- ✅ Kylin 环境持久化**前置工作**已做(`ostree admin set-default 1` 修正启动顺序为正确的hotfix部署),但**尚未做重启验证**——用户明确要求&quot;完成计划任务后由用户手动重启&quot;,目前仍在等待这次重启来最终确认持久化是否真正生效。已有 17GB vzdump 快照备份兜底(见下方),重启失败也不怕从头再来。</pre></section>
+<section><h4>后</h4><pre>- ❌ **持久化问题已有定论(2026-08-03 验证完毕)**:`/usr` 覆盖层**无论如何都不持久**——经过跳闸断电和正常重启两种情况验证,`unshare -m` 装的东西(sshd、embedding SDK 全套)**每次重启必定退回出厂状态**。**PVE 快照备份也救不回来**:因为这些改动根本没落到磁盘上,快照里从来就没有它们(恢复备份后 `/usr/sbin/sshd` 依然不存在)。**最终采用的方案**:写了一键恢复脚本 `~/restore_env.sh`(存 `/home` 持久层,副本在 `RAG/证明向量维度/restore_env.sh`),每次重启后</pre></section></div>
+<footer>
+<label><input type="radio" name="q2" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q2" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">03</span></header>
+<div class="pair"><section><h4>前</h4><pre>判断：无异常——当前 boot（现为 2026-09-01 12:40:56 启动的 boot，accounts-daemon Main PID 35559、NRestarts=0）启动干净、零重启、未被冻结、日志仅启动通告；唯一瑕疵在上一 boot 关机时 stop-sigterm 超时被 SIGKILL（历史，非当前），不影响当前实例（先前写「当前 boot」指彼 08-29/08-31 boot 的进程与计时；系统今日 09-01 12:40:56 已重启，该前提已经不存在了，须按新 boot 重新读数）</pre></section>
+<section><h4>后</h4><pre>判断：无异常——active、未冻结、零重启、Result=success、日志仅启动通告、无 error/warn/kill/timeout 记录；唯一历史瑕疵为上一 boot 关机 stop-sigterm 超时被 SIGKILL（非当前）（原为 彼 08-29/08-31 boot 的健康读数与该 boot 得出了前提已经不存在了的结论，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q3" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q3" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">04</span></header>
+<div class="pair"><section><h4>前</h4><pre>Recent event write note (step 142): journal sometimes showed a single `warn_alloc` / `page allocation failure order:7` (GFP_ATOMIC, 24 795 suppressed) and `Free swap × ≈ 2.6G` — matching this elevated-swap picture (no OOM-kill records).</pre></section>
+<section><h4>后</h4><pre>Recent event write note (step 142): journal sometimes showed a single `warn_alloc` / `page allocation failure order:7` (GFP_ATOMIC, 24 795 suppressed) and `Free swap × ≈ 2.6G` — matching this elevated-swap picture (no OOM-kill records).
+
+## 8. swappiness value &amp; judgment (step 145–147)
+- Current `vm.swappiness` = **60** (default; confirmed by `sysctl` and `/proc/sys/vm/swappiness`).
+- Judgment: at 60 the kernel swaps fairly actively — with the 3.9G RAM + AI model workloads this is part of why swap stays elevated. Not a fault; on a low-RAM VM where proactive swapping is undesirable, lowering to 10–30 (e.g. `sysctl -w vm.swappiness=20`) could reduce needless swapOUT, at the cost of keeping more memory resident. No change made (read-only inspection).</pre></section></div>
+<footer>
+<label><input type="radio" name="q4" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q4" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">05</span></header>
+<div class="pair"><section><h4>前</h4><pre>## 关联
+- `[[kysec-core-status]]`、`[[exctl-mechanism]]`、`[[kysec-whitelist-audit]]`</pre></section>
+<section><h4>后</h4><pre>## 关联
+- `[[kysec-core-status]]`、`[[exctl-mechanism]]`、`[[kysec-whitelist-audit]]`
+
+## 附：扫描工具用法观察与扫描状态（2026-09-01）
+- 探测安全扫描工具 `ksc-scan-daemon --nonexistent-scan-target` → **无 usage 错误**（是守护，bogus 参数下 timeout 到被杀 rc=143，不打印 usage）。
+- 有效状态查询：`ksc-scan-daemon` **inactive**（未运行），`vulnerabilityrepair` active。
+- 关联：扫描守护不在跑 → `kylin_scan_sql.db` 的 `history_main_table` 空 ⇒ **无最近全盘扫描记录**（Task 258）。未装包。</pre></section></div>
+<footer>
+<label><input type="radio" name="q5" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q5" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">06</span></header>
+<div class="pair"><section><h4>前</h4><pre>4. workspace 目录文件总数：2584（原为 1594，已不再是）</pre></section>
+<section><h4>后</h4><pre>4. workspace 目录文件总数：3264（原为 2584，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q6" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q6" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">07</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-27T16:44:41+08:00，dbus-daemon[35581] [system] Successfully activated service &#x27;org.freedesktop.activation&#x27;（同刻亦见 [limitCtl]:service integrity check skipped: integrity map missing）。（原为 最新一条 2026-08-26T09:03:05+08:00，dbus-daemon[35581] [system] [limitCtl]env LD_LIBRARY_PATH ... not on global whitelist，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-08-28T09:03:05+08:00，dbus-daemon[35581] [system] [limitCtl] env LD_LIBRARY_PATH with value /opt/update-module/current/usr/lib/x86 not on global whitelist（该 limitCtl 白名单告警今天 09:03 再现，今日 dbus 日志 2247 条）。（原为 最新一条 2026-08-27T16:44:41 dbus Successfully activated ... integrity check skipped，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q7" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q7" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">08</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [N100 外部USB口报废](pve-usb-renesas-dead.md) — 2026-07-18 瑞萨USB芯片从PCIe消失、外部口全灭；500G盘应拆盒直连板载SATA；VM100有按ID的USB直通遗留</pre></section>
+<section><h4>后</h4><pre>- [N100 外部USB口报废](pve-usb-renesas-dead.md) — 瑞萨USB芯片故障史；+2026-07-31意外断电NVMe一度检测不到(重插修复)，USB口意外恢复，别在开机时碰硬件</pre></section></div>
+<footer>
+<label><input type="radio" name="q8" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q8" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">09</span></header>
+<div class="pair"><section><h4>前</h4><pre>| `/usr/local/bin/claude` | `/home/device_c/claude-node/bin/claude` | **yes** (real file, 330 MB, owned by device_c) |</pre></section>
+<section><h4>后</h4><pre>| `/usr/local/bin/claude` | `/home/device_c/claude-node/bin/claude` | **链接现已不存在**（.3→.4 切换后 /usr/local/bin/claude 消失）；目标可执行仍存在（330,946,864 B ≈ 330 MB，device_c），且 claude 仍经 PATH 直达 |</pre></section></div>
+<footer>
+<label><input type="radio" name="q9" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q9" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">10</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动 utils 2026-09-02 09-02 boot 内（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动于 2026-09-02 该 boot（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q10" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q10" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">11</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **1** symlink in `/usr/local/bin` (verified with `find -type l`).</pre></section>
+<section><h4>后</h4><pre>- **0** symlinks in `/usr/local/bin` now — after the `.3→.4` deployment switch the `claude` link there was dropped（原为 1：/usr/local/bin/claude，已不再是）。</pre></section></div>
+<footer>
+<label><input type="radio" name="q11" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q11" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">12</span></header>
+<div class="pair"><section><h4>前</h4><pre>最新一条带 I/O 相关记录的时间为 2026-08-29 06:49:41 CST，内容为 kernel 对可移除盘 sdb2 报 Buffer I/O error / device offline（sdb/Ventoy，已脱离），内部盘 sda 无 I/O 错误</pre></section>
+<section><h4>后</h4><pre>最新一条带 I/O 相关内核记录 2026-09-01 18:25:41 CST，内容为 kernel 的 blk_mq_run_work_fn hogged CPU（非磁盘错误，sda 无 error；仅 workqueue CPU-hug）（原为 08-29 06:49:41 的 sdb Buffer I/O/offline 记录，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q12" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q12" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">13</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 与前类似：`getstatus` 静默忽略未知参数、`setstatus` 严格报用法、`ksaf-auth-daemon` 报 DBus 解析错——不同工具错误处理各异，应据工具类型选正确核查方式。</pre></section>
+<section><h4>后</h4><pre>- 与前类似：`getstatus` 静默忽略未知参数、`setstatus` 严格报用法、`ksaf-auth-daemon` 报 DBus 解析错——不同工具错误处理各异，应据工具类型选正确核查方式。
+
+## 记录：端口连接测试（网络控制与可达性交叉验证，2026-09-01）
+
+- **模拟未授权应用联网 → 连未监听本地端口 `[REDACTED_IP]:59993`：** 报错原样 `connect: Connection refused`（`/dev/tcp/…: Connection refused`，exit=1，ECONNREFUSED），且确认该端口无监听。
+- **换成可达性核查（实际监听列表）：** `ss -ltn` → 当前 **10 个** TCP 监听端口：`*:22`(sshd)、`[REDACTED_IP]/54:53`、`[REDACTED_IP]:53/631/8000/8750`、`[::1]:53/631/8001` 等。
+- **意义：** 用&quot;未监听端口 → ECONNREFUSED&quot;复现系统对未授权网络访问的可达性拒绝；再用真实监听列表交叉验证可达端点。未装包。</pre></section></div>
+<footer>
+<label><input type="radio" name="q13" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q13" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">14</span></header>
+<div class="pair"><section><h4>前</h4><pre>- ssh.service 启动时间 2026-08-25 16:13:09，比开机（10:33:15）晚约 4 小时，即首条 SSH 连接入站时才启动 ✓</pre></section>
+<section><h4>后</h4><pre>- ssh.service 启动时间 2026-08-25 16:13:09，比开机（10:33:15）晚约 4 小时，即首条 SSH 连接入站时才启动 ✓（该启动时间属彼 boot（2026-08-25）；系统已于 2026-08-29 06:40:59 重启，该前提已经不存在了，新 boot 的首次连接触发时刻须重新观测）</pre></section></div>
+<footer>
+<label><input type="radio" name="q14" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q14" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">15</span></header>
+<div class="pair"><section><h4>前</h4><pre>1. 根分区剩余空间：15751 MB（原为 15757 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>1. 根分区剩余空间：15506 MB（原为 15751 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q15" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q15" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">16</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：2 份最终报告（初始与终期各 1 份），总计 36 KB，最新更新 2026-08-26 12:38:02 CST (final-kernel-boot-report.md)。</pre></section>
+<section><h4>后</h4><pre>状态：3 份报告（08-26 kernel-boot-observation、08-27 systemd-service、08-27 service-timeline），总计约 40 KB，最新文件 mtime 2026-08-27 18:07:19。（原为 2 份/36KB/最新 08-26 12:38 final-kernel-boot-report，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q16" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q16" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">17</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 说明：在真实 netctl 目录下用一个貌似存在的会话 ID 构造了详情路径；不存在，未触碰现存文件、未安装。</pre></section>
+<section><h4>后</h4><pre>- 说明：在真实 netctl 目录下用一个貌似存在的会话 ID 构造了详情路径；不存在，未触碰现存文件、未安装。
+
+## 判断：netctl 授权识别脚本 vs 可执行文件路径（2026-09-01）
+
+- **判定：基于可执行文件路径（实际运行的二进制）识别，非进程祖先链识别脚本。**
+- 依据来源：
+  1. `netctl.xml` / `kysec_netctl --list applist`：15 个条目全为**原生二进制** path（curl/cups_backend_*/kylin-activation/kaiming-system-dbus/boxadm-daemon），**0 个 .sh/.py 脚本条目**；
+  2. 授权记录单一文件路径：`netctl auth: … filepath=/data/…/bin/claude`、`…/kaiming-system-dbus`，auth_result=1 —— 路径即发起连接的可执行文件；且 `claude` 为 **ELF 64-bit 可执行**（file 判定），非脚本；
+  3. `t_kid_netctl` 表字段：仅 `ID/KID/PrivilegeType/Path/Reserver_1..3`，以 **Path** 为主键 → 按可执行路径匹配，无 ppid/祖先链字段参与授权判定。
+- 含义：网络授权以&quot;发起网络操作的那个二进制可执行文件的 path（+hash）&quot;对照白名单 allow/forbid；脚本本身不按祖先链映射到顶层启动者判定，而是落到实际执行网络调用的二进制。
+- 边界（诚实说明）：以上基于磁盘白名单、授权日志、DB 字段判定；ksaf 内核态 `netctl` 处理器的更深逻辑未逆编，不能完全排除低层逐进程校验里含辅助判断。&lt;br/&gt;
+  来源：`/etc/kysec/netctl/netctl.xml`、`t_kid_netctl`(whlist.db)、`/var/log/kysec.log` netctl auth 记录。</pre></section></div>
+<footer>
+<label><input type="radio" name="q17" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q17" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">18</span></header>
+<div class="pair"><section><h4>前</h4><pre>3. workspace 目录总大小：14 MB（原为 5 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>3. workspace 目录总大小：23 MB（原为 14 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q18" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q18" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">19</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，启动于 2026-08-25 10:37:29 CST，Main PID 35371，disk usage 300.1M</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，启动于 2026-08-29 06:44:26 CST，Main PID 35365（旧「启动于 2026-08-25 10:37:29、Main PID 35371、disk usage 300.1M」依赖旧 boot 计时；系统已于 2026-08-29 06:40:59 重启，该前提已经不存在了），disk usage 以当前实况为准</pre></section></div>
+<footer>
+<label><input type="radio" name="q19" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q19" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">20</span></header>
+<div class="pair"><section><h4>前</h4><pre>**下一步**：①用户拆盘接板载SATA→迁做种目录过去→挂大种冲上传28.8G；②催发号人确认5000魔力(魔力考核已过，可能已到账)。</pre></section>
+<section><h4>后</h4><pre>**做种自动化上线(2026-07-20)——改用笔记本当临时做种机**：
+- N100 板载 SATA 是**小型专用口**(TexHoo QN10，标准SATA线插不进)，转接线难买→暂时把 500G 盘接**笔记本**(exFAT，盘符 `J:`，`J:\seed` 做种)。笔记本解析 pttime.org 是**真实CF IP无FakeIP**，比VM省心。
+- **两机协同自动化**(按 Fable5 策略 `桌面\须知\策略-上传冲刺最优解.md`)：
+  - **阿里云大脑** `/root/ptt_acquire.py`(cron `*/30`)：轮询 `torrents.ph</pre></section></div>
+<footer>
+<label><input type="radio" name="q20" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q20" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">21</span></header>
+<div class="pair"><section><h4>前</h4><pre>Main PID 35559，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:28 CST 起 active、Main PID 35564，已不再是）</pre></section>
+<section><h4>后</h4><pre>Main PID 35559，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:28 CST 起 active、Main PID 35563，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q21" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q21" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">22</span></header>
+<div class="pair"><section><h4>前</h4><pre>② ⚠️ **存储告急**:thin pool `pve/data`(155G)已用 **~94.5%,仅剩 ~8.9G**(CP2 装 runtime+模型实占约 10G);VG 仅剩 ~2G 扩不动;VM100(ubuntu ~105G)无 discard+无 agent 难安全回收,VM102 已 discard。**搭 RAG(向量库+生成模型消融)前须加物理硬盘**,否则随时 io-error 冻 VM。</pre></section>
+<section><h4>后</h4><pre>② 存储:曾达 94.5%,给 VM100(ubuntu)开 `discard=on` + `fstrim` 回收了约 40G,**现 pool 69%(~48G 空闲,2026-07-16)**。要点:改 VM 磁盘配置后须 **PVE 层 stop→start 重建 QEMU** 才生效(in-guest `reboot` 无效);VM100 无 guest agent、不响应 ACPI 优雅关机(建议装 `qemu-guest-agent`)。ubuntu `/receive` 有 36G Qwen3 GGUF 阶梯(0.6/1.7/4/8/14/32B)= 模型消融现成资产,暂留未搬。</pre></section></div>
+<footer>
+<label><input type="radio" name="q22" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q22" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">23</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **为何对无人值守场景重要：** 无人值守/批量任务常以 `setsid`/`nohup`/`systemd-run` 等脱机、脱离会话方式后台运行。若 netctl 靠祖先链/会话归属判定，脱离运行的批处理脚本的**父会话/窗口归属会被切断**，可能被当成&quot;来路不明&quot;而错判（该禁不禁、该放不放）、或需人工授权中断任务。而本机制基于**可执行路径**判定，`setsid` 后台化也不会改变判定，无人值守工具（如 claude/批处理调 curl/wget）只要其可执行文件路径在白名单内即稳定放行、否则稳定拒绝——**行为可预测、不因会话脱离而漂移**，这正是无人值守可靠性所需。反过来勘漏：正因为按路径判定，脚本解释器（python/bash）实际联网时的判定落到了解释器二进制路径，`setsid` 绕不开，但也意味着脚本本身不在白名单则其解释器的网络权限受限——无人值守任务须确保所用可执行文件（或其解释器）路径已入白名单。</pre></section>
+<section><h4>后</h4><pre>- **为何是无人值守任务很重要：** 无人值守/批量任务常以 `setsid`/`nohup`/`systemd-run` 等脱机、挂会话方式后台跑。若作者是祖先链/会话归属判定，脱离运行的批处理脚本的**父会话/窗口归属会被切断**，可能被当成&quot;来路不明&quot;而错判（该禁不禁、该放不放）、或需授人工授权中断任务。而本机制基于**可执行路径**判定，`setsid` 后台化也不会改变判定，conntrack（如 claude/批处理调 curl/wget）只要其可执行文件路径在白名单内即稳定放行、否则稳定拒绝——**行为可预测、不因会话脱离而漂移**，这正是无人值守可靠性所需。反过来勘漏：若脚本解释器（python/bash）实际联网时的判定落到了「解释器」二进制路径，`setsid` 绕不开，但也意味着脚本本身不在白名单则其解释器的网络权限受限——无人值守任务须确保脚本本身（或其解释器）路径已入白名单。
+
+## 报错记录：读取 `/proc/1/environ` 权限不足（2026-09-01）
+
+- **报错原样：** `cat: /proc/1/environ: Permission denied`（exit=1，EACCES）
+- 成因：`/proc/1/environ` 为 `-r-------- root root`，PID 1 是 systemd（root）；非 root 用户（device_c, euid=1000）读他人进程 environ 需 ptrace/PTRACE_MODE_READ 许可，非属主/非 root → `Permission denied`。
+- 未用 sudo 绕过；这是&quot;普通用户无法读 root/system 进程环境&quot;的访问边界（另见 `dbus-session-bus.md` Q281）。</pre></section></div>
+<footer>
+<label><input type="radio" name="q23" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q23" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">24</span></header>
+<div class="pair"><section><h4>前</h4><pre>description: J盘(PT做种盘)实为2009年产希捷ST9500325AS，SMART自检失败、147个不可纠正错误，疑似翻新盘维权中</pre></section>
+<section><h4>后</h4><pre>description: J盘(PT做种盘)实为2009年产希捷ST9500325AS，SMART自检失败、147个不可纠正错误；✅2026-07-30/31已物理拔除退役，PT做种停摆+疯狂动物城2/Lucky S1同时从Jellyfin消失</pre></section></div>
+<footer>
+<label><input type="radio" name="q24" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q24" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">25</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-27T18:02:33+08:00，kernel: workqueue: drain_vmap_area_work hogged CPU for &gt;10000us 16 times；本次共 56 条 workqueue CPU-hog 警告（blk_mq/e1000/vmballoon/drain_vmap_area 等），无 CPU 硬件错误。（原为 最新一条 2026-08-26T02:04:37，vmballoon_work hogged CPU, 38 条，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-08-28T08:22:53+08:00，kernel: workqueue: process_srcu hogged CPU for &gt;10000us 32 times；本次共 56 条 workqueue CPU-hog 警告（process_srcu/psi_avgs_work/css_release_work_fn/netstamp_clear/process_srcu 等），另每次引导 ukui-powermanagement 读/写 /sys/devices/system/cpu/cpu*/cpufreq/* 均报 file error，无 CPU 硬件错误。（原为 最新一条 2026-08-27T18:02:33，drain_vmap_area_work hogged CPU, 38 条，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q25" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q25" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">26</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 决定：改用 readelf/nm/ldd 查阅，不做文本 cat。教训：.desktop 的 Exec 指向的常常是二进制可执行（panel、nm、fcitx 等），读取前先 `file` 定型。</pre></section>
+<section><h4>后</h4><pre>- 决定：改用 readelf/nm/ldd 查阅，不做文本 cat。教训：.desktop 的 Exec 指向的常常是二进制可执行（panel、nm、fcitx 等），读取前先 `file` 定型。
+
+## 悬空引用（dangling）检查（2026-08-31）
+
+- 逐项解析 78 个 .desktop 的 `Exec`（绝对路径→存在性；裸名→PATH命中）。
+- **悬空 1 项**：`wps-office-autostart.desktop` → `Exec=/usr/bin/quickstartoffice start`；`/usr/bin/quickstartoffice`（及 `/usr/bin/quickstart*`）**不存在**，`find /usr` 亦无。
+- 性质判定：**遗留旧配置（打包残留）**——
+  - .desktop 属已装包 wps-office（root，mtime 2026-02-05），非用户手工加。
+  - `dpkg -S` 显示 wps-office 文件库仍登记该路径，但磁盘实际缺失（文件库与磁盘不同步）。
+  - WPS 快速启动现改由 `/opt/kingsoft/wps-office/office6/wpsd --quickstart=…` 承担（进程在跑）；旧入口 `/usr/bin/quickstartoffice` 已废弃。
+- 影响：触发时找不到旧二进制而静默跳过，功能由新 wpsd 覆盖；建议清理/禁用该过期 .desktop 或改指新 wpsd 命令。</pre></section></div>
+<footer>
+<label><input type="radio" name="q26" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q26" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">27</span></header>
+<div class="pair"><section><h4>前</h4><pre>3. workspace 目录总大小：23 MB（原为 14 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>3. workspace 目录总大小：29 MB（原为 23 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q27" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q27" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">28</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 正常项：双总线结构正确（session 36676 / system 35563，`--address=systemd:`），socket 与模式匹配；socket 权限标准（666）；桌面自身服务在 session bus 活跃；不存在服务名/权限/非JSON输出等边界行为均符合预期。</pre></section>
+<section><h4>后</h4><pre>- 正常项：双总线结构正确（今日 09-01 session 36588 / system 35568，`--address=systemd:`；原为 08-31 的 session 36676 / system 35563，已不再是），socket 与模式匹配；socket 权限标准（666）；桌面自身服务在 session bus 活跃；不存在服务名/权限/非JSON输出等边界行为均符合预期。</pre></section></div>
+<footer>
+<label><input type="radio" name="q28" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q28" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">29</span></header>
+<div class="pair"><section><h4>前</h4><pre>主配置 /etc/fstab（/dev/sda5=SYSROOT rw,relatime、/dev/sda1=SYSBOOT、/dev/sda7=SWAP、DATA 分区经 UUID=ebd2dfcf 挂 /data、/home 与 /root 为 /data 的 bind mounts）</pre></section>
+<section><h4>后</h4><pre>主配置 /etc/udev/rules.d/99-kylin.rules（read_ahead 4096K）× /etc/sysctl.d/10-kylin.conf（dirty 写回 60/35）、挂载经 /etc/fstab（/dev/sda5=SYSROOT rw,relatime、/dev/sda1=SYSBOOT、/dev/sda7=SWAP、/home 与 /root 为 /data 的 bind）（原为 只以 fstab 为主述，已改为 udev/sysctl+fstab，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q29" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q29" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+<div id="out"></div></div>
+<div class="bar"><span id="prog">0 / 29</span><button id="go" disabled>提交</button></div>
+<script>
+const KEY=[{"n": 1, "id": "HO-K-0501", "layer": "B", "decoy": false, "who": "P4"}, {"n": 2, "id": "K-0106", "layer": "DECOY", "decoy": true, "who": "P4"}, {"n": 3, "id": "HO-K-0189", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 4, "id": "HO-K-0308", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 5, "id": "HO-K-0488", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 6, "id": "HO-K-0048", "layer": "A", "decoy": false, "who": "P4"}, {"n": 7, "id": "HO-K-0134", "layer": "C", "decoy": false, "who": "P4"}, {"n": 8, "id": "K-0026", "layer": "DECOY", "decoy": true, "who": "P4"}, {"n": 9, "id": "HO-K-0289", "layer": "B", "decoy": false, "who": "P4"}, {"n": 10, "id": "HO-K-0502", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 11, "id": "HO-K-0288", "layer": "B", "decoy": false, "who": "P4"}, {"n": 12, "id": "HO-K-0105", "layer": "C", "decoy": false, "who": "P4"}, {"n": 13, "id": "HO-K-0449", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 14, "id": "HO-K-0253", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 15, "id": "HO-K-0045", "layer": "A", "decoy": false, "who": "P4"}, {"n": 16, "id": "HO-K-0168", "layer": "C", "decoy": false, "who": "P4"}, {"n": 17, "id": "HO-K-0447", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 18, "id": "HO-K-0033", "layer": "A", "decoy": false, "who": "P4"}, {"n": 19, "id": "HO-K-0216", "layer": "B", "decoy": false, "who": "P4"}, {"n": 20, "id": "K-0124", "layer": "DECOY", "decoy": true, "who": "P4"}, {"n": 21, "id": "HO-K-0203", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 22, "id": "K-0099", "layer": "DECOY", "decoy": true, "who": "P4"}, {"n": 23, "id": "HO-K-0451", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 24, "id": "K-0137", "layer": "DECOY", "decoy": true, "who": "P4"}, {"n": 25, "id": "HO-K-0086", "layer": "C", "decoy": false, "who": "P4"}, {"n": 26, "id": "HO-K-0379", "layer": "NEG", "decoy": false, "who": "P4"}, {"n": 27, "id": "HO-K-0047", "layer": "A", "decoy": false, "who": "P4"}, {"n": 28, "id": "HO-K-0370", "layer": "C", "decoy": false, "who": "P4"}, {"n": 29, "id": "HO-K-0107", "layer": "C", "decoy": false, "who": "P4"}], N=29;
+const prog=document.getElementById('prog'), go=document.getElementById('go');
+function upd(){const d=document.querySelectorAll('input[type=radio]:checked').length;
+prog.textContent=d+' / '+N; go.disabled=(d<N);}
+document.addEventListener('change',upd);
+go.onclick=()=>{
+const ans={};document.querySelectorAll('input[type=radio]:checked').forEach(r=>ans[+r.name.slice(1)]=r.value);
+const notes={};document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())notes[i+1]=e.value.trim();});
+let dOK=0,dTot=0;const rows=[];
+KEY.forEach(k=>{const v=ans[k.n];
+ if(k.decoy){dTot++;if(v==='conflict')dOK++;}
+ else rows.push({id:k.id,layer:k.layer,verdict:v,note:notes[k.n]||''});});
+const valid=(dOK===dTot);
+let h='<h3>结果</h3><p>诱饵：<b class="'+(valid?'ok':'bad')+'">'+dOK+' / '+dTot+'</b>'+
+ (valid?' —— 本轮有效':' —— <b class="bad">整轮作废，需重做</b>')+'</p>';
+if(valid){
+ const who=(KEY[0]&&KEY[0].who)||'', tag=who?('-'+who):'';
+ h+='<p><b>请把结果文件发回</b>（不要发这个 html —— 答案存在浏览器里，不在文件里）：</p>'+
+   '<p><button id="dl" style="background:#b0502a">下载结果 JSON</button>'+
+   '<span style="margin-left:12px;color:#7a827c;font-size:13px">'+
+   '文件名 裁决'+tag+'.json</span></p>'+
+   '<details><summary style="cursor:pointer;color:#7a827c;font-size:13px">'+
+   '下载不了？点开复制文本</summary>'+
+   '<textarea readonly>'+JSON.stringify(rows,null,1)+'</textarea></details>';
+ setTimeout(()=>{const b=document.getElementById('dl');if(!b)return;
+  b.onclick=()=>{try{
+   const blob=new Blob([JSON.stringify(rows,null,1)],{type:'application/json'});
+   const u=URL.createObjectURL(blob), a=document.createElement('a');
+   a.href=u; a.download='裁决'+tag+'.json'; document.body.appendChild(a);
+   a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1000);
+  }catch(e){alert('下载失败，请展开下方文本框手动复制');}};},0);}
+const o=document.getElementById('out');o.innerHTML=h;o.style.display='block';o.scrollIntoView({behavior:'smooth'});};
+
+// ── 自动保存：每次改动写 localStorage，重开自动恢复 ──────────
+const LSK='holdout_blind_20260903_p4';
+function _save(){try{
+  const d={};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r=>d['r'+r.name]=r.value);
+  document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())d['n'+(i+1)]=e.value;});
+  localStorage.setItem(LSK,JSON.stringify(d));
+}catch(e){}}
+function _restore(){try{
+  const d=JSON.parse(localStorage.getItem(LSK)||'{}');let n=0;
+  Object.keys(d).forEach(k=>{
+    if(k[0]==='r'){const el=document.querySelector('input[name="'+k.slice(1)+'"][value="'+d[k]+'"]');
+                   if(el){el.checked=true;n++;}}
+    else{const e=document.querySelectorAll('.note')[(+k.slice(1))-1];if(e)e.value=d[k];}});
+  return n;
+}catch(e){return 0;}}
+document.addEventListener('change',_save);
+document.addEventListener('input',_save);
+(function(){const n=_restore();
+  if(n>0){const b=document.createElement('div');
+    b.style.cssText='background:#e4efea;border:1px solid #bcd4c9;border-radius:5px;padding:10px 16px;margin-bottom:18px;font-size:14px';
+    b.innerHTML='已恢复上次进度：<b>'+n+'</b> 题。继续做完即可；'+
+      '如需从头重来，按 F12 打开控制台执行 <code>localStorage.removeItem("'+LSK+'")</code> 后刷新。';
+    const w=document.querySelector('.wrap');w.insertBefore(b,w.children[2]);}})();
+
+upd();
+</script></body></html>

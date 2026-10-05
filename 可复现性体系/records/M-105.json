@@ -1,0 +1,89 @@
+{
+  "record_id": "M-105",
+  "title": "numpy 存储后端：性能与资源占用（20000 条）",
+  "layer": "L1",
+  "script": "reproduce_L1.py",
+  "script_sha256": "f58a47a157e0af1e566bdd41ae8c592a2763dcd8cbf226815111b84e56b1a610",
+  "command": "python measure_L1.py M-105",
+  "started_at": "2026-08-06T02:10:02.692635+00:00",
+  "duration_sec": 1.469,
+  "random_seed": 42,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [],
+  "metrics": {
+    "search_ms": {
+      "value": 5.998,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 20,
+      "runs": [
+        5.998,
+        7.4553,
+        2.2766,
+        2.4208,
+        2.7901,
+        3.1619,
+        3.1953,
+        3.7981,
+        3.0469,
+        3.2585,
+        3.0204,
+        4.1849,
+        3.0431,
+        3.3411,
+        4.5652,
+        4.0477,
+        3.6749,
+        3.936,
+        2.5006,
+        1.5097
+      ],
+      "mean": 3.561255,
+      "p50": 3.1953,
+      "p95": 5.998,
+      "min": 1.5097,
+      "max": 7.4553,
+      "stdev": 1.319546
+    },
+    "cold_start_ms": {
+      "value": 1.25,
+      "unit": "ms",
+      "repeats": 1
+    },
+    "build_index_sec": {
+      "value": 0.725,
+      "unit": "秒",
+      "repeats": 1
+    },
+    "indexed_count": {
+      "value": 20000,
+      "unit": "条",
+      "repeats": 1
+    },
+    "memory_delta_mb": {
+      "value": 62.7,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "disk_mb": {
+      "value": 58.7,
+      "unit": "MB",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "内存为本进程 RSS 增量；原始向量数据本身约 58.6MB，可据此判断额外开销大小"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-105] numpy 存储后端：性能与资源占用（20000 条）  (层级 L1) =====\n  [note] 内存为本进程 RSS 增量；原始向量数据本身约 58.6MB，可据此判断额外开销大小\n"
+}

@@ -1,0 +1,98 @@
+{
+  "record_id": "M-112",
+  "title": "宽松召回率（近重复语料multi-gold诊断，独立评审E-6）",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "72634310565553bc34cd46b6eac4050499f82b1a71181d9bca928d5d64b9d406",
+  "command": "python scan_corpus_duplicates.py && python compute_lenient_recall.py",
+  "started_at": "2026-08-15T03:33:19.498145+00:00",
+  "duration_sec": 0.002,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\评测集\\corpus_duplicates.json",
+      "sha256": "ab9c0440b3f6a11136eac78608454f5d9efee89ab19ed09cad8574c266a8472c",
+      "bytes": 1385,
+      "lines": 98
+    },
+    {
+      "path": "..\\评测集\\recall_results_kylin.jsonl",
+      "sha256": "a824d14dae153fac3fa6f253b127d30af6a90c4057b32872b07addf14b3cb817",
+      "bytes": 76318,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "dup_pair_count": {
+      "value": 18,
+      "unit": "对",
+      "repeats": 1
+    },
+    "dup_involved_ratio": {
+      "value": 0.2526,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_1_strict": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_1_lenient": {
+      "value": 0.5286,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3_strict": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3_lenient": {
+      "value": 0.7665,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5_strict": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5_lenient": {
+      "value": 0.8326,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10_strict": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10_lenient": {
+      "value": 0.8722,
+      "unit": "",
+      "repeats": 1
+    },
+    "changed_question_count": {
+      "value": 3,
+      "unit": "题",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "宽松口径只是诊断信息，硬指标对照统一用严格口径（第三节），不互相替代"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-112] 宽松召回率（近重复语料multi-gold诊断，独立评审E-6）  (层级 L1) =====\n近重复对：18（涉及25.3%语料）；3题排名因宽松判定改善\n  [note] 宽松口径只是诊断信息，硬指标对照统一用严格口径（第三节），不互相替代\n"
+}

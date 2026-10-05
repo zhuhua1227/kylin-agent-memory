@@ -1,0 +1,147 @@
+{
+  "record_id": "M-107",
+  "title": "案例挖掘：四步过滤后的历史案例产出量（含异常日检测）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_cases.py",
+  "script_sha256": null,
+  "command": "python mine_cases.py",
+  "started_at": "2026-08-15T06:20:35.231921+00:00",
+  "duration_sec": 0.721,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "45863d4ed5489ef2ce1c704e269409fbbb9b5f2f41f245a7ed2987ab0a241258",
+      "bytes": 21459925,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "outlier_days_count": {
+      "value": 1,
+      "unit": "天",
+      "repeats": 1
+    },
+    "outlier_2026-07-27_errors": {
+      "value": 837,
+      "unit": "条",
+      "repeats": 1
+    },
+    "outlier_2026-07-27_share_pct": {
+      "value": 57.3,
+      "unit": "%",
+      "repeats": 1
+    },
+    "outlier_2026-07-27_sessions": {
+      "value": 2,
+      "unit": "个",
+      "repeats": 1
+    },
+    "total_errors": {
+      "value": 1462,
+      "unit": "条",
+      "repeats": 1
+    },
+    "permission": {
+      "value": 940,
+      "unit": "条",
+      "repeats": 1
+    },
+    "infra": {
+      "value": 6,
+      "unit": "条",
+      "repeats": 1
+    },
+    "technical": {
+      "value": 251,
+      "unit": "条",
+      "repeats": 1
+    },
+    "unknown": {
+      "value": 265,
+      "unit": "条",
+      "repeats": 1
+    },
+    "candidates_before_similarity": {
+      "value": 455,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_similarity": {
+      "value": 229,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_template_check": {
+      "value": 27,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_identical_cmd": {
+      "value": 9,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_probe_only": {
+      "value": 156,
+      "unit": "条",
+      "repeats": 1
+    },
+    "cases_found": {
+      "value": 31,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_spurious_pscp": {
+      "value": 20,
+      "unit": "条",
+      "repeats": 1
+    },
+    "deduped_shared_fix": {
+      "value": 3,
+      "unit": "条",
+      "repeats": 1
+    },
+    "normal_days_total_errors": {
+      "value": 625,
+      "unit": "条",
+      "repeats": 1
+    },
+    "normal_days_permission": {
+      "value": 136,
+      "unit": "条",
+      "repeats": 1
+    },
+    "normal_days_infra": {
+      "value": 6,
+      "unit": "条",
+      "repeats": 1
+    },
+    "normal_days_technical": {
+      "value": 228,
+      "unit": "条",
+      "repeats": 1
+    },
+    "normal_days_unknown": {
+      "value": 255,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "三轮人工抽样验证：第一轮(25样本)发现约60%为「下一步无关操作」误判→加相似度过滤；第二轮(20样本)扩大分类规则后精度回升但发现pscp/plink共享前缀噪声→加模板前缀过滤；第三轮(20样本)验证通过。生成评测集反向出题时又发现第五个问题：连续多次相似失败后跟一次真实重试，该重试被算法复用给前面每次失败，制造人为重复案例(10/61受影响)→加第五步去重(deduplicate_shared_fix)。同时发现07-27单日污染了91.3%权限拒绝这一头部统计，已加入通用异常日检测，不再是硬编码的一次性修正。详见知识检索/说明报告.md"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-107] 案例挖掘：四步过滤后的历史案例产出量（含异常日检测）  (层级 L1) =====\n异常日：1 个 —— [{'day': '2026-07-27', 'error_count': 837, 'share_pct': 57.3, 'sessions': 2}]\n出错记录 1462：权限拒绝 940 (64.3%)，基础设施故障 6，技术故障 251 (17.2%)\n候选修复对 455，相似度过滤剔除 229，模板前缀过滤剔除 27，共享修复动作去重剔除 3\n最终案例：31 条\n  [note] 三轮人工抽样验证：第一轮(25样本)发现约60%为「下一步无关操作」误判→加相似度过滤；第二轮(20样本)扩大分类规则后精度回升但发现pscp/plink共享前缀噪声→加模板前缀过滤；第三轮(20样本)验证通过。生成评测集反向出题时又发现第五个问题：连续多次相似失败后跟一次真实重试，该重试被算法复用给前面每次失败，制造人为重复案例(10/61受影响)→加第五步去重(deduplicate_shared_fix)。同时发现07-27单日污染了91.3%权限拒绝这一头部统计，已加入通用异常日检测，不再是硬编码的一次性修正。详见知识检索/说明报告.md\n"
+}

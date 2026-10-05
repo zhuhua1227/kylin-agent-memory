@@ -1,0 +1,83 @@
+{
+  "record_id": "M-106",
+  "title": "语义检索正确性（使用官方 SDK 固化向量，端到端最小管线玩具语料）",
+  "layer": "L1",
+  "script": "reproduce_L1.py",
+  "script_sha256": "f58a47a157e0af1e566bdd41ae8c592a2763dcd8cbf226815111b84e56b1a610",
+  "command": "python measure_L1.py M-106",
+  "started_at": "2026-08-06T02:10:04.740485+00:00",
+  "duration_sec": 0.004,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "vectors\\toy_docs.tsv",
+      "sha256": "fb189431a1a5f0522b603a5571d67e262201af9dbe6c7553a47197f9ab53e1ce",
+      "bytes": 36533,
+      "lines": 5
+    },
+    {
+      "path": "vectors\\toy_query.tsv",
+      "sha256": "af808da9dbcca4e894f8e6282d0661583b014a8d6cae8e6a900b9c87525f2052",
+      "bytes": 7322,
+      "lines": 1
+    }
+  ],
+  "metrics": {
+    "doc_count": {
+      "value": 5,
+      "unit": "条",
+      "repeats": 1
+    },
+    "vector_dim": {
+      "value": 768,
+      "unit": "维",
+      "repeats": 1
+    },
+    "top1_score": {
+      "value": 0.9441,
+      "unit": "",
+      "repeats": 1
+    },
+    "top1_text": {
+      "value": "怎么重启网络服务",
+      "unit": "",
+      "repeats": 1
+    },
+    "top2_score": {
+      "value": 0.7118,
+      "unit": "",
+      "repeats": 1
+    },
+    "top2_text": {
+      "value": "网络连接不上怎么办",
+      "unit": "",
+      "repeats": 1
+    },
+    "top3_score": {
+      "value": 0.5326,
+      "unit": "",
+      "repeats": 1
+    },
+    "top3_text": {
+      "value": "如何清理系统缓存文件",
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "向量由官方 KYSDK embedding 生成后固化保存；本项只验证检索逻辑，向量来源的真实性由 L2 的麒麟环境测量覆盖"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-106] 语义检索正确性（使用官方 SDK 固化向量，端到端最小管线玩具语料）  (层级 L1) =====\n查询：网络服务重启方法\n  第1名  相似度=0.9441   原文：怎么重启网络服务\n  第2名  相似度=0.7118   原文：网络连接不上怎么办\n  第3名  相似度=0.5326   原文：如何清理系统缓存文件\n  [note] 向量由官方 KYSDK embedding 生成后固化保存；本项只验证检索逻辑，向量来源的真实性由 L2 的麒麟环境测量覆盖\n"
+}

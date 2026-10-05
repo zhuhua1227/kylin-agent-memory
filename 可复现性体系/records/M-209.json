@@ -1,0 +1,168 @@
+{
+  "record_id": "M-209",
+  "title": "负样本对照：域外/域内两档 + 拒答判定 precision/recall（E-8 + R3-31）",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "26a70ce06fa6704506238cc2bd45356efb3316f630595d30722a136164224bda",
+  "command": "python3 measure_L2.py M-209",
+  "started_at": "2026-08-15T11:35:16.533395+00:00",
+  "duration_sec": 4.41,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_d",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) N100",
+    "cpu_count": 2,
+    "mem_total_mb": 3916,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [
+    {
+      "path": "../eval/out_of_kb_questions.json",
+      "sha256": "4de0500b293b586ba28ba4e654d1ce5e32a97914a9ca42dd88684d3cc61aaed0",
+      "bytes": 1964,
+      "lines": 25
+    },
+    {
+      "path": "../eval/eval_set.jsonl",
+      "sha256": "c0727f48a36c884a9de8910325f9ef4f1fc6020b4fcdcccbf815366640220d96",
+      "bytes": 232991,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "ook_min": {
+      "value": 0.4234,
+      "unit": "",
+      "repeats": 1
+    },
+    "ook_max": {
+      "value": 0.5253,
+      "unit": "",
+      "repeats": 1
+    },
+    "ook_mean": {
+      "value": 0.4691,
+      "unit": "",
+      "repeats": 1
+    },
+    "ook_n": {
+      "value": 20,
+      "unit": "",
+      "repeats": 1
+    },
+    "kb_min": {
+      "value": 0.6111,
+      "unit": "",
+      "repeats": 1
+    },
+    "kb_max": {
+      "value": 0.8577,
+      "unit": "",
+      "repeats": 1
+    },
+    "kb_mean": {
+      "value": 0.6938,
+      "unit": "",
+      "repeats": 1
+    },
+    "kb_n": {
+      "value": 20,
+      "unit": "",
+      "repeats": 1
+    },
+    "ind_min": {
+      "value": 0.5582,
+      "unit": "",
+      "repeats": 1
+    },
+    "ind_max": {
+      "value": 0.6835,
+      "unit": "",
+      "repeats": 1
+    },
+    "ind_mean": {
+      "value": 0.6336,
+      "unit": "",
+      "repeats": 1
+    },
+    "ind_n": {
+      "value": 20,
+      "unit": "",
+      "repeats": 1
+    },
+    "ranges_overlap": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ook_tau": {
+      "value": 0.5682,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ook_precision": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ook_recall": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ook_f1": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ind_tau": {
+      "value": 0.6563,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ind_precision": {
+      "value": 0.7727,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ind_recall": {
+      "value": 0.85,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_ind_f1": {
+      "value": 0.8095,
+      "unit": "",
+      "repeats": 1
+    },
+    "ind_ranges_overlap": {
+      "value": 1,
+      "unit": "",
+      "repeats": 1
+    },
+    "refusal_f1_drop_ood_to_ind": {
+      "value": 0.1905,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "不预设「该拒答」这个能力已经做到——本项测的是两个分布可分到什么程度，不实现拒答阈值机制本身（那是运行时功能，超出评测范围）。★ R3-31 的核心发现：域外负样本给出 F1=1.0 的完美假象，换成领域内负样本后 F1 掉到 0.81——四轮报告里那个「区间不重叠」是被过于容易的负样本撑起来的。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-209] 负样本对照：域外/域内两档 + 拒答判定 precision/recall（E-8 + R3-31）  (层级 L2) =====\n域外负样本 top1 范围 [0.4234, 0.5253]\n真实问题   top1 范围 [0.6111, 0.8577]\n域外 vs 真实 两分布重叠：False\n拒答判定[ook] τ=0.5682 precision=1.0000 recall=1.0000 F1=1.0000\n拒答判定[ind] τ=0.6563 precision=0.7727 recall=0.8500 F1=0.8095\n域内负样本 top1 范围 [0.5582, 0.6835]，与真实问题重叠：True\n  [note] 不预设「该拒答」这个能力已经做到——本项测的是两个分布可分到什么程度，不实现拒答阈值机制本身（那是运行时功能，超出评测范围）。★ R3-31 的核心发现：域外负样本给出 F1=1.0 的完美假象，换成领域内负样本后 F1 掉到 0.81——四轮报告里那个「区间不重叠」是被过于容易的负样本撑起来的。\n"
+}

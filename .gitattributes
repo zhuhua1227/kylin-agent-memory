@@ -1,0 +1,63 @@
+# 全仓库统一用 LF，**工作区也是 LF**（`eol=lf`，不只是入库时归一）。
+#
+# 为什么必须钉死：`generate_manifest.py` 对交付物算 sha256，算的是**工作区
+# 里的字节**。而 Windows 上 git 的默认 `core.autocrlf=true` 会在 checkout
+# 时把 LF 换成 CRLF——仓库里存的是 LF、检出来的是 CRLF，两者字节不同，
+# 哈希自然不同。
+#
+# 后果不是"有点不整齐"，而是**任何人克隆这个仓库后跑一键复现，都会在开头
+# 看到一屏"证据被改动过"**——第三轮 R3-36 刚把清单核对接进 reproduce_L1.py，
+# 这个默认配置会让它对每一位复核员都误报，而且误报的措辞恰恰是最要命的那种
+# （看起来像我们篡改了证据）。本机实测：`知识检索/cases.jsonl` 检出后有 27
+# 处 CRLF、`measure_L2.py` 有 570 处，与仓库里的 LF 版本哈希全部对不上。
+#
+# `.gitattributes` 的优先级高于 `core.autocrlf`，所以这一行同时管住了别人
+# 机器上的配置——不需要每位复核员先去改自己的 git 设置。
+* text=auto eol=lf
+
+# 固化向量：纯 ASCII 文本，但它们是 M-111/M-114 的输入，字节必须逐位稳定，
+# 显式标成二进制，任何情况下都不做任何转换。
+*.tsv binary
+*.npy binary
+
+# ★★ 冻结且已外部锚定的评测集文件：**绝对不能碰一个字节** ★★
+#
+# 这三个文件的 sha256 已经发成 GitHub issue 评论、由服务端时间戳背书
+# （v1.3.0 = 2e198716fa14b587…，见 评测集/说明报告.md）。哈希算的是文件
+# 的原始字节，而它们**当初是以 CRLF 落盘并被锚定的**——一旦被行尾归一化
+# 改成 LF，哈希立刻变成另一个值，那条锚定就此作废，而且**再也补不回来**：
+# 锚定的全部意义是"先冻结、后跑模型"这个顺序有服务端时间戳作证，重新
+# 锚定只能证明"今天冻结了"，证明不了当初。
+#
+# 上面那条 `* text=auto eol=lf` 是对的、也必须有，但它会连这三个文件一起
+# 归一化。本轮加 .gitattributes 时就真的踩了：归一化之后 C-221（冻结哈希
+# 主张）当场报红，实测算出 9923f49c…，与锚定值对不上。标成 binary 之后
+# 才既让其余文件跨平台稳定、又让这三个保持锚定时的原始字节。
+#
+# ⚠️ 以后再冻结新版本（v1.4.0…）时，新文件也必须加进这份名单。
+评测集/eval_set.jsonl binary
+评测集/eval_candidates.jsonl binary
+评测集/eval_set_frozen.json binary
+
+# 三份知识语料同样"被哈希登记过"，只是不那么显眼：`eval_set_frozen.json`
+# 的 `knowledge_base_sha256` 字段登记了它们的 sha256，`measure_recall.py`
+# 的 E-3 语料哈希卫每次跑都会核对——**语料变一个字节就拒跑**（这是刻意
+# 设计：评测集是针对某一版语料出的题，语料换了题目就不再对应）。
+# 归一化行尾同样会踩到：本轮实测 E-3 守卫当场把正常路径判成"语料被篡改"。
+知识检索/cases.jsonl binary
+知识检索/workflows.jsonl binary
+知识检索/templates.jsonl binary
+
+# ★ 冲突判定规则冻结（《冲突规则冻结-执行方案.md》，2026-08-27）★
+# 这几个文件的 sha256 登记进 records/MANIFEST.sha256 的 evidence 段
+# （generate_manifest.py 的 _FROZEN_RULES），reproduce_L1.py 每次核对，
+# 失配即报红。行尾一旦被归一化，哈希立刻对不上、冻结叙事作废，与上面
+# 评测集三件套同理，标 binary 锁死原始字节。
+# ⚠️ preferences.jsonl / preferences_eval_frozen.json 是偏好模块的同类
+#   冻结产物，本次一并 binary（其 MANIFEST evidence 接线待偏好模块单独补）。
+知识检索/conflicts.jsonl binary
+知识检索/conflicts_eval.jsonl binary
+知识检索/conflicts_eval_frozen.json binary
+知识检索/conflicts_review_decisions.json binary
+知识检索/preferences.jsonl binary
+知识检索/preferences_eval_frozen.json binary

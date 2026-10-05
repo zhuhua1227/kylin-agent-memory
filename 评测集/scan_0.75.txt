@@ -1,0 +1,14 @@
+候选总数：178，阈值：0.75
+命中对数：3
+
+[0.88] difficulty=close  doc_id 20 vs 22
+    A: 用plink去查Yani Neko S01E03.mkv报错没有那个文件或目录，怎么排查？
+    B: 用plink连过去看Yani Neko S01E04.mkv报错没有那个文件或目录怎么办
+
+[0.86] difficulty=close  doc_id 61 vs 92
+    A: 帮我看看当前目录的claudecode为什么不需要官方账号也能用
+    B: 看看当前目录下这个claudecode为啥不需要官方账号也能用
+
+[0.76] difficulty=close  doc_id 6 vs 87
+    A: PowerShell用plink执行add2.sh脚本报错Exit code 1怎么搞
+    B: PowerShell里运行plink.exe报错Exit code 1怎么解决

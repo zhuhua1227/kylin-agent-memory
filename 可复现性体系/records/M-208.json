@@ -1,0 +1,70 @@
+{
+  "record_id": "M-208",
+  "title": "端侧内存总占用（embedding一侧，独立评审R-2）",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "b794263db7cdebd42470865fac0d68208056652c08cb757c569ee5d2c84a19ce",
+  "command": "python3 measure_L2.py M-208",
+  "started_at": "2026-08-05T04:37:01.874728+00:00",
+  "duration_sec": 0.362,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_d",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) N100",
+    "cpu_count": 2,
+    "mem_total_mb": 3916,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [],
+  "metrics": {
+    "kytensor_rss_mb": {
+      "value": 1403.8,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "kylin_ai_runtime_rss_mb": {
+      "value": 69.8,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "emb_serverd_rss_mb": {
+      "value": 7.7,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "kytensor_delta_kb": {
+      "value": 0,
+      "unit": "KB",
+      "repeats": 1
+    },
+    "kylin_ai_runtime_delta_kb": {
+      "value": 28,
+      "unit": "KB",
+      "repeats": 1
+    },
+    "attributable_increment_mb": {
+      "value": 7.76,
+      "unit": "MB",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "稳态测量：kytensor在此之前已因本项目多次调用而常驻目标模型，增量为0正是这个稳态的体现；未测量系统首次冷加载该模型的一次性代价，如实声明"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-208] 端侧内存总占用（embedding一侧，独立评审R-2）  (层级 L2) =====\nkytensor（系统级，与本项目无关的其它模型也在里面）：1403.8MB，本次调用增量 0KB\nkylin-ai-runtime：69.8MB，本次调用增量 28KB\nemb_serverd（本项目自己的客户端进程）：7.7MB\n本项目可归因的端侧内存增量：约 7.8MB（不含kytensor常驻的1.4GB，那是系统级公共基础设施，无论本项目用不用都会常驻）\n  [note] 稳态测量：kytensor在此之前已因本项目多次调用而常驻目标模型，增量为0正是这个稳态的体现；未测量系统首次冷加载该模型的一次性代价，如实声明\n"
+}

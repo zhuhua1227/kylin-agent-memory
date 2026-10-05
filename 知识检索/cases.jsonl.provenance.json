@@ -1,0 +1,11 @@
+{
+  "artifact": "cases.jsonl",
+  "artifact_sha256": "cba294b498e93434e19a08fa2a98fd199ef0cadd697bf32048df37623098a3d1",
+  "script": "知识检索/mine_cases.py",
+  "script_sha256": "8f0b3d71c2fb84eb3f7cf7cb6f72f8b9379cc82a9be058a42cda819135734b81",
+  "inputs": {
+    "多源数据整合/dataset/memory_source_records.jsonl": "45863d4ed5489ef2ce1c704e269409fbbb9b5f2f41f245a7ed2987ab0a241258"
+  },
+  "generated_at": "2026-08-15T05:41:57.329562+00:00",
+  "frozen_reason": "2026-08-27 脱敏补漏：源数据集 memory_source_records.jsonl 因 identity_map 新增 4 条（主机名/用户名大小写变体/2 个 AppID）而 rescrub，sha256 由 45863d4e… 变为 84ad7a4a…。本产物**内容不受影响**——这 4 类 token 不在 案例/流程文本里，实测重跑 mine_cases.py / mine_workflows.py 得到逐字节相同的 cases.jsonl / workflows.jsonl（mine_cases.py 本身也拒绝改写已冻结产物）。v1.4.0 评测集的 doc_id 与召回率数字全部建立在这份不变的产物上，不受影响。见《代码产物落差登记表》。"
+}

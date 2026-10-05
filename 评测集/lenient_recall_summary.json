@@ -1,0 +1,24 @@
+{
+  "strict": {
+    "recall_at_1": 0.645,
+    "recall_at_3": 0.8225,
+    "recall_at_5": 0.8698,
+    "recall_at_10": 0.9172
+  },
+  "lenient": {
+    "recall_at_1": 0.6746,
+    "recall_at_3": 0.8284,
+    "recall_at_5": 0.8698,
+    "recall_at_10": 0.9172
+  },
+  "changed_count": 7,
+  "changed_questions": [
+    "Q-018",
+    "Q-039",
+    "Q-041",
+    "Q-042",
+    "Q-043",
+    "Q-135",
+    "Q-136"
+  ]
+}

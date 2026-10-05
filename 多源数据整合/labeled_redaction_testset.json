@@ -1,0 +1,237 @@
+{
+  "note": "独立评审D-8/D-9要求：脱敏能力此前只有7条手工用例、从未测过召回率/精确率/误伤率。本文件是标注测试集：positive=应当被打码的敏感内容（结构与真实泄漏事故一致，但值本身是合成的，不含任何真实密钥/密码）；negative=容易被误伤但不该打码的正常内容（UUID、哈希、版本号等）。跑法见同目录 measure_anonymize_quality.py。",
+  "positive": [
+    {
+      "id": "p01",
+      "text": "密钥sk-xxxxYYYYzzzz1234",
+      "why": "新式带连字符API密钥，独立评审发现的真实漏检模式"
+    },
+    {
+      "id": "p02",
+      "text": "Authorization: Bearer abcDEF123456ghijKLMNOP7890",
+      "why": "Bearer token"
+    },
+    {
+      "id": "p03",
+      "text": "sshpass -p PLAINPW1234 ssh a@b",
+      "why": "裸词sshpass"
+    },
+    {
+      "id": "p04",
+      "text": "sshpass -p 'quotedSecret99' ssh a@b",
+      "why": "带引号sshpass"
+    },
+    {
+      "id": "p05",
+      "text": "echo 'u:mySecretPass1' | chpasswd",
+      "why": "chpasswd整行"
+    },
+    {
+      "id": "p06",
+      "text": "plink -pw 'MyPassw0rd123' user@host",
+      "why": "带引号-pw"
+    },
+    {
+      "id": "p07",
+      "text": "plink -pw MyBarePassw0rd user@host",
+      "why": "裸词-pw"
+    },
+    {
+      "id": "p08",
+      "text": "\"web_ui_password\": \"SynthWebUi2027!\"",
+      "why": "下划线拼接字段名+值，真实漏检模式（值为合成值，第二轮独立复核指出此前误用了真实密码词根，已改）"
+    },
+    {
+      "id": "p09",
+      "text": "cfg[\"password\"] = \"DictLiteralPw1\"",
+      "why": "Python字典写法，分隔符含] ="
+    },
+    {
+      "id": "p10",
+      "text": "web_ui_password\\\": \\\"EscapedJsonPw1\\\"",
+      "why": "转义JSON写法，分隔符含反斜杠"
+    },
+    {
+      "id": "p11",
+      "text": "client_secret: qqBotSecretValue16",
+      "why": "英文secret关键词"
+    },
+    {
+      "id": "p12",
+      "text": "上传目录TOKEN: uploadTokenValue16",
+      "why": "英文token关键词，中文语境"
+    },
+    {
+      "id": "p13",
+      "text": "密码：MyChineseColonPw",
+      "why": "中文冒号紧跟密码"
+    },
+    {
+      "id": "p14",
+      "text": "密码`BacktickWrappedPw`",
+      "why": "中文反引号包裹"
+    },
+    {
+      "id": "p15",
+      "text": "口令是SomeKouLingValue1",
+      "why": "口令关键词"
+    },
+    {
+      "id": "p16",
+      "text": "联系电话13812345678，请尽快回复",
+      "why": "手机号"
+    },
+    {
+      "id": "p17",
+      "text": "邮箱 someone@example.com 联系",
+      "why": "邮箱"
+    },
+    {
+      "id": "p18",
+      "text": "服务器地址是192.168.100.50，请连接",
+      "why": "IPv4"
+    },
+    {
+      "id": "p19",
+      "text": "网卡MAC地址64:6e:60:cd:4c:57已记录",
+      "why": "MAC地址"
+    },
+    {
+      "id": "p20",
+      "text": "-----BEGIN RSA PRIVATE KEY-----",
+      "why": "私钥头标记"
+    },
+    {
+      "id": "p21",
+      "text": "api_key=1234567890abcdefGHIJ",
+      "why": "api_key等号写法"
+    },
+    {
+      "id": "p22",
+      "text": "credential: someLongCredentialValue123",
+      "why": "credential关键词"
+    },
+    {
+      "id": "p23",
+      "text": "AKIAABCDEFGHIJKLMNOP",
+      "why": "AWS Access Key格式，R2-08对抗集指出的真实漏检模式（无sk-前缀、无关键词伴随、未达32位）"
+    },
+    {
+      "id": "p24",
+      "text": "xoxb-1234567890-abcdefghijk",
+      "why": "Slack token格式，R2-08对抗集指出的真实漏检模式"
+    },
+    {
+      "id": "p25",
+      "text": "ghp_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "why": "GitHub PAT格式，R2-08对抗集指出的真实漏检模式"
+    },
+    {
+      "id": "p26",
+      "text": "mysql -pSecretPw99 -e \"select 1\"",
+      "why": "-p紧贴密码无空格的写法，R2-08对抗集指出规则原要求-p后有空格，紧贴形式未覆盖"
+    },
+    {
+      "id": "p27",
+      "text": "curl -u admin:SuperSecret1 http://x",
+      "why": "-u user:pass合一形式，R2-08对抗集指出原来完全没有规则覆盖"
+    }
+  ],
+  "negative": [
+    {
+      "id": "n01",
+      "text": "会话ID是9cfdd06b-6e79-45b7-a682-47da83398243",
+      "why": "UUID格式session_id，不含敏感关键词，属正常标识符"
+    },
+    {
+      "id": "n02",
+      "text": "commit hash a638753480da623c3c46631d8494e8c224ccb080",
+      "why": "40位十六进制git commit hash，不是密钥"
+    },
+    {
+      "id": "n03",
+      "text": "文件sha256为2e198716fa14b587e5832c0eb94a4dca259ec78a8f6d9f2c44e352d5087a21f0",
+      "why": "64位十六进制内容哈希，本项目自己claims.json里大量使用这类值，不是密钥"
+    },
+    {
+      "id": "n04",
+      "text": "临时目录C:\\\\Users\\\\device_a\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\28454cd3-0acb-47d0-82e5-ce83fa714c8b",
+      "why": "含UUID的正常临时目录路径"
+    },
+    {
+      "id": "n05",
+      "text": "包版本号libkylin-coreai-embedding_1.2.0.0-0k0.4_amd64",
+      "why": "dpkg包版本字符串"
+    },
+    {
+      "id": "n06",
+      "text": "今天天气不错，我想去公园散步",
+      "why": "普通中文句子，无敏感内容"
+    },
+    {
+      "id": "n07",
+      "text": "这个任务进展顺利，明天继续",
+      "why": "普通中文句子"
+    },
+    {
+      "id": "n08",
+      "text": "The quick brown fox jumps over the lazy dog",
+      "why": "普通英文句子"
+    },
+    {
+      "id": "n09",
+      "text": "请把文件从upward目录移动到下一层",
+      "why": "含upward一词，测试pw子串不应被误判"
+    },
+    {
+      "id": "n10",
+      "text": "钥匙掉在桌子上了，记得带走",
+      "why": "含'钥匙'但不是'密钥'，不应误伤"
+    },
+    {
+      "id": "n11",
+      "text": "session_id: b5ae1378-53bf-4ae1-8929-2336e30cee15",
+      "why": "字段名含session不含key/token等敏感词，值为UUID"
+    },
+    {
+      "id": "n12",
+      "text": "GET https://api.example.com/v1/search?q=test&limit=10",
+      "why": "普通API URL，无随机长token"
+    },
+    {
+      "id": "n13",
+      "text": "版本号v2.4.0已发布，更新日志见CHANGELOG",
+      "why": "版本号"
+    },
+    {
+      "id": "n14",
+      "text": "错误码E12345，请查阅文档第3章",
+      "why": "错误码，短数字字母组合"
+    },
+    {
+      "id": "n15",
+      "text": "配置文件路径为/etc/kylin-ai/config.yaml",
+      "why": "普通配置文件路径"
+    },
+    {
+      "id": "n16",
+      "text": "这次提交修复了三个bug，覆盖率提升到93.7%",
+      "why": "普通中文技术描述句"
+    },
+    {
+      "id": "n17",
+      "text": "password policy document",
+      "why": "R2-08对抗集指出的真实误伤：关键词后紧跟空格+6位以上英文单词，被误当成密钥值整体打码，实为正常英文散文"
+    },
+    {
+      "id": "n18",
+      "text": "task-execution-record-2026-08-05-final",
+      "why": "R2-08对抗集指出的真实误伤：sk-规则原无左词边界，task-里的sk-子串被误判为key前缀"
+    },
+    {
+      "id": "n19",
+      "text": "kylin-ai-vector-engine-client-devel",
+      "why": "R2-08对抗集指出的真实误伤：本项目核心包名，多段小写连字符拼接、超32位，被32位长串兜底规则整体打码"
+    }
+  ]
+}

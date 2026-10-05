@@ -1,0 +1,68 @@
+{
+  "record_id": "M-109",
+  "title": "mine_workflows.py 确定性回归 + 评测集冻结统计",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_workflows.py",
+  "script_sha256": null,
+  "command": "python mine_workflows.py（3个独立子进程、不同哈希种子，比对md5）",
+  "started_at": "2026-08-15T06:20:36.577405+00:00",
+  "duration_sec": 0.758,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [],
+  "metrics": {
+    "determinism_runs_agree": {
+      "value": 1,
+      "unit": "",
+      "repeats": 1
+    },
+    "determinism_run_hashes": {
+      "value": "bbc3487ff6d851120e309fb009cf34b7,bbc3487ff6d851120e309fb009cf34b7,bbc3487ff6d851120e309fb009cf34b7",
+      "unit": "",
+      "repeats": 1
+    },
+    "eval_set_count": {
+      "value": 227,
+      "unit": "题",
+      "repeats": 1
+    },
+    "eval_set_sha256": {
+      "value": "c0727f48a36c884a9de8910325f9ef4f1fc6020b4fcdcccbf815366640220d96",
+      "unit": "",
+      "repeats": 1
+    },
+    "eval_set_version": {
+      "value": "v1.4.0",
+      "unit": "",
+      "repeats": 1
+    },
+    "candidate_covered_units": {
+      "value": 77,
+      "unit": "条",
+      "repeats": 1
+    },
+    "candidate_total_units": {
+      "value": 86,
+      "unit": "条",
+      "repeats": 1
+    },
+    "candidate_coverage_ratio": {
+      "value": 0.8953,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [],
+  "succeeded": true,
+  "raw_stdout": "===== [M-109] mine_workflows.py 确定性回归 + 评测集冻结统计  (层级 L1) =====\n3个独立子进程(不同哈希种子) md5：['bbc3487ff6d851120e309fb009cf34b7', 'bbc3487ff6d851120e309fb009cf34b7', 'bbc3487ff6d851120e309fb009cf34b7'] → 一致\n评测集 v1.4.0：227 题，sha256=c0727f48a36c884a9de8910325f9ef4f1fc6020b4fcdcccbf815366640220d96\n候选覆盖率：77/86 = 89.5%\n"
+}

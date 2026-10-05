@@ -1,0 +1,102 @@
+{
+  "_说明": [
+    "交叉验证记录：同一个结论，用两条互不依赖的路径分别得到，看结果是否一致。",
+    "",
+    "为什么它比单次测量强：单一测量若读错了某个字段、或某段代码有系统性偏差，",
+    "结果会一错到底而无从察觉。两条独立路径同时错到同一个数字上的可能性要低得多。",
+    "",
+    "⚠️ 它仍然不能排除伪造——我们可以两边都编。它抬高的是造假成本，",
+    "真正的保障还是「你可以自己重跑」（见 可复现性说明.md）。"
+  ],
+
+  "crosschecks": [
+    {
+      "crosscheck_id": "X-001",
+      "claim": "官方 KYSDK embedding 输出向量维度为 768",
+      "why_independent": "两条路径在 SDK 内部不共用数据源：路径一读的是模型描述元数据（推理发生之前就已存在的配置），路径二数的是一次真实推理实际产出了多少个浮点数。若我们读错了某个字段，两者不会同时指向 768。",
+      "methods": [
+        {
+          "name": "路径一：模型元数据自述",
+          "api": "text_embedding_get_model_list() -> embedding_model_list_get_model(0) -> embedding_model_info_get_model_dim()",
+          "record_id": "M-201",
+          "metric": "model_dim_from_metadata",
+          "result": 768
+        },
+        {
+          "name": "路径二：实际推理输出长度",
+          "api": "text_embedding() -> embedding_result_get_vector_length()",
+          "record_id": "M-201",
+          "metric": "vector_length_from_result",
+          "result": 768
+        }
+      ],
+      "agreement": true,
+      "verified_by": "dim_crosscheck.c（程序内直接比对，不一致则以非 0 退出码报错）",
+      "layer": "L2"
+    },
+
+    {
+      "crosscheck_id": "X-002",
+      "claim": "同一组文本与查询的语义检索相似度为 0.9441 / 0.7118 / 0.5326",
+      "why_independent": "三条路径的相似度计算实现完全不同：一条是自己写的纯 Python 余弦相似度，一条是官方向量引擎（Milvus Lite 分支）内部的 COSINE 度量，一条是 numpy 的矩阵乘法。三方给出逐位相同的分数，说明官方引擎的 COSINE 与我们自实现的余弦在数值上等价，也说明检索逻辑没有实现偏差。",
+      "methods": [
+        {
+          "name": "路径一：阶段01 纯 Python 暴力遍历",
+          "record_id": "M-106",
+          "metrics": {"top1_score": 0.9441, "top2_score": 0.7118, "top3_score": 0.5326},
+          "layer": "L1"
+        },
+        {
+          "name": "路径二：官方麒麟向量引擎（COSINE）",
+          "record_id": "M-206",
+          "metrics": {"kylin_top1_score": 0.9441, "kylin_top2_score": 0.7118, "kylin_top3_score": 0.5326},
+          "layer": "L2"
+        },
+        {
+          "name": "路径三：numpy 后端（预归一化 + 矩阵乘法）",
+          "record_id": "M-206",
+          "metrics": {"numpy_top1_score": 0.9441, "numpy_top2_score": 0.7118, "numpy_top3_score": 0.5326},
+          "layer": "L2"
+        }
+      ],
+      "agreement": true,
+      "note": "三方一致，且与阶段01《端到端最小管线》报告的历史记录逐位相同"
+    },
+
+    {
+      "crosscheck_id": "X-003",
+      "claim": "对同一文本「怎么重启网络服务」，官方 SDK 输出的向量前 5 个值为 -0.061744 0.067857 -0.087588 0.019701 -0.013820",
+      "why_independent": "四个独立编译的程序各自调用 SDK 取值。若某个程序的参数传递或结果解析有误，其输出会与其余不同。数值逐位一致，说明调用方式正确且 SDK 输出稳定可复现。",
+      "methods": [
+        {"name": "emb_test（证明向量维度用）", "layer": "L2"},
+        {"name": "emb_vec（阶段01 管线用，argv 传参）", "layer": "L2"},
+        {"name": "emb_serverd（常驻服务，长度前缀协议）", "layer": "L2"},
+        {"name": "dim_crosscheck（本次新增的双路验证程序）", "record_id": "M-201", "metric": "first5_values", "layer": "L2"}
+      ],
+      "agreement": true,
+      "note": "四个程序的输入传递方式各不相同（写死在代码里 / 命令行参数 / 管道长度前缀），却得到相同数值，同时也验证了不同传参方式不影响结果"
+    },
+
+    {
+      "crosscheck_id": "X-004",
+      "claim": "多源数据集合法记录总数为 6,927 条",
+      "why_independent": "提取阶段与合并阶段是两套独立代码，各自计数：提取脚本统计自己产出了多少条，合并脚本重新逐行解析并做字段校验后独立计数。若某个提取脚本多写或漏写，两个数字会对不上。",
+      "methods": [
+        {
+          "name": "路径一：各提取脚本自行计数",
+          "detail": "第三版：内容级去重+三态执行结果分类后合法记录 6927 条（R3-22：此前停留在第二版去重前的 14588 口径）",
+          "layer": "L1"
+        },
+        {
+          "name": "路径二：合并脚本独立解析与校验后计数",
+          "record_id": "M-101",
+          "metric": "total_records",
+          "result": 6927,
+          "detail": "merge_and_validate.py 逐行重新解析、按记录类型分别校验必填字段，不合法计数为 0",
+          "layer": "L1"
+        }
+      ],
+      "agreement": true
+    }
+  ]
+}

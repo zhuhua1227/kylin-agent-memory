@@ -1,0 +1,159 @@
+{
+  "record_id": "M-402",
+  "title": "偏好提取：留出期行为预测准确率 vs 多数基线 vs 提升幅度",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_preferences.py",
+  "script_sha256": null,
+  "command": "python measure_preferences.py M-402",
+  "started_at": "2026-08-27T06:39:47.370730+00:00",
+  "duration_sec": 2.01,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+      "bytes": 21459731,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "train_sessions": {
+      "value": 142,
+      "unit": "个",
+      "repeats": 1
+    },
+    "test_sessions": {
+      "value": 95,
+      "unit": "个",
+      "repeats": 1
+    },
+    "preferences_extracted": {
+      "value": 16,
+      "unit": "条",
+      "repeats": 1
+    },
+    "operation_habit_n_trigger": {
+      "value": 1352,
+      "unit": "次",
+      "repeats": 1
+    },
+    "operation_habit_accuracy": {
+      "value": 0.9001,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_accuracy_ci_lo": {
+      "value": 0.883,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_accuracy_ci_hi": {
+      "value": 0.915,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_baseline": {
+      "value": 0.2049,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_baseline_ci_lo": {
+      "value": 0.1842,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_baseline_ci_hi": {
+      "value": 0.2272,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_lift": {
+      "value": 0.6953,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_lift_ci_lo": {
+      "value": 0.6558,
+      "unit": "",
+      "repeats": 1
+    },
+    "operation_habit_lift_ci_hi": {
+      "value": 0.7308,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_n_trigger": {
+      "value": 44,
+      "unit": "次",
+      "repeats": 1
+    },
+    "output_style_accuracy": {
+      "value": 0.6818,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_accuracy_ci_lo": {
+      "value": 0.5344,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_accuracy_ci_hi": {
+      "value": 0.8,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_baseline": {
+      "value": 0.6818,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_baseline_ci_lo": {
+      "value": 0.5344,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_baseline_ci_hi": {
+      "value": 0.8,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_lift": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_lift_ci_lo": {
+      "value": -0.2656,
+      "unit": "",
+      "repeats": 1
+    },
+    "output_style_lift_ci_hi": {
+      "value": 0.2656,
+      "unit": "",
+      "repeats": 1
+    },
+    "safety_policy_n_trigger": {
+      "value": 0,
+      "unit": "次",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "operation_habit 提升幅度区间下界>0，可以确信提取器优于多数基线（这是本模块唯一有统计显著提升的类别）。",
+    "output_style 提升幅度=0：该类别当前只挖到一个触发情境（doc_format），类别级多数基线与该情境的多数在数学上恒等，不是提取器无效，是这一类目前只有一个候选情境——按赛题'未达基础指标需明确优化方向'如实处理：优化方向是拓宽输出风格的情境切分（如按目录/项目区分），不是这个数字本身有问题。",
+    "safety_policy n=0：提取阶段已是空集，评测阶段自然无可评测对象，与 M-401 的空结果一致，不是评测环节的独立问题。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-402] 偏好提取：留出期行为预测准确率 vs 多数基线 vs 提升幅度  (层级 L1) =====\n训练期 142 会话 / 留出期 95 会话\n  operation_habit: n=1352 准确率=90.0% 基线=20.5% 提升=+69.5pp 提升区间(保守)=[65.6%, 73.1%]\n  output_style: n=44 准确率=68.2% 基线=68.2% 提升=+0.0pp 提升区间(保守)=[-26.6%, 26.6%]\n  safety_policy: n=0，无法评测（提取阶段无产出）\n  [note] operation_habit 提升幅度区间下界>0，可以确信提取器优于多数基线（这是本模块唯一有统计显著提升的类别）。\n  [note] output_style 提升幅度=0：该类别当前只挖到一个触发情境（doc_format），类别级多数基线与该情境的多数在数学上恒等，不是提取器无效，是这一类目前只有一个候选情境——按赛题'未达基础指标需明确优化方向'如实处理：优化方向是拓宽输出风格的情境切分（如按目录/项目区分），不是这个数字本身有问题。\n  [note] safety_policy n=0：提取阶段已是空集，评测阶段自然无可评测对象，与 M-401 的空结果一致，不是评测环节的独立问题。\n"
+}

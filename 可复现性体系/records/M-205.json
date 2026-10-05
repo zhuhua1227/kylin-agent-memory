@@ -1,0 +1,148 @@
+{
+  "record_id": "M-205",
+  "title": "两种存储后端资源占用对比（20000 条 × 768 维）",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "5378cd54faa6f89de74c687435b1ec7d784842fbfe18872b43391c25c1466029",
+  "command": "python3 measure_L2.py M-205",
+  "started_at": "2026-08-03T21:49:36.691753+00:00",
+  "duration_sec": 18.578,
+  "random_seed": 42,
+  "environment": {
+    "hostname": "device_d",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) N100",
+    "cpu_count": 2,
+    "mem_total_mb": 3916,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [],
+  "metrics": {
+    "kylin_search_ms": {
+      "value": 15.837633,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 20,
+      "runs": [
+        17.716445,
+        15.725139,
+        15.477447,
+        15.837633,
+        15.421955,
+        14.509392,
+        14.478979,
+        14.113399,
+        14.393242,
+        13.937207,
+        14.750467,
+        14.626202,
+        14.425238,
+        15.12003,
+        15.496712,
+        14.006946,
+        14.12405,
+        14.09664,
+        14.204338,
+        14.147744
+      ],
+      "mean": 14.83046,
+      "p50": 14.478979,
+      "p95": 15.837633,
+      "min": 13.937207,
+      "max": 17.716445,
+      "stdev": 0.916399
+    },
+    "numpy_search_ms": {
+      "value": 6.604652,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 20,
+      "runs": [
+        35.089662,
+        3.169999,
+        6.604652,
+        2.939157,
+        2.744331,
+        3.180411,
+        2.95539,
+        2.687132,
+        2.839542,
+        2.816639,
+        2.982075,
+        2.823761,
+        2.821638,
+        2.839088,
+        2.900143,
+        2.676047,
+        3.159853,
+        2.755176,
+        2.990305,
+        2.886495
+      ],
+      "mean": 4.693075,
+      "p50": 2.886495,
+      "p95": 6.604652,
+      "min": 2.676047,
+      "max": 35.089662,
+      "stdev": 7.203808
+    },
+    "kylin_cold_start_ms": {
+      "value": 58.53,
+      "unit": "ms",
+      "repeats": 1
+    },
+    "kylin_build_index_sec": {
+      "value": 14.583,
+      "unit": "秒",
+      "repeats": 1
+    },
+    "kylin_engine_delta_mb": {
+      "value": 114.5,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "kylin_bridge_mb": {
+      "value": 27.1,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "kylin_memory_mb": {
+      "value": 141.6,
+      "unit": "MB",
+      "repeats": 1
+    },
+    "numpy_cold_start_ms": {
+      "value": 0.209,
+      "unit": "ms",
+      "repeats": 1
+    },
+    "numpy_build_index_sec": {
+      "value": 1.655,
+      "unit": "秒",
+      "repeats": 1
+    },
+    "numpy_memory_mb": {
+      "value": 59.3,
+      "unit": "MB",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "官方引擎内存为「守护进程增量 + 桥接进程」；numpy 为本进程 RSS 增量。原始向量数据本身约 58.6MB"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-205] 两种存储后端资源占用对比（20000 条 × 768 维）  (层级 L2) =====\n  后端 kylin 测量完成\n  后端 numpy 测量完成\n  [note] 官方引擎内存为「守护进程增量 + 桥接进程」；numpy 为本进程 RSS 增量。原始向量数据本身约 58.6MB\n"
+}

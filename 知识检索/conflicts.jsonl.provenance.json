@@ -1,0 +1,10 @@
+{
+  "artifact": "conflicts.jsonl",
+  "artifact_sha256": "c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745",
+  "script": "知识检索/mine_conflicts.py",
+  "script_sha256": "7378b51d34e392a57712259b2ad95173e221813f68415e7dfcd554cee0a782c4",
+  "inputs": {
+    "多源数据整合/dataset/memory_source_records.jsonl": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee"
+  },
+  "generated_at": "2026-08-28T08:10:38.888870+00:00"
+}

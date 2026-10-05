@@ -1,0 +1,170 @@
+{
+  "record_id": "M-101",
+  "title": "多源数据集构成与时间戳归一化覆盖",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "e3eccd896edb294c09b0088e026cc4f5b2ae904da934edc347565bef0a48ecd4",
+  "command": "python measure_L1.py M-101",
+  "started_at": "2026-08-14T04:00:25.171862+00:00",
+  "duration_sec": 0.283,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "02f48b5eea373955540456bc5481750545fff4a3c705186688001020f1adf9f9",
+      "bytes": 21469478,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "total_records": {
+      "value": 9807,
+      "unit": "条",
+      "repeats": 1
+    },
+    "count_user_input": {
+      "value": 534,
+      "unit": "条",
+      "repeats": 1
+    },
+    "count_config_item": {
+      "value": 7,
+      "unit": "条",
+      "repeats": 1
+    },
+    "count_tool_execution": {
+      "value": 9266,
+      "unit": "条",
+      "repeats": 1
+    },
+    "source_claude_code_history": {
+      "value": 534,
+      "unit": "条",
+      "repeats": 1
+    },
+    "source_claude_code_config": {
+      "value": 7,
+      "unit": "条",
+      "repeats": 1
+    },
+    "source_claude_code": {
+      "value": 9096,
+      "unit": "条",
+      "repeats": 1
+    },
+    "source_openclaw_lucy": {
+      "value": 170,
+      "unit": "条",
+      "repeats": 1
+    },
+    "timestamp_source_epoch_ms": {
+      "value": 704,
+      "unit": "条",
+      "repeats": 1
+    },
+    "timestamp_source_iso8601": {
+      "value": 9103,
+      "unit": "条",
+      "repeats": 1
+    },
+    "time_span_start": {
+      "value": "2026-05-26T05:47:12.519000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "time_span_end": {
+      "value": "2026-08-14T02:50:56.275000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "tool_success": {
+      "value": 7804,
+      "unit": "条",
+      "repeats": 1
+    },
+    "tool_error": {
+      "value": 1462,
+      "unit": "条",
+      "repeats": 1
+    },
+    "tool_execution_time_span_start": {
+      "value": "2026-07-04T14:25:18.990000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "tool_execution_time_span_end": {
+      "value": "2026-08-14T02:50:56.275000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "user_input_time_span_start": {
+      "value": "2026-05-26T05:47:12.519000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "user_input_time_span_end": {
+      "value": "2026-08-03T02:29:20.254000+00:00",
+      "unit": "",
+      "repeats": 1
+    },
+    "te_source_ratio_claude_code": {
+      "value": 0.9817,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_source_ratio_openclaw_lucy": {
+      "value": 0.0183,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_top1_session_ratio": {
+      "value": 0.2518,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_top5_session_ratio": {
+      "value": 0.6453,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_distinct_session_count": {
+      "value": 141,
+      "unit": "个",
+      "repeats": 1
+    },
+    "te_keyword_ratio_麒麟": {
+      "value": 0.0535,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_keyword_ratio_kylin": {
+      "value": 0.0624,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_keyword_ratio_OS_Agent": {
+      "value": 0.0068,
+      "unit": "",
+      "repeats": 1
+    },
+    "te_keyword_ratio_磐石": {
+      "value": 0.007,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [],
+  "succeeded": true,
+  "raw_stdout": "===== [M-101] 多源数据集构成与时间戳归一化覆盖  (层级 L1) =====\n总记录 9807；类型分布 {'user_input': 534, 'config_item': 7, 'tool_execution': 9266}\n来源分布 {'claude_code_history': 534, 'claude_code_config': 7, 'claude_code': 9096, 'openclaw_lucy': 170}\n时间戳来源 {'epoch_ms': 704, 'iso8601': 9103}\n时间跨度（全部类型混合）2026-05-26T05:47:12.519000+00:00 → 2026-08-14T02:50:56.275000+00:00\n  tool_execution 时间跨度：2026-07-04T14:25:18.990000+00:00 → 2026-08-14T02:50:56.275000+00:00\n  user_input 时间跨度：2026-05-26T05:47:12.519000+00:00 → 2026-08-03T02:29:20.254000+00:00\n工具调用成功 7804 / 出错 1462\n数据代表性：来源{'claude_code': 9096, 'openclaw_lucy': 170}，最大会话占比25.2%，前5会话占比64.5%，麒麟关键词占比5.35%\n"
+}

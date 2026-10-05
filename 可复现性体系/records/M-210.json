@@ -1,0 +1,299 @@
+{
+  "record_id": "M-210",
+  "title": "关联检索消融：naive/meta_oracle/meta_prior/mmr/bm25/supersede/all 七档对比",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "3ca64248c334d99260df10d5a832bd27c72ef3fb53c40fbaf92f56112b0a68b5",
+  "command": "python3 measure_recall.py --compare-ablation（先跑七次 --retrieval）",
+  "started_at": "2026-09-07T14:13:14.630056+00:00",
+  "duration_sec": 0.012,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_c-pc",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) Core(TM) i7-14650HX",
+    "cpu_count": 2,
+    "mem_total_mb": 3882,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [
+    {
+      "path": "../评测集/recall_results_ablation_kylin_naive.jsonl",
+      "sha256": "ff51355b79b96ea462cfaa0f29e11caa91d1d6e820d4aadb8474474c68b2d32a",
+      "bytes": 76248,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_meta_oracle.jsonl",
+      "sha256": "c6ec24c1ef7ba82d26b7e5738f6a8dc8c279010f49ff59562af0d90d90b7a10e",
+      "bytes": 76258,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_meta_prior.jsonl",
+      "sha256": "5b2c91ec4521caa240ee118680aff9146455b39bb1904ccde9da8ffb4ae200bd",
+      "bytes": 76350,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_mmr.jsonl",
+      "sha256": "9bea6b65b4bed3cab8440b4b3edfa5fb0ccfaaccc67d99e6005d7afd886bc07d",
+      "bytes": 76997,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_bm25.jsonl",
+      "sha256": "0b59c221a0506fe68c5b7de37612c02ccbc20a841f02368ad58344acb3633484",
+      "bytes": 76316,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_supersede.jsonl",
+      "sha256": "34f099ee01ee02c59d671b9f8bf02ca17624275ea9d927830e15058037cb3603",
+      "bytes": 76287,
+      "lines": 227
+    },
+    {
+      "path": "../评测集/recall_results_ablation_kylin_all.jsonl",
+      "sha256": "e1afe8d6be048ab34f484331879b6331413fe934190b46bed8238938e6cd9e2c",
+      "bytes": 77000,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "naive_r1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "naive_r5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "naive_r10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "naive_r10_ci_lo": {
+      "value": 0.8127,
+      "unit": "",
+      "repeats": 1
+    },
+    "naive_r10_ci_hi": {
+      "value": 0.9021,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_r1": {
+      "value": 0.5551,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_r5": {
+      "value": 0.859,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_r10": {
+      "value": 0.9119,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_r10_ci_lo": {
+      "value": 0.8678,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_r10_ci_hi": {
+      "value": 0.9422,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_oracle_diff_from_naive_n": {
+      "value": 36,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_r1": {
+      "value": 0.5198,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_r5": {
+      "value": 0.8282,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_r10": {
+      "value": 0.8722,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_r10_ci_lo": {
+      "value": 0.8225,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_r10_ci_hi": {
+      "value": 0.9096,
+      "unit": "",
+      "repeats": 1
+    },
+    "meta_prior_diff_from_naive_n": {
+      "value": 14,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_r1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_r5": {
+      "value": 0.7137,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_r10": {
+      "value": 0.7841,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_r10_ci_lo": {
+      "value": 0.7261,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_r10_ci_hi": {
+      "value": 0.8327,
+      "unit": "",
+      "repeats": 1
+    },
+    "mmr_diff_from_naive_n": {
+      "value": 58,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_r1": {
+      "value": 0.4581,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_r5": {
+      "value": 0.7797,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_r10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_r10_ci_lo": {
+      "value": 0.8127,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_r10_ci_hi": {
+      "value": 0.9021,
+      "unit": "",
+      "repeats": 1
+    },
+    "bm25_diff_from_naive_n": {
+      "value": 109,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_r1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_r5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_r10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_r10_ci_lo": {
+      "value": 0.8127,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_r10_ci_hi": {
+      "value": 0.9021,
+      "unit": "",
+      "repeats": 1
+    },
+    "supersede_diff_from_naive_n": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_r1": {
+      "value": 0.4626,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_r5": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_r10": {
+      "value": 0.8678,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_r10_ci_lo": {
+      "value": 0.8176,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_r10_ci_hi": {
+      "value": 0.9058,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_diff_from_naive_n": {
+      "value": 110,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_lift_r10_pp": {
+      "value": 0.44,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_clears_85pct_with_ci": {
+      "value": false,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "naive 档必须与 评测集/recall_results_kylin.jsonl（旧报告口径）逐题 rank 一致——这是本次消融合法性的前提，若不一致说明重构引入了偏差，应先查明原因，此记录不做这道核对（core check 在跑 --retrieval naive 时由脚本自己打印，请人工确认过再采信本记录其余数字）。",
+    "supersede/all 档的 net_gain（扣除语料规模效应后的排序质量真实贡献）见 评测集/measure_recall.py 的 net_gain_for_supersede()，需要supersede 配置运行时打印的 n_removed 语料条数手动代入，本记录只存raw 的 recall 数字。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-210] 关联检索消融：naive/meta_oracle/meta_prior/mmr/bm25/supersede/all 七档对比  (层级 L2) =====\n配置        R@1     R@5     R@10    R@10 95%CI          与naive rank差异题数     \nnaive     52.4   82.4   86.3   [81.3, 90.2]        —                   \nmeta_oracle55.5   85.9   91.2   [86.8, 94.2]        36                  \n    meta_oracle —— 元数据过滤的【上界】。使用标准答案自身的 knowledge_type\n              作为过滤条件，因此不代表可部署的检索能力，仅用于回答\n              \"若能完美预测查询对应的知识类型，最多能提升多少\"。\n              这一档的数字不得以\"系统召回率\"的名义出现在报告里。\nmeta_prior52.0   82.8   87.2   [82.3, 91.0]        14                  \nmmr       52.4   71.4   78.4   [72.6, 83.3]        58                  \nbm25      45.8   78.0   86.3   [81.3, 90.2]        109                 \nsupersede 52.4   82.4   86.3   [81.3, 90.2]        0                   \nall       46.3   76.2   86.8   [81.8, 90.6]        110                 \n⚠️ 配置 naive 与 supersede 的逐题 rank 完全相同——其中至少一个是 no-op，先查为什么，不要写进报告\n\nsupersede 档（相对 naive）：raw_gain(R@10) = +0.00pp，移除了 0 条被 superseded 的知识单元\n  size_effect（语料变小的机械涨幅）= +0.00pp\n  net_gain（扣除语料规模效应后的排序质量真实贡献）= +0.00pp\n\nall 档（相对 naive）：raw_gain(R@10) = +0.44pp，移除了 0 条被 superseded 的知识单元\n  size_effect（语料变小的机械涨幅）= +0.00pp\n  net_gain（扣除语料规模效应后的排序质量真实贡献）= +0.44pp\nnaive R@10=86.3%  all R@10=86.8%（提升 +0.4pp）\nall 配置 R@10 的 Wilson CI 下界 81.8% < 85% 门槛\n  [note] naive 档必须与 评测集/recall_results_kylin.jsonl（旧报告口径）逐题 rank 一致——这是本次消融合法性的前提，若不一致说明重构引入了偏差，应先查明原因，此记录不做这道核对（core check 在跑 --retrieval naive 时由脚本自己打印，请人工确认过再采信本记录其余数字）。\n  [note] supersede/all 档的 net_gain（扣除语料规模效应后的排序质量真实贡献）见 评测集/measure_recall.py 的 net_gain_for_supersede()，需要supersede 配置运行时打印的 n_removed 语料条数手动代入，本记录只存raw 的 recall 数字。\n"
+}

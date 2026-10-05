@@ -1,0 +1,23 @@
+# 全项目唯一的身份假名映射表（第三轮 R3-28 合并自 多源数据整合/ 与 可复现性体系/ 两份）
+# 加载入口：项目根目录的 identity_map_loader.py（唯一实现，两个子系统共用）
+# 格式：真实值<TAB>假名[<TAB>match=word|substr]
+#   第三列可选；不写时自动判定——纯字母→全词匹配（R3-29，防撞常见英文词），
+#   含数字/连字符→子串匹配。
+# 把本文件复制为 identity_map.txt 后填入你自己的真实值；不填也能跑，只是不做假名化。
+#
+# 假名词表沿用「多源数据整合」那一套（user_a / device_a …）：它已冻结在
+# 脱敏语料 → 知识单元 doc_id → v1.3.0 评测集哈希这条链上，改不得；
+# 「可复现性体系」侧的假名只是 records 里的标签，改动代价近乎零，故由它让步。
+#
+# 下面全部是**构造的示例值**，不是任何真实用户名/主机名。
+# 第三列刻意各演示一次显式覆盖。
+
+# ── 用户身份：同一个人的多个别名映射到同一个假名，正是"一致性假名化"要的效果
+exampleuser123	user_a
+exampleuser	user_a
+Exampleuser	user_a	match=word
+
+# ── 设备/主机名
+EXAMPLE-DESKTOP-01	device_a
+EXAMPLE-KYLIN-VM	device_d
+Examplehost	device_b	match=word

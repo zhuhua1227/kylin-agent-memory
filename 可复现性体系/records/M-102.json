@@ -1,0 +1,82 @@
+{
+  "record_id": "M-102",
+  "title": "三类知识单元的可挖掘量",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "e3eccd896edb294c09b0088e026cc4f5b2ae904da934edc347565bef0a48ecd4",
+  "command": "python measure_L1.py M-102",
+  "started_at": "2026-08-14T04:00:26.028619+00:00",
+  "duration_sec": 0.125,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "02f48b5eea373955540456bc5481750545fff4a3c705186688001020f1adf9f9",
+      "bytes": 21469478,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "error_records": {
+      "value": 1462,
+      "unit": "条",
+      "repeats": 1
+    },
+    "case_pairs": {
+      "value": 552,
+      "unit": "对",
+      "repeats": 1
+    },
+    "case_pair_ratio_pct": {
+      "value": 37.76,
+      "unit": "%",
+      "repeats": 1
+    },
+    "sessions_tool": {
+      "value": 141,
+      "unit": "个",
+      "repeats": 1
+    },
+    "sessions_input": {
+      "value": 114,
+      "unit": "个",
+      "repeats": 1
+    },
+    "sessions_shared": {
+      "value": 18,
+      "unit": "个",
+      "repeats": 1
+    },
+    "linkable_intents": {
+      "value": 69,
+      "unit": "条",
+      "repeats": 1
+    },
+    "covered_tool_calls": {
+      "value": 1106,
+      "unit": "条",
+      "repeats": 1
+    },
+    "coverage_pct": {
+      "value": 11.94,
+      "unit": "%",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "案例判定用的是简单启发式（同工具、同会话、5步内），命中率偏低有优化空间；规则写在代码里，可自行调整复算"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-102] 三类知识单元的可挖掘量  (层级 L1) =====\n出错记录 1462，其中 552 条可配成「失败→修复」案例 (37.8%)\n会话交集 18（工具侧 141 / 输入侧 114）\n可关联用户意图 69 条，覆盖工具调用 1106 条 (11.9%)\n  [note] 案例判定用的是简单启发式（同工具、同会话、5步内），命中率偏低有优化空间；规则写在代码里，可自行调整复算\n"
+}

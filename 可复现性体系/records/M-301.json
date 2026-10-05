@@ -1,0 +1,139 @@
+{
+  "record_id": "M-301",
+  "title": "知识冲突挖掘：候选池构成（含两轮方法修正前后对比）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_conflicts.py",
+  "script_sha256": null,
+  "command": "python mine_conflicts.py",
+  "started_at": "2026-09-02T11:23:50.829925+00:00",
+  "duration_sec": 0.797,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+      "bytes": 21459731,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "doc_edit_total": {
+      "value": 148,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_append_only": {
+      "value": 91,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_same_session": {
+      "value": 27,
+      "unit": "条",
+      "repeats": 1
+    },
+    "doc_revision_candidates": {
+      "value": 29,
+      "unit": "条",
+      "repeats": 1
+    },
+    "skipped_unknown_origin": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    },
+    "case_total": {
+      "value": 31,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_permission": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_infra": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "case_signature_groups": {
+      "value": 4,
+      "unit": "条",
+      "repeats": 1
+    },
+    "case_conflict_candidates": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_low_text_overlap": {
+      "value": 5,
+      "unit": "条",
+      "repeats": 1
+    },
+    "user_reversal_signals": {
+      "value": 2,
+      "unit": "条",
+      "repeats": 1
+    },
+    "cmd_drift_candidates": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_non_bash": {
+      "value": 5498,
+      "unit": "条",
+      "repeats": 1
+    },
+    "cmd_rejected_by_permission": {
+      "value": 5,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_same_day": {
+      "value": 44,
+      "unit": "条",
+      "repeats": 1
+    },
+    "cmd_rejected_by_same_session": {
+      "value": 8,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_high_similarity": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "conflict_candidates_total": {
+      "value": 149,
+      "unit": "条",
+      "repeats": 1
+    },
+    "positive_candidates_total": {
+      "value": 29,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "S1（命令输出漂移）实测 0 条正例：当前数据集里还没有任何一条命令跨天且跨会话被重复执行过（《每日锚点16条.md》要求的每日固定读数尚未开始积累），这条矿脉是为其供给方投入使用后才会产出候选的客观通道，不是实现有问题——detector 本身的判据正确性由 test_detectors.py 的阴性验证与 mutate.py 的变异测试单独保证（见 S1检测器-实施方案.md）。",
+    "S3（case签名分组）实测 0 条正例——4 组签名分组全部因文本重叠度过滤剔除（见 mine_conflicts.py 的 CASE_SIGNATURE_OVERLAP_THRESHOLD 注释：Exit code/Traceback 样板文本把不相关事件聚成了同一组），与设计方案估算的'5~8组'不符，如实报告而非调低过滤阈值凑数。",
+    "S2（doc revision）经历两轮真实方法修正：①最初的'同会话即排除'判据被发现会误杀跨天恢复的长驻会话（实测一个会话横跨23天），改为'同会话且同一天'后候选从4条回升到19条；②append_only判据从'前缀匹配'放宽为'子串匹配'后剔除了2条MEMORY.md索引行插入造成的假阳性。两次修正均有实测数字对比，详见 mine_conflicts.py对应位置的注释。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-301] 知识冲突挖掘：候选池构成（含两轮方法修正前后对比）  (层级 L1) =====\n候选池合计 149 条，正例（structural candidate）29 条\ndoc_revision: append_only=91 same_sitting=27 candidate=29\ncase_signature: groups=4 rejected_by_low_text_overlap=5 candidate=0\ncmd_drift(S1): rejected_by_non_bash=5498 rejected_by_same_day=44 cmd_rejected_by_same_session=8 cmd_rejected_by_permission=5 rejected_by_high_similarity=0 candidate=0\n  [note] S1（命令输出漂移）实测 0 条正例：当前数据集里还没有任何一条命令跨天且跨会话被重复执行过（《每日锚点16条.md》要求的每日固定读数尚未开始积累），这条矿脉是为其供给方投入使用后才会产出候选的客观通道，不是实现有问题——detector 本身的判据正确性由 test_detectors.py 的阴性验证与 mutate.py 的变异测试单独保证（见 S1检测器-实施方案.md）。\n  [note] S3（case签名分组）实测 0 条正例——4 组签名分组全部因文本重叠度过滤剔除（见 mine_conflicts.py 的 CASE_SIGNATURE_OVERLAP_THRESHOLD 注释：Exit code/Traceback 样板文本把不相关事件聚成了同一组），与设计方案估算的'5~8组'不符，如实报告而非调低过滤阈值凑数。\n  [note] S2（doc revision）经历两轮真实方法修正：①最初的'同会话即排除'判据被发现会误杀跨天恢复的长驻会话（实测一个会话横跨23天），改为'同会话且同一天'后候选从4条回升到19条；②append_only判据从'前缀匹配'放宽为'子串匹配'后剔除了2条MEMORY.md索引行插入造成的假阳性。两次修正均有实测数字对比，详见 mine_conflicts.py对应位置的注释。\n"
+}

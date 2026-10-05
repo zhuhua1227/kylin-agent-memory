@@ -1,0 +1,58 @@
+{
+  "record_id": "M-110",
+  "title": "模板挖掘：按操作序列签名聚合的可复用模板产出量",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_templates.py",
+  "script_sha256": null,
+  "command": "python mine_templates.py",
+  "started_at": "2026-08-15T06:20:37.433179+00:00",
+  "duration_sec": 0.006,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\cases.jsonl",
+      "sha256": "ab42d314ba846ace073b76dc13f9cb4736cb6dfe08a7dda4dfcc34d4390400a8",
+      "bytes": 61988,
+      "lines": 31
+    },
+    {
+      "path": "..\\知识检索\\workflows.jsonl",
+      "sha256": "0fc530279e9c343583fd18ad65cdd5b2c7006af82104e42c7234d017fa37cd2c",
+      "bytes": 47243,
+      "lines": 54
+    }
+  ],
+  "metrics": {
+    "tool_switch_templates": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    },
+    "tool_sequence_templates": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "templates_total": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "按(失败工具,修复工具,错误类别)与(去重后有序工具名元组)两种签名分别聚合，支持度阈值2，跨会话重复才计入——不是按意图关键词聚类（那条路径已实测证明72%聚不出类）"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-110] 模板挖掘：按操作序列签名聚合的可复用模板产出量  (层级 L1) =====\n工具切换类模板：1 条\n工具序列类模板：0 条\n模板总计：1 条\n  [note] 按(失败工具,修复工具,错误类别)与(去重后有序工具名元组)两种签名分别聚合，支持度阈值2，跨会话重复才计入——不是按意图关键词聚类（那条路径已实测证明72%聚不出类）\n"
+}

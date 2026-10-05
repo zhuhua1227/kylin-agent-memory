@@ -1,0 +1,54 @@
+{
+  "record_id": "M-000",
+  "title": "自检：框架是否工作",
+  "layer": "L1",
+  "script": "measure.py",
+  "script_sha256": "4704e0c5877b06ec73fa89aebcb5d4dfef7a0c496f66d60b1aeb82eaf5ba91e8",
+  "command": "python3 measure.py",
+  "started_at": "2026-08-03T10:54:02.551009+00:00",
+  "duration_sec": 0.0,
+  "random_seed": 1,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [],
+  "metrics": {
+    "dummy_latency_ms": {
+      "value": 10.847434,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 5,
+      "runs": [
+        10.134364,
+        10.847434,
+        10.763775,
+        10.255069,
+        10.495435
+      ],
+      "mean": 10.499215,
+      "p50": 10.255069,
+      "p95": 10.847434,
+      "min": 10.134364,
+      "max": 10.847434,
+      "stdev": 0.309833
+    },
+    "dummy_count": {
+      "value": 42,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "这是框架自检产生的假数据，不代表任何真实指标"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-000] 自检：框架是否工作  (层级 L1) =====\n  [note] 这是框架自检产生的假数据，不代表任何真实指标\n"
+}

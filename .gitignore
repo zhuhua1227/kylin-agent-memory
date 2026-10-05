@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.idea/
+~$*
+
+# 本地私有表，只分发 .example
+identity_map.txt
+多源数据整合/secrets_blocklist.txt
+脱敏/patterns.local.txt
+
+# 原始数据集（含个人信息，不公开）
+多源数据整合/dataset/
+多源数据整合/dataset_*.jsonl

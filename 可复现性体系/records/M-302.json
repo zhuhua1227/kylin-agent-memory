@@ -1,0 +1,88 @@
+{
+  "record_id": "M-302",
+  "title": "知识冲突判定准确率（is_conflict，36对含负例）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_conflicts.py",
+  "script_sha256": null,
+  "command": "python measure_conflicts.py M-302",
+  "started_at": "2026-09-02T11:23:52.113127+00:00",
+  "duration_sec": 0.001,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\conflicts_eval.jsonl",
+      "sha256": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "bytes": 76379,
+      "lines": 36
+    }
+  ],
+  "metrics": {
+    "n": {
+      "value": 36,
+      "unit": "对",
+      "repeats": 1
+    },
+    "positive_n": {
+      "value": 19,
+      "unit": "对",
+      "repeats": 1
+    },
+    "negative_n": {
+      "value": 17,
+      "unit": "对",
+      "repeats": 1
+    },
+    "tp": {
+      "value": 19,
+      "unit": "",
+      "repeats": 1
+    },
+    "fp": {
+      "value": 1,
+      "unit": "",
+      "repeats": 1
+    },
+    "tn": {
+      "value": 16,
+      "unit": "",
+      "repeats": 1
+    },
+    "fn": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "accuracy": {
+      "value": 0.9722,
+      "unit": "",
+      "repeats": 1
+    },
+    "wilson_ci_lo": {
+      "value": 0.8583,
+      "unit": "",
+      "repeats": 1
+    },
+    "wilson_ci_hi": {
+      "value": 0.9951,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "n=36 < 50：样本量不足以支撑对 88% 门槛的可靠判定，Wilson 区间下界 85.8% 是最诚实的表述方式。",
+    "已知误判 K-0067（结构层判定为候选，人工复核后否决）：纯措辞精简无信息差异，结构规则（同文件+非纯追加+跨会话跨天）无法区分'有意义的修订'与'无意义的措辞调整'，这是 L1 结构层本身的能力边界，不是可简单打补丁修掉的实现 bug——《知识冲突处理说明报告.md》有专门讨论。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-302] 知识冲突判定准确率（is_conflict，36对含负例）  (层级 L1) =====\n判定准确率 35/36 = 97.2%（Wilson 95% CI [85.8%, 99.5%]）\n误判：['K-0067']\n  [note] n=36 < 50：样本量不足以支撑对 88% 门槛的可靠判定，Wilson 区间下界 85.8% 是最诚实的表述方式。\n  [note] 已知误判 K-0067（结构层判定为候选，人工复核后否决）：纯措辞精简无信息差异，结构规则（同文件+非纯追加+跨会话跨天）无法区分'有意义的修订'与'无意义的措辞调整'，这是 L1 结构层本身的能力边界，不是可简单打补丁修掉的实现 bug——《知识冲突处理说明报告.md》有专门讨论。\n"
+}

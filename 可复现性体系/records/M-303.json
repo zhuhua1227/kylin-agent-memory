@@ -1,0 +1,88 @@
+{
+  "record_id": "M-303",
+  "title": "知识冲突裁决正确率（adjudicate，19对已确认冲突正例）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_conflicts.py",
+  "script_sha256": null,
+  "command": "python measure_conflicts.py M-303",
+  "started_at": "2026-09-02T11:23:52.204806+00:00",
+  "duration_sec": 0.001,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\conflicts_eval.jsonl",
+      "sha256": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "bytes": 76379,
+      "lines": 36
+    }
+  ],
+  "metrics": {
+    "n": {
+      "value": 19,
+      "unit": "对",
+      "repeats": 1
+    },
+    "verdict_accuracy": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "verdict_wilson_ci_lo": {
+      "value": 0.8318,
+      "unit": "",
+      "repeats": 1
+    },
+    "verdict_wilson_ci_hi": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "type_accuracy": {
+      "value": 0.4211,
+      "unit": "",
+      "repeats": 1
+    },
+    "type_wilson_ci_lo": {
+      "value": 0.2314,
+      "unit": "",
+      "repeats": 1
+    },
+    "type_wilson_ci_hi": {
+      "value": 0.6372,
+      "unit": "",
+      "repeats": 1
+    },
+    "reason_kind_accuracy": {
+      "value": 0.8947,
+      "unit": "",
+      "repeats": 1
+    },
+    "reason_kind_wilson_ci_lo": {
+      "value": 0.6861,
+      "unit": "",
+      "repeats": 1
+    },
+    "reason_kind_wilson_ci_hi": {
+      "value": 0.9706,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "谁生效(verdict)在本数据集上 19/19=100%——但这是问题结构决定的（19条真实案例里'更晚的断言正确'无一例外成立，adjudicate()的verdict规则本质是'总是选更新的'，在此数据集与人工标注恰好吻合，不代表规则验证了比时间序更难的语义判断，报告不会把这条当成规则裁决器'很聪明'的证据）。",
+    "T1~T4 类型判断是三层里最弱的一层：加入环境变更关键词（ENV_CHANGE_PATTERNS）前 7/18=38.9%，加入后 8/18=44.4%（v1.2.0评测集，n=18）。v1.3.0起源查找修复后评测集扩至n=19（新增K-0052，起源修复前被误判same_sitting漏检），类型判断为8/19=42.1%——K-0052被adjudicate()判为T4，金标为T1，是随样本扩充新暴露的真实类型误判，不是代码改动导致的回归。人工复核过程中也发现同一现实事件（做种盘拔除）在不同上下文被人工标成了不同类型（K-0024标T3、K-0025标T1），说明T1/T3在'事实因环境变化而更新'这类场景边界本身就模糊，不是规则没写好，如实报告不继续调参拟合。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-303] 知识冲突裁决正确率（adjudicate，19对已确认冲突正例）  (层级 L1) =====\n裁决三层准确率（n=19）：\n  谁生效(verdict)   19/19 = 100.0%  CI[83.2%, 100.0%]\n  类型(T1-T4)       8/19 = 42.1%  CI[23.1%, 63.7%]\n  reason_kind       17/19 = 89.5%  CI[68.6%, 97.1%]\n  类型误判：[('K-0106', 'T1', 'T3'), ('K-0025', 'T1', 'T3'), ('K-0137', 'T1', 'T3'), ('K-0099', 'T1', 'T4'), ('K-0044', 'T1', 'T2'), ('K-0048', 'T1', 'T4'), ('K-0078', 'T1', 'T2'), ('K-0026', 'T4', 'T3'), ('K-0020', 'T4', 'T1'), ('K-0023', 'T4', 'T3'), ('K-0052', 'T1', 'T4')]\n  [note] 谁生效(verdict)在本数据集上 19/19=100%——但这是问题结构决定的（19条真实案例里'更晚的断言正确'无一例外成立，adjudicate()的verdict规则本质是'总是选更新的'，在此数据集与人工标注恰好吻合，不代表规则验证了比时间序更难的语义判断，报告不会把这条当成规则裁决器'很聪明'的证据）。\n  [note] T1~T4 类型判断是三层里最弱的一层：加入环境变更关键词（ENV_CHANGE_PATTERNS）前 7/18=38.9%，加入后 8/18=44.4%（v1.2.0评测集，n=18）。v1.3.0起源查找修复后评测集扩至n=19（新增K-0052，起源修复前被误判same_sitting漏检），类型判断为8/19=42.1%——K-0052被adjudicate()判为T4，金标为T1，是随样本扩充新暴露的真实类型误判，不是代码改动导致的回归。人工复核过程中也发现同一现实事件（做种盘拔除）在不同上下文被人工标成了不同类型（K-0024标T3、K-0025标T1），说明T1/T3在'事实因环境变化而更新'这类场景边界本身就模糊，不是规则没写好，如实报告不继续调参拟合。\n"
+}

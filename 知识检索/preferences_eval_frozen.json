@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "frozen_at": "2026-08-27T06:39:34.802933+00:00",
+  "split_train_ratio": 0.6,
+  "split_session_list_sha256": "c81d766f169ffca9013ddc2fa202fac0fd458481aabda4caa8c5e92752964035",
+  "split_train_session_count": 142,
+  "split_test_session_count": 95,
+  "preferences_jsonl_sha256": "cdf2f1f7b58eb6161b193ecfb438b13069cc1a4181d91d1430f25fc8e1c4e80a",
+  "corpus_sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+  "corpus_file": "多源数据整合/dataset/memory_source_records.jsonl",
+  "eval_result": {
+    "by_category": {
+      "operation_habit": {
+        "n_trigger": 1352,
+        "extractor_hits": 1217,
+        "baseline_hits": 277,
+        "accuracy": 0.9001,
+        "accuracy_wilson_ci": [
+          0.883,
+          0.915
+        ],
+        "baseline": 0.2049,
+        "baseline_wilson_ci": [
+          0.1842,
+          0.2272
+        ],
+        "lift": 0.6953,
+        "lift_ci_conservative": [
+          0.6558,
+          0.7308
+        ]
+      },
+      "output_style": {
+        "n_trigger": 44,
+        "extractor_hits": 30,
+        "baseline_hits": 30,
+        "accuracy": 0.6818,
+        "accuracy_wilson_ci": [
+          0.5344,
+          0.8
+        ],
+        "baseline": 0.6818,
+        "baseline_wilson_ci": [
+          0.5344,
+          0.8
+        ],
+        "lift": 0.0,
+        "lift_ci_conservative": [
+          -0.2656,
+          0.2656
+        ]
+      },
+      "safety_policy": {
+        "n_trigger": 0,
+        "accuracy": null,
+        "baseline": null,
+        "lift": null
+      }
+    },
+    "train_sessions": 142,
+    "test_sessions": 95,
+    "preferences_extracted": 16
+  }
+}

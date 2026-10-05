@@ -1,0 +1,2273 @@
+{
+  "_说明": [
+    "本文件把各份报告里的数字主张写成机器可读的形式，供 reproduce_L1.py 逐条复算校验。",
+    "",
+    "★为什么要分校验类型★",
+    "并非所有数字都能跨机器精确复现。实测：同一段代码在麒麟虚机(2vCPU)与开发机(24核)上，",
+    "相似度分数与磁盘占用完全一致，内存接近，但延迟差了约 2 倍。",
+    "如果一律要求精确匹配，性能类主张会全部误报为『不一致』，反而掩盖真正的问题。",
+    "因此按主张的性质分类校验：",
+    "",
+    "  exact  —— 确定性数字，必须完全相等（条数、维度、相似度分数、脱敏用例）",
+    "  close  —— 允许相对容差（内存、磁盘：受分配器与文件系统影响，但基本可移植）",
+    "  bound  —— 只验证不等式是否成立（延迟：硬件相关，只能验证结论）",
+    "  ratio  —— 验证两个指标的比值落在区间内（比绝对值可移植得多）",
+    "",
+    "★诚实说明★",
+    "bound 与 ratio 类主张，复现者验证的是『结论成立』而非『数字相同』。",
+    "报告里的绝对延迟数字只在报告所记录的那台机器上成立，其环境指纹写在对应记录的",
+    "environment 字段里。这一点在报告与本文件中均已注明，不做模糊处理。"
+  ],
+  "_语料口径": {
+    "_说明": [
+      "★为什么这里要并列三个口径★（第四轮独立复核 R4-11）",
+      "复核抓到的矛盾是：C-202 说案例 15 条，而 C-234/235/242/250~252 硬编码",
+      "语料共 95 条（=27+59+9）。15+59+9 = 83 ≠ 95。矛盾**本身是有意的**——",
+      "产物重新生成会改掉全部 doc_id 编号、作废已外部锚定的 v1.3.0 冻结评测集，",
+      "理由登记在《可复现性体系/代码产物落差登记表.md》。错的不是「数字不一样」，",
+      "是**两个口径混在一起写、且没有任何检查覆盖这条跨主张的算术**。",
+      "",
+      "所以修法不是把 15 改成 27，而是让每条相关主张用 corpus_basis 说清自己",
+      "描述的是哪一版，再由 verify_reports.py 的 check_corpus_arithmetic() 对",
+      "每一版分别验算 sum(parts) == total，并与**真实产物行数 / records 实测值**",
+      "对钉。这样「15 与 27 并存」是被声明的事实，而某一版内部算术对不上、",
+      "或声明与真实产物/记录对不上，会立刻报红。",
+      "",
+      "★为什么是三个而不是两个★",
+      "第四轮整改（R4-12 取值选项按命令分表、R4-13 容器内执行剥壳 + netstat 收进",
+      "探查表）之后，当前代码重跑得 14 条案例，**而 records/M-107.json 是",
+      "2026-08-06 测的、仍是 15 条**。也就是说「记录」本身已经落后于「代码」一条。",
+      "把 C-202 标成 current_code 会是错的（当前代码给的是 14 不是 15），",
+      "把它标成 delivered 更错（交付产物是 27）。三层落差就如实声明三层，",
+      "不合并、不四舍五入到两层。",
+      "",
+      "★2026-08-14 更新★：整链重跑后三个口径合一（86 = 31+54+1）。",
+      "此前 delivered(95) / records(75) / current_code(74) 三者不同，是",
+      "「代码已修但产物未重新生成」造成的；重跑之后这个落差不再存在。",
+      "保留三层结构而非删减，是因为它随时会再次分叉——下次改了挖掘器",
+      "而暂不重跑产物时，直接往对应层填数即可。"
+    ],
+    "delivered": {
+      "说明": "当前交付产物（三个 .jsonl 的真实行数），v1.4.0 冻结链所锚定的就是这一版。2026-08-14 整链重跑后，三个口径**已经合一**——产物、记录、当前代码产出的是同一批 86 条。",
+      "total": 86,
+      "parts": {
+        "cases": 31,
+        "workflows": 54,
+        "templates": 1
+      },
+      "files": {
+        "cases": "知识检索/cases.jsonl",
+        "workflows": "知识检索/workflows.jsonl",
+        "templates": "知识检索/templates.jsonl"
+      }
+    },
+    "records": {
+      "说明": "records/*.json 里的实测值。整链重跑后与 delivered / current_code 完全一致。三层结构保留：它们回答的是不同问题（产物里是什么 / 证据里写了什么 / 代码现在会产出什么），此刻恰好相等，下次三者再分叉时结构直接可用。",
+      "total": 86,
+      "parts": {
+        "cases": 31,
+        "workflows": 54,
+        "templates": 1
+      },
+      "records": {
+        "cases": [
+          "M-107",
+          "cases_found"
+        ],
+        "workflows": [
+          "M-108",
+          "workflows_found"
+        ],
+        "templates": [
+          "M-110",
+          "templates_total"
+        ]
+      }
+    },
+    "current_code": {
+      "说明": "当前代码重跑会得到的条数。整链重跑后与交付产物一致——这正是本次重跑的目的：把「代码已修、产物未重新生成」这个持续四轮的落差彻底清掉。",
+      "total": 86,
+      "parts": {
+        "cases": 31,
+        "workflows": 54,
+        "templates": 1
+      },
+      "unpinned_reason": "既无产物文件也无 records 可对钉——产物是 27/59/9、记录是 15/59/1，本口径的 14 只能靠现场重跑挖掘器得到，而挖掘器有冻结守卫、不该在每次核对报告时被自动跑一遍（跑它要 40 秒且会读 13MB 数据集）。复现命令写在上面的『说明』里，任何人可在 1 分钟内证伪。"
+    }
+  },
+  "claims": [
+    {
+      "claim_id": "C-001",
+      "report": "多源数据整合/说明报告.md",
+      "text": "三类异构数据合法记录总数 9807 条（v1.4.0 整链重跑；v1.3.0 时为 6927 条）",
+      "record_id": "M-101",
+      "metric": "total_records",
+      "expected": 9807,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-002",
+      "report": "多源数据整合/说明报告.md",
+      "text": "工具执行结果 9266 条",
+      "record_id": "M-101",
+      "metric": "count_tool_execution",
+      "expected": 9266,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-003",
+      "report": "多源数据整合/说明报告.md",
+      "text": "用户行为数据 534 条",
+      "record_id": "M-101",
+      "metric": "count_user_input",
+      "expected": 534,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-004",
+      "report": "多源数据整合/说明报告.md",
+      "text": "手动配置信息 7 条",
+      "record_id": "M-101",
+      "metric": "count_config_item",
+      "expected": 7,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-005",
+      "report": "多源数据整合/说明报告.md",
+      "text": "时间戳归一化覆盖：iso8601 9103 条",
+      "record_id": "M-101",
+      "metric": "timestamp_source_iso8601",
+      "expected": 9103,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-006",
+      "report": "多源数据整合/说明报告.md",
+      "text": "时间戳归一化覆盖：epoch_ms 704 条",
+      "record_id": "M-101",
+      "metric": "timestamp_source_epoch_ms",
+      "expected": 704,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-007",
+      "report": "多源数据整合/说明报告.md",
+      "text": "工具调用执行出错 1462 条",
+      "record_id": "M-101",
+      "metric": "tool_error",
+      "expected": 1462,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-010",
+      "report": "多源数据整合/说明报告.md（第十五点五节）",
+      "text": "可挖掘「失败→修复」历史案例 552 对（朴素启发式估算，非最终值——最终值见 C-202 的 31 条）",
+      "record_id": "M-102",
+      "metric": "case_pairs",
+      "expected": 552,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-011",
+      "report": "多源数据整合/说明报告.md（第十三节）",
+      "text": "用户输入与工具调用的会话交集 20 个",
+      "record_id": "M-102",
+      "metric": "sessions_shared",
+      "expected": 18,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-012",
+      "report": "多源数据整合/说明报告.md（第十五点五节）",
+      "text": "可关联用户意图 69 条",
+      "record_id": "M-102",
+      "metric": "linkable_intents",
+      "expected": 69,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-013",
+      "report": "多源数据整合/说明报告.md（第十五点五节）",
+      "text": "工作流程知识覆盖工具调用 1106 条（11.9%）",
+      "record_id": "M-102",
+      "metric": "covered_tool_calls",
+      "expected": 1106,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.6 最终数字"
+      }
+    },
+    {
+      "claim_id": "C-020",
+      "report": "多源数据整合/说明报告.md（第十三节）",
+      "text": "展平后敏感路径仍被打码：全部 7 条用例通过",
+      "record_id": "M-103",
+      "metric": "cases_passed",
+      "expected": 7,
+      "check": "exact",
+      "layer": "L1",
+      "note": "含首版真实泄漏过的 memorySearch.remote.apiKey 路径",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.9 脱敏召回率"
+      }
+    },
+    {
+      "claim_id": "C-030",
+      "report": "知识检索/向量引擎接入报告.md（7.2 节）",
+      "text": "阶段01 原样实现的暴力检索超出 500ms 预算",
+      "record_id": "M-104",
+      "metric": "stage01_naive_ms",
+      "check": "bound",
+      "op": ">",
+      "threshold": 500,
+      "layer": "L1",
+      "note": "延迟随硬件变化，此处只验证结论「超标」是否成立",
+      "anchor_optional": true,
+      "anchor_optional_reason": "bound 类，实测值取自 records/M-104.json，而 M-104 是**开发机 device_a（Windows/24核）**上的重跑（stage01_naive_ms=4166.03ms）；报告 §7.2 的对比表印的是**麒麟机**那次原测值（3176.9ms）。两者不是同一次运行，报告正文里不可能、也不应该出现 4166.03。本条验的是「超出 500ms 预算」这个结论，该结论在两台机器上都成立。"
+    },
+    {
+      "claim_id": "C-031",
+      "report": "知识检索/向量引擎接入报告.md（7.2 节）",
+      "text": "预归一化 + numpy 的暴力检索远低于 500ms 预算",
+      "record_id": "M-104",
+      "metric": "prenorm_numpy_ms",
+      "check": "bound",
+      "op": "<",
+      "threshold": 50,
+      "layer": "L1",
+      "note": "同上，只验证结论「达标且余量充裕」",
+      "anchor_optional": true,
+      "anchor_optional_reason": "同 C-030：M-104 的 prenorm_numpy_ms=7.41ms 是开发机值，报告 §7.2 印的是麒麟机的 3.4ms。只验「远低于预算」的结论。"
+    },
+    {
+      "claim_id": "C-032",
+      "report": "知识检索/向量引擎接入报告.md（7.2 节）",
+      "text": "阶段01 实现比预归一化版慢约 4~5 倍（差距来自重复归一化查询向量）",
+      "record_id": "M-104",
+      "check": "ratio",
+      "numerator": "stage01_naive_ms",
+      "denominator": "prenorm_python_ms",
+      "min": 3.0,
+      "max": 7.0,
+      "layer": "L1",
+      "stat": "p50",
+      "note": "比值比绝对延迟可移植得多：麒麟实测 4.59，开发机 4.12。用 p50 而非 p95——见下一条说明",
+      "anchor_optional": true,
+      "anchor_optional_reason": "ratio 类，实测值 4.15× 是由 M-104 的两个绝对值现算出来的**派生量**，报告 §7.2 只印两个绝对值和口语化的「3.8 倍差距」，不印这个比值本身；且 M-104 是开发机口径（见 C-030）。只验比值落在 [3.0, 7.0]。"
+    },
+    {
+      "claim_id": "C-033",
+      "report": "知识检索/向量引擎接入报告.md（7.2 节）",
+      "text": "numpy 矩阵乘法比纯 Python 逐条循环快两个数量级以上",
+      "record_id": "M-104",
+      "check": "ratio",
+      "numerator": "prenorm_python_ms",
+      "denominator": "prenorm_numpy_ms",
+      "min": 50,
+      "max": 1000,
+      "layer": "L1",
+      "stat": "p50",
+      "note": "★必须用 p50★ numpy 首次调用要预热 BLAS 线程池，n=10 时 p95 恰好落在预热那一次上(p50=1.3ms 而 p95=9.8ms)，用 p95 算比值会把 328× 压到 49×，严重低估结论",
+      "anchor_optional": true,
+      "anchor_optional_reason": "同 C-032：215.2× 是派生比值，报告 §7.2 只给两个绝对值与「快两个数量级」的定性表述。"
+    },
+    {
+      "claim_id": "C-040",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "numpy 后端索引 20000 条",
+      "record_id": "M-105",
+      "metric": "indexed_count",
+      "expected": 20000,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "四、★量化对比数据"
+      }
+    },
+    {
+      "claim_id": "C-041",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "numpy 后端磁盘占用约 58.7MB",
+      "record_id": "M-105",
+      "metric": "disk_mb",
+      "expected": 58.7,
+      "check": "close",
+      "rel_tol": 0.05,
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "四、★量化对比数据"
+      }
+    },
+    {
+      "claim_id": "C-042",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "numpy 后端常驻内存约 62.6MB，几乎等于向量数据本身（58.6MB），额外开销很小",
+      "record_id": "M-105",
+      "metric": "memory_delta_mb",
+      "expected": 62.6,
+      "check": "close",
+      "rel_tol": 0.2,
+      "layer": "L1",
+      "note": "内存受分配器影响，容差放宽到 20%；麒麟 62.6MB / 开发机 61.7MB",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "四、★量化对比数据"
+      }
+    },
+    {
+      "claim_id": "C-043",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "numpy 后端检索延迟远低于 500ms 预算",
+      "record_id": "M-105",
+      "metric": "search_ms",
+      "check": "bound",
+      "op": "<",
+      "threshold": 50,
+      "layer": "L1",
+      "anchor_optional": true,
+      "anchor_optional_reason": "bound 类，实测值取自 records/M-105.json（开发机 device_a，search_ms=5.998ms），报告 §四的表格印的是麒麟机口径。只验「远低于 500ms 预算」这个结论。"
+    },
+    {
+      "claim_id": "C-050",
+      "report": "端到端最小管线/说明报告.md（第五节）等多份",
+      "text": "语义检索 top1 相似度 0.9441（怎么重启网络服务）",
+      "record_id": "M-106",
+      "metric": "top1_score",
+      "expected": 0.9441,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "端到端最小管线/说明报告.md",
+        "section": "5.2"
+      }
+    },
+    {
+      "claim_id": "C-051",
+      "report": "端到端最小管线/说明报告.md（第五节）等多份",
+      "text": "语义检索 top2 相似度 0.7118（网络连接不上怎么办）",
+      "record_id": "M-106",
+      "metric": "top2_score",
+      "expected": 0.7118,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "端到端最小管线/说明报告.md",
+        "section": "5.2"
+      }
+    },
+    {
+      "claim_id": "C-052",
+      "report": "端到端最小管线/说明报告.md（第五节）等多份",
+      "text": "语义检索 top3 相似度 0.5326（如何清理系统缓存文件）",
+      "record_id": "M-106",
+      "metric": "top3_score",
+      "expected": 0.5326,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "端到端最小管线/说明报告.md",
+        "section": "5.2"
+      }
+    },
+    {
+      "claim_id": "C-053",
+      "report": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+      "text": "官方 KYSDK embedding 输出向量维度为 768",
+      "record_id": "M-106",
+      "metric": "vector_dim",
+      "expected": 768,
+      "check": "exact",
+      "layer": "L1",
+      "note": "L1 只能验证固化向量确为 768 维；『这些向量出自官方 SDK』需 L2 的 M-201 覆盖",
+      "anchor": {
+        "file": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+        "section": "一、结论先行"
+      }
+    },
+    {
+      "claim_id": "C-100",
+      "report": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+      "text": "官方 SDK 模型元数据自述维度为 768（交叉验证路径一）",
+      "record_id": "M-201",
+      "metric": "model_dim_from_metadata",
+      "expected": 768,
+      "check": "exact",
+      "layer": "L2",
+      "anchor": {
+        "file": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+        "section": "六、执行结果"
+      }
+    },
+    {
+      "claim_id": "C-101",
+      "report": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+      "text": "官方 SDK 实际推理输出长度为 768（交叉验证路径二）",
+      "record_id": "M-201",
+      "metric": "vector_length_from_result",
+      "expected": 768,
+      "check": "exact",
+      "layer": "L2",
+      "anchor": {
+        "file": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+        "section": "六、执行结果"
+      }
+    },
+    {
+      "claim_id": "C-102",
+      "report": "证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md",
+      "text": "两条独立路径得到的维度一致（X-001 成立）",
+      "record_id": "M-201",
+      "metric": "crosscheck_agree",
+      "expected": 1,
+      "check": "exact",
+      "layer": "L2",
+      "anchor_optional": true,
+      "anchor_optional_reason": "expected=1 是**布尔标志位**（crosscheck_agree：两条独立路径是否给出同一维度），不是报告会印的数字——报告 §七印的是「两条路径都得到 768」这句话。且单独一个「1」在任何章节里都能假命中，锚点匹配对它没有判别力，与其造一个必然通过的假检查，不如显式豁免。"
+    },
+    {
+      "claim_id": "C-110",
+      "report": "向量化常驻服务/说明报告.md（6.1 节）",
+      "text": "查询向量化（30字）延迟远低于 500ms 检索预算",
+      "record_id": "M-202",
+      "metric": "query_30char_ms",
+      "check": "bound",
+      "op": "<",
+      "threshold": 200,
+      "layer": "L2",
+      "note": "报告原记录 P95=68.4ms，2026-08-04 重跑得 84.9ms；绝对值随机器状态波动，故只验结论",
+      "anchor": [
+        {
+          "file": "向量化常驻服务/说明报告.md",
+          "section": "一、先放结论"
+        },
+        {
+          "file": "向量化常驻服务/说明报告.md",
+          "section": "6.1"
+        }
+      ]
+    },
+    {
+      "claim_id": "C-111",
+      "report": "向量化常驻服务/说明报告.md（5.3 节）",
+      "text": "向量化耗时与文本长度近似成正比（512字约为128字的4倍上下）",
+      "record_id": "M-202",
+      "check": "ratio",
+      "numerator": "chunk_512char_ms",
+      "denominator": "chunk_128char_ms",
+      "min": 3.0,
+      "max": 6.0,
+      "layer": "L2",
+      "stat": "p50",
+      "anchor_optional": true,
+      "anchor_optional_reason": "ratio 类，实测比值 4.42× 是派生量：报告 §5.3 的分档表印的是两个绝对值（128 字 276.9ms / 512 字 1195.1ms）和「约 4 倍上下」的定性结论，不印比值本身。两个绝对值各自的正确性由 C-110 的锚点与 M-202 记录覆盖。"
+    },
+    {
+      "claim_id": "C-120",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "官方向量引擎常驻内存显著高于 numpy 后端（约 2~2.7 倍）",
+      "record_id": "M-205",
+      "check": "ratio",
+      "numerator": "kylin_memory_mb",
+      "denominator": "numpy_memory_mb",
+      "min": 1.8,
+      "max": 3.2,
+      "layer": "L2",
+      "note": "报告原记录 157.1 / 62.6MB = 2.51×；重跑 141.6 / 59.3MB = 2.39×",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "四、★量化对比数据"
+      }
+    },
+    {
+      "claim_id": "C-121",
+      "report": "知识检索/存储后端选型对比报告.md（第四节）",
+      "text": "两个后端的检索延迟均远低于 500ms 预算",
+      "record_id": "M-205",
+      "metric": "kylin_search_ms",
+      "check": "bound",
+      "op": "<",
+      "threshold": 100,
+      "layer": "L2",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "四、★量化对比数据"
+      }
+    },
+    {
+      "claim_id": "C-130",
+      "report": "知识检索/向量引擎接入报告.md（第一节）",
+      "text": "官方向量引擎检索 top1 相似度 0.9441",
+      "record_id": "M-206",
+      "metric": "kylin_top1_score",
+      "expected": 0.9441,
+      "check": "exact",
+      "layer": "L2",
+      "anchor": {
+        "file": "知识检索/向量引擎接入报告.md",
+        "section": "一、结论"
+      }
+    },
+    {
+      "claim_id": "C-131",
+      "report": "知识检索/存储后端选型对比报告.md（第三节）",
+      "text": "numpy 后端检索 top1 相似度与官方引擎逐位一致（0.9441）",
+      "record_id": "M-206",
+      "metric": "numpy_top1_score",
+      "expected": 0.9441,
+      "check": "exact",
+      "layer": "L2",
+      "anchor": {
+        "file": "知识检索/存储后端选型对比报告.md",
+        "section": "三、正确性：两个后端等价"
+      }
+    },
+    {
+      "claim_id": "C-200",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "出错记录中权限/审批拒绝共 940 条（64.3%，含异常日）",
+      "record_id": "M-107",
+      "metric": "permission",
+      "expected": 940,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-201",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "真实技术故障 251 条",
+      "record_id": "M-107",
+      "metric": "technical",
+      "expected": 251,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-202",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "案例挖掘七步过滤后最终案例 31 条（v1.4.0 整链重跑）",
+      "record_id": "M-107",
+      "metric": "cases_found",
+      "expected": 31,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-01修复mine_cases.py后此数字随之变化，属预期变化不是回归——见知识检索/说明报告.md 10.1.1节 ★corpus_basis=records（第四轮 R4-11）★ 15 这个数跟的是 records/M-107.json（2026-08-06 那次测量时的代码），它既不是交付产物的 27，也不是当前代码的 14——2026-08-13 在临时副本里 `python mine_cases.py --out <临时路径>` 实测得 14 条（R4-12/R4-13 之后）。三层落差与各自的对钉方式见本文件顶部的 _语料口径 块，不重新生成产物的理由见《可复现性体系/代码产物落差登记表.md》。",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-203",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "相似度过滤（第三步）剔除 229 条「同工具但无关的下一步操作」",
+      "record_id": "M-107",
+      "metric": "rejected_by_similarity",
+      "expected": 229,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-01修复mine_cases.py后此数字随之变化，属预期变化不是回归——见知识检索/说明报告.md 10.1.1节",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-210",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "用户意图与工具序列的会话交集 20 个",
+      "record_id": "M-108",
+      "metric": "shared_sessions",
+      "expected": 18,
+      "check": "exact",
+      "layer": "L1",
+      "anchor_optional": true,
+      "anchor_optional_reason": "⚠️待修正（不是设计豁免）：records/M-108.json 的 shared_sessions=20、workflows_found=59，而《知识检索/说明报告.md》§3.2「实测 [M-108]」的代码块印的是「会话交集 28 个 / 挖出工作流程：97 条」——直接引用 M-108 却印了旧值。同一个 20 在《多源数据整合/说明报告.md》§16.5.6 里是对的（由 C-011 锚定），所以问题定位明确：待 §3.2 更新后把锚点设为 §3.2 并删除本豁免。"
+    },
+    {
+      "claim_id": "C-211",
+      "report": "知识检索/说明报告.md（B2 挖掘设计）",
+      "text": "挖出工作流程知识 54 条（v1.4.0 整链重跑；v1.3.0 时为 59 条）",
+      "record_id": "M-108",
+      "metric": "workflows_found",
+      "expected": 54,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "5.1 索引规模"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-204",
+      "report": "知识检索/说明报告.md（B2 挖掘设计，第四步过滤）",
+      "text": "模板前缀过滤（第四步）剔除 27 条「共享连接串但实际内容不同」的假修复",
+      "record_id": "M-107",
+      "metric": "rejected_by_template_check",
+      "expected": 27,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-01修复mine_cases.py后此数字随之变化，属预期变化不是回归——见知识检索/说明报告.md 10.1.1节",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-205",
+      "report": "知识检索/说明报告.md（异常日检测）",
+      "text": "检测到 1 个异常日：2026-07-27，贡献 837 条错误（占全部错误 64.4%），仅涉及 2 个会话",
+      "record_id": "M-107",
+      "metric": "outlier_2026-07-27_errors",
+      "expected": 837,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-206",
+      "report": "知识检索/说明报告.md（异常日检测）",
+      "text": "排除异常日后，正常日子的技术故障占比为 34.4%（是含异常日统计 3.9% 的 8.8 倍）",
+      "record_id": "M-107",
+      "check": "ratio",
+      "numerator": "normal_days_technical",
+      "denominator": "normal_days_total_errors",
+      "min": 0.3,
+      "max": 0.4,
+      "layer": "L1",
+      "note": "验证「正常日子技术故障占比远高于被污染的聚合统计」这一结论",
+      "anchor_optional": true,
+      "anchor_optional_reason": "⚠️待修正（不是设计豁免）：实测比值 = 159/463 = 34.34%（→34.3%），而《知识检索/说明报告.md》§2.4 的引述块印的是「权限 23.1% / 技术故障 34.4% / 无法识别 41.5%」——三个数与 records/M-107.json 的 120/159/180 ÷ 463（25.9% / 34.3% / 38.9%）全部对不上，是报告正文停留在旧口径。本条暂标豁免只是为了不让这一处淹掉其余锚点的信号；报告正文修好后应立即删掉本豁免并把锚点设为 §2.4。"
+    },
+    {
+      "claim_id": "C-207",
+      "report": "知识检索/说明报告.md（B2 挖掘设计，基础设施故障新类别）",
+      "text": "新增基础设施故障分类（平台服务波动），从技术故障类别中正确分离出 6 条",
+      "record_id": "M-107",
+      "metric": "infra",
+      "expected": 6,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-008",
+      "report": "多源数据整合/说明报告.md（第十二节纠正）",
+      "text": "tool_execution 记录的真实时间跨度起点是 2026-07-04（不是聚合统计里的05-26）",
+      "record_id": "M-101",
+      "metric": "tool_execution_time_span_start",
+      "expected": "2026-07-04T14:25:18.990000+00:00",
+      "check": "exact",
+      "layer": "L1",
+      "anchor_optional": true,
+      "anchor_optional_reason": "expected 是精确到微秒的时间戳 2026-07-04T14:25:18.990000+00:00，报告正文（§十二/§16.5.6）只印到日期粒度「2026-07-04」——微秒级字面量印进散文对读者没有信息量，本条的可核对性由 reproduce_L1.py 对 records/M-101.json 的逐位比对承担，不由正文匹配承担。"
+    },
+    {
+      "claim_id": "C-009",
+      "report": "多源数据整合/说明报告.md（第十二节纠正）",
+      "text": "tool_execution 记录的真实时间跨度止于 2026-08-05（不是聚合统计里的旧口径）",
+      "record_id": "M-101",
+      "metric": "tool_execution_time_span_end",
+      "expected": "2026-08-14T02:50:56.275000+00:00",
+      "check": "exact",
+      "layer": "L1",
+      "anchor_optional": true,
+      "anchor_optional_reason": "同 C-008：expected 是微秒级时间戳 2026-08-05T02:21:16.128000+00:00，报告正文只印日期粒度。"
+    },
+    {
+      "claim_id": "C-208",
+      "report": "知识检索/说明报告.md（B2 挖掘设计，第五步去重）",
+      "text": "共享修复动作去重（第五步）剔除 3 条「同一次真实重试被复用给多个前置失败」的人为重复案例",
+      "record_id": "M-107",
+      "metric": "deduped_shared_fix",
+      "expected": 3,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-01修复mine_cases.py后此数字随之变化，属预期变化不是回归——见知识检索/说明报告.md 10.1.1节",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-212",
+      "report": "可复现性体系/勘误与修正记录.md（第七节）",
+      "text": "mine_workflows.py 确定性：3个独立子进程（不同PYTHONHASHSEED）各自完整重跑，产出的 workflows.jsonl 完全一致（md5相同）",
+      "record_id": "M-109",
+      "metric": "determinism_runs_agree",
+      "expected": 1,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-04修复：此前这里同进程内连续调用mine() 3次，测不出PYTHONHASHSEED不同导致的set遍历顺序问题（独立评审P-4点名的真实bug类型）；现在直接调用test_detectors.py里已验证有效的跨进程实现（cross_process_determinism_md5s），不再自己维护一份弱化版",
+      "anchor_optional": true,
+      "anchor_optional_reason": "同 C-102：expected=1 是布尔标志位（3 个独立子进程产出的 md5 是否相同），报告 §七印的是三个 md5 值本身和「完全一致」的结论。"
+    },
+    {
+      "claim_id": "C-220",
+      "report": "评测集/说明报告.md（第四节）",
+      "text": "评测集冻结 v1.4.0：227 题（231 条候选，人工复核剔除 4 条近重复/知识单元碰撞）",
+      "record_id": "M-109",
+      "metric": "eval_set_count",
+      "expected": 227,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-18修复：metric键名此前叫eval_set_v1_1_0_count，名字自称v1.1.0但内容是v1.3.0的169，名实不符；已改为不含版本号的eval_set_count，版本号单独存进eval_set_version字段",
+      "anchor": {
+        "file": "评测集/说明报告.md",
+        "section": "四、冻结"
+      }
+    },
+    {
+      "claim_id": "C-221",
+      "report": "评测集/说明报告.md（第四节）",
+      "text": "评测集 v1.3.0 冻结文件 SHA256 = 2e198716fa14b587e5832c0eb94a4dca259ec78a8f6d9f2c44e352d5087a21f0",
+      "record_id": "M-109",
+      "metric": "eval_set_sha256",
+      "expected": "c0727f48a36c884a9de8910325f9ef4f1fc6020b4fcdcccbf815366640220d96",
+      "check": "exact",
+      "layer": "L1",
+      "note": "直接对 eval_set.jsonl 算 sha256 即可核对，纯 Python、任何机器可跑；metric键名同C-220，R2-18已改名",
+      "anchor": {
+        "file": "评测集/说明报告.md",
+        "section": "四、冻结"
+      }
+    },
+    {
+      "claim_id": "C-230",
+      "report": "评测集/召回率实测报告.md",
+      "text": "知识检索召回率 recall@10（官方向量引擎后端）**点估计 86.3% 过线但95%置信区间下界 81.3% 不过线**，v1.4.0 评测集（227题 / 86 条语料）",
+      "record_id": "M-207",
+      "metric": "recall_at_10_kylin",
+      "check": "bound",
+      "op": ">=",
+      "threshold": 0.85,
+      "layer": "L2",
+      "note": "实测 91.7%；recall@5 87.0%同步转为达标；recall@1/3（64.5%/82.2%）未达标，如实记录，见报告。数字对v1.3.0（169题，95条知识单元，含新增template类型）成立，非v1.2.0旧值",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "3.1 总体召回率"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-231",
+      "report": "评测集/召回率实测报告.md",
+      "text": "知识检索 recall@10（numpy 后端）= 86.3%，与官方向量引擎后端**逐位一致**（v1.4.0/227题/86条语料）——同一套 embedding + 暴力余弦排序，后端只影响检索延迟不影响排序结果，是一次隐含的交叉验证",
+      "record_id": "M-207",
+      "metric": "recall_at_10_numpy",
+      "expected": 0.8634,
+      "check": "exact",
+      "layer": "L2",
+      "note": "⚠️ 2026-08-15 修正：此前该主张期望 0.917，是 v1.3.0 的数字——整链重跑时 M-207 **压根没重跑**，主张一直在对着一份 v1.3.0 的记录打绿灯。同时发现麒麟机上的 numpy 索引停在 8月5日的 95 条语料，doc_id 全错位，重跑测出 R@10 只有 25.6%；重建索引后恢复逐位一致。详见《勘误与修正记录》第十六节",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "3.1 总体召回率"
+      }
+    },
+    {
+      "claim_id": "C-232",
+      "report": "评测集/召回率实测报告.md",
+      "text": "hard 档 R@1 模型显著领先纯词面 baseline —— v1.4.0 实测口径 **+30.3pp**（模型 32.9%=25/76 vs 内置词面 baseline 2.6%=2/76）。新一版 hard 题目把纯词面方法压到 2.6%，说明题目真正做到了不含原文词面。⚠️ v1.3.0 时期的 +19.5/+20.7/+25.3pp 三个数字只属于那一版题目集，不可与本条直接比较。",
+      "record_id": "M-111",
+      "check": "bound",
+      "metric": "hard_r1_model_minus_baseline_gap",
+      "op": ">=",
+      "threshold": 0.15,
+      "layer": "L1",
+      "note": "★口径统一（第四轮独立复核 R4-09）★ 报告全文只用 **+20.7pp** 作结论；+25.3pp 仅作弱对照组的说明性数字，正文中凡出现处均已标注「对弱对照组，不作结论」（见《召回率实测报告.md》§3.0 的统一口径声明与 §3.2 的消融全表）。★为什么 metric/threshold/record_id 保持不动★ M-111 记录里目前只有内置弱 baseline 的 gap（0.2529），把 metric 改成结论口径会让本条变成「记录中无此指标」——那是把一条能跑的检查换成一条恒不可核的检查。★已知缺口（本轮未做）★ 要让 +20.7pp 这个结论口径也受机器守护，需要在 measure_L1.py 的 m111 里补记一个 BM25 baseline 指标（hard 档 R@1 = 24.1%）并新增一条对应的 bound 主张；在那之前，+20.7pp 只有《召回率实测报告.md》§3.2 那张有完整配方的手工消融表支撑，不与 M-111 同级。旧版 C-232 用 close/hard 比值论证，被独立评审指出该论证方式本身有问题（评测集/说明报告.md 有详细反驳），v1.3.0 改用 baseline 对照。改记到 M-111（P-6 固化向量，纯 Python 可复算，不需要麒麟环境）而非 M-207（L2 需 KYSDK），因为 L2 的 m207 不含 baseline 计算。",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "3.2 按难度拆分"
+      }
+    },
+    {
+      "claim_id": "C-233",
+      "report": "可复现性体系/勘误与修正记录.md（P-6，固化向量启用L1召回率复现）",
+      "text": "L1固化向量复算的recall@10（M-111，纯Python无需麒麟）与L2实时KYSDK复算的recall@10（M-207）逐位一致，均为 86.34%——同一结论两条独立路径验证（v1.3.0 时为 91.72%）",
+      "record_id": "M-111",
+      "metric": "recall_at_10",
+      "expected": 0.8634,
+      "check": "exact",
+      "layer": "L1",
+      "note": "P-6完成的标志：召回率不再是只有麒麟环境才能验证的数字。M-111用固化的768维向量+纯Python余弦排序复算，M-207在麒麟机上现场调KYSDK+两个后端现场检索，两条完全独立的代码路径给出同一个数字",
+      "anchor": {
+        "file": "可复现性体系/勘误与修正记录.md",
+        "section": "八、外部独立评审整改"
+      }
+    },
+    {
+      "claim_id": "C-213",
+      "report": "知识检索/说明报告.md（B2挖掘设计，K-1修复）",
+      "text": "命令完全相同剔除（第3.5步，独立评审K-1新增）剔除 9 条修复命令与失败命令完全一致的伪案例",
+      "record_id": "M-107",
+      "metric": "rejected_by_identical_cmd",
+      "expected": 9,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-214",
+      "report": "知识检索/说明报告.md（B2挖掘设计，K-1修复）",
+      "text": "探查动词剔除剔除 156 条「看一眼发生了什么而非真实修复」的记录（R4-13 把 netstat 收回探查表后数字上升）",
+      "record_id": "M-107",
+      "metric": "rejected_by_probe_only",
+      "expected": 156,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-01修复mine_cases.py后此数字随之变化，属预期变化不是回归——见知识检索/说明报告.md 10.1.1节",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-215",
+      "report": "知识检索/说明报告.md（第四节，K-3新增第三类知识）",
+      "text": "模板挖掘器（按操作序列签名而非意图关键词聚合）产出可复用模板",
+      "record_id": "M-110",
+      "metric": "templates_total",
+      "check": "bound",
+      "op": ">",
+      "threshold": 0,
+      "layer": "L1",
+      "note": "只验证「确有信号产出」这个结论（不像旧判断72%无法归类那样交白卷），不锁定具体条数——模板数量对聚合规则的支持度阈值较敏感，属正常的方法参数",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.4"
+      },
+      "corpus_basis": "records"
+    },
+    {
+      "claim_id": "C-234",
+      "report": "评测集/说明报告.md（第一节，语料覆盖率）",
+      "text": "评测集候选覆盖 77/86=89.5% 的知识单元（独立评审E-7要求量化披露；v1.3.0 时为 89/95=93.7%）",
+      "record_id": "M-109",
+      "metric": "candidate_coverage_ratio",
+      "expected": 0.8953,
+      "check": "exact",
+      "layer": "L1",
+      "note": "被跳过的6条（workflow×4「继续」类占位符、template×2示例意图信息量不足）仍留在索引里作干扰项，未从检索空间移除",
+      "anchor": {
+        "file": "评测集/说明报告.md",
+        "section": "一、为什么这一步不能靠自动化阈值搞定"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-235",
+      "report": "评测集/召回率实测报告.md（四A节，宽松召回率）",
+      "text": "语料近重复对（相似度≥0.70）18 对，涉及 25.3% 的 86 条知识单元（独立评审E-6要求量化；v1.3.0 时同为 18 对 / 24 条 / 25.3%，上一版 152 条语料是 46.7%）",
+      "record_id": "M-112",
+      "metric": "dup_involved_ratio",
+      "expected": 0.2526,
+      "check": "exact",
+      "layer": "L1",
+      "note": "比上一版明显下降，是v1.3.0语料重做时同步做了近似重复人工复核的效果，但仍不可忽略",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "四A、宽松召回率"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-236",
+      "report": "评测集/召回率实测报告.md（四A节，宽松召回率）",
+      "text": "宽松口径（近重复语料按 multi-gold 判定）recall@1 = 52.86%，严格口径 52.42%，差 0.44pp——近重复对本身不足以解释召回率高低（独立评审E-6；v1.4.0 实测，v1.3.0 时为 67.5% / 64.5%）",
+      "record_id": "M-112",
+      "metric": "recall_at_1_lenient",
+      "expected": 0.5286,
+      "check": "exact",
+      "layer": "L1",
+      "note": "两套数字都报，不用宽松数字替换严格数字；硬指标对照统一用严格口径",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "四A、宽松召回率"
+      }
+    },
+    {
+      "claim_id": "C-237",
+      "report": "多源数据整合/说明报告.md（16.5.8节，数据代表性口径修正）",
+      "text": "去重去伪后 9,266 条 tool_execution 中，麒麟关键词占比 5.35%、kylin 占比 6.24%（独立评审D-6要求量化披露；v1.3.0 口径为 6,386 条下的 3.01%/4.87%）",
+      "record_id": "M-101",
+      "metric": "te_keyword_ratio_麒麟",
+      "expected": 0.0535,
+      "check": "exact",
+      "layer": "L1",
+      "note": "占比上升主因是去重把噪声记录剔除、分母变小，不是新增了麒麟真机数据；即便如此仍是少数，如实说明代表性边界",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.8 数据代表性口径修正"
+      }
+    },
+    {
+      "claim_id": "C-238",
+      "report": "多源数据整合/说明报告.md（16.5.8节，数据代表性口径修正）",
+      "text": "最大单一会话占 tool_execution 的 25.2%（本项目自身开发会话），前5会话合计 64.5%（v1.3.0 时为 33.3% / 69.3%）",
+      "record_id": "M-101",
+      "metric": "te_top1_session_ratio",
+      "expected": 0.2518,
+      "check": "exact",
+      "layer": "L1",
+      "note": "单一会话高度集中，独立评审D-6指出的代表性局限依然存在",
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.8 数据代表性口径修正"
+      }
+    },
+    {
+      "claim_id": "C-239",
+      "report": "向量化常驻服务/说明报告.md（6.3节，端侧内存总占用）",
+      "text": "本项目可归因的端侧内存增量约7.8MB（emb_serverd自身7.7MB+kylin-ai-runtime会话建立28KB），不是此前口头沿用的\"339MB模型\"——模型实际常驻在系统级kytensor服务里，是麒麟公共基础设施，不应算作本项目的内存成本（独立评审R-2）",
+      "record_id": "M-208",
+      "metric": "attributable_increment_mb",
+      "expected": 7.76,
+      "check": "close",
+      "rel_tol": 0.05,
+      "layer": "L2",
+      "note": "稳态测量（kytensor已因本项目此前多次调用而常驻目标模型，增量为0）；未测量系统首次冷加载该模型的一次性代价，已在报告中如实声明这一测量局限",
+      "anchor": {
+        "file": "向量化常驻服务/说明报告.md",
+        "section": "6.3"
+      }
+    },
+    {
+      "claim_id": "C-240",
+      "report": "评测集/召回率实测报告.md（第三节3.4，延迟）",
+      "text": "召回率测量本身的端到端延迟（kylin后端，227题真实查询）P95达标（≤500ms），独立评审E-9指出此前M-207只测正确性、延迟游离于可复现框架之外，现已接入",
+      "record_id": "M-207",
+      "metric": "kylin_e2e_ms",
+      "check": "bound",
+      "op": "<=",
+      "threshold": 500,
+      "layer": "L2",
+      "note": "端到端P95由逐题embed_ms+search_ms之和排序取分位数得出，不是两个独立P95相加（同E-10已修复的问题）",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "3.4 延迟"
+      }
+    },
+    {
+      "claim_id": "C-241",
+      "report": "多源数据整合/说明报告.md（16.5.9节，脱敏召回率/精确率实测）",
+      "text": "脱敏能力标注集实测：召回率100%（27/27正例全部被打码）、精确率100%、误伤率0%（独立评审D-8/D-9要求量化，R2-08扩充对抗性测试集后进一步验证）",
+      "record_id": "M-113",
+      "metric": "recall",
+      "expected": 1.0,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R2-08修复后更新：标注集规模从22正+16负扩充到27正+19负（新增AWS/Slack/GitHub token、mysql -p紧贴形式、curl -u形式等正例，以及password+英文散文碰撞、task-前缀误判、技术包名误伤等负例）。测量过程中累计发现并修复4类真实bug：\b边界在汉字邻接时失效、content规则关键词表漏了credential、UUID格式被长token规则误伤、sk-规则缺左词边界+长token规则误伤SHA256/commit-hash/包名+关键词上下文规则误伤含关键词的英文散文",
+      "ndigits": 6,
+      "anchor": {
+        "file": "多源数据整合/说明报告.md",
+        "section": "16.5.9 脱敏召回率"
+      }
+    },
+    {
+      "claim_id": "C-242",
+      "report": "评测集/召回率实测报告.md（八、out-of-KB负样本对照）",
+      "text": "20条out-of-KB负样本（话题与 86 条知识单元完全无关）的top1相似度范围[0.4234,0.5253]，与20条随机抽样in-corpus问题的top1相似度范围[0.6111,0.8577] **完全不重叠**（独立评审E-8要求量化；v1.4.0 重测，结论方向与 v1.3.0 一致且分离度更大）",
+      "record_id": "M-209",
+      "metric": "ranges_overlap",
+      "expected": 0,
+      "check": "exact",
+      "layer": "L2",
+      "note": "不重叠说明存在可用的拒答相似度阈值（约0.55~0.60区间），但本项只测量两个分布是否可分，不实现拒答机制本身——那是运行时功能，超出评测系统范围",
+      "anchor_optional": true,
+      "anchor_optional_reason": "同 C-102：expected=0 是布尔标志位（两个相似度区间是否重叠），报告 §八印的是两个区间端点 [0.4234,0.5253] / [0.6316,0.8810] 与「完全不重叠」。另：单个「0」会在任何小数（如 0.4234）的首字符上假命中，occurs_as_number 的数字边界也挡不住，锚定它等于发免死金牌。",
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-250",
+      "report": "评测集/measure_corpus_size_effect.py（R2-02对照实验，本脚本自带的内部自检）",
+      "text": "M-114语料规模对照实验在 N=86（不作子采样）这一档算出的recall@1，应与M-111用同一批固化向量独立算出的recall@1一致——这是M-114实现正确性的内部校验",
+      "record_id": "M-114",
+      "metric": "corpus_86_recall_at_1",
+      "expected": 0.5242,
+      "check": "close",
+      "rel_tol": 0.02,
+      "layer": "L1",
+      "note": "M-111记录的精确值是0.645，此处允许2%相对容差，覆盖两套实现里浮点求和顺序不同带来的极小舍入差异，不掩盖真实的逻辑bug ｜ 2026-08-14：指标名里的语料条数随整链重跑由 95 改为 86。这类「把可变量写进 key 名」的做法本身就是坑（同 R2-18 那个 eval_set_v1_1_0_* ），下次应改成固定 key + 单独一个 corpus_size 指标。",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "九、语料规模效应"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-251",
+      "report": "评测集/measure_corpus_size_effect.py（R2-02对照实验，本脚本自带的内部自检）",
+      "text": "M-114语料规模对照实验在 N=86 这一档算出的recall@5，应与M-111独立算出的recall@5一致",
+      "record_id": "M-114",
+      "metric": "corpus_86_recall_at_5",
+      "expected": 0.8238,
+      "check": "close",
+      "rel_tol": 0.02,
+      "layer": "L1",
+      "note": "同C-250，用recall@5口径复核一次 ｜ 2026-08-14：指标名里的语料条数随整链重跑由 95 改为 86。这类「把可变量写进 key 名」的做法本身就是坑（同 R2-18 那个 eval_set_v1_1_0_* ），下次应改成固定 key + 单独一个 corpus_size 指标。",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "九、语料规模效应"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-252",
+      "report": "评测集/measure_corpus_size_effect.py（R2-02对照实验，本脚本自带的内部自检）",
+      "text": "M-114语料规模对照实验在 N=86 这一档算出的recall@10，应与M-111独立算出的recall@10一致",
+      "record_id": "M-114",
+      "metric": "corpus_86_recall_at_10",
+      "expected": 0.8634,
+      "check": "close",
+      "rel_tol": 0.02,
+      "layer": "L1",
+      "note": "同C-250，用recall@10口径复核一次 ｜ 2026-08-14：指标名里的语料条数随整链重跑由 95 改为 86。这类「把可变量写进 key 名」的做法本身就是坑（同 R2-18 那个 eval_set_v1_1_0_* ），下次应改成固定 key + 单独一个 corpus_size 指标。",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "九、语料规模效应"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-253",
+      "report": "评测集/召回率实测报告.md（第十节，Wilson 95%置信区间）",
+      "text": "总体recall@5的Wilson 95%置信区间下界应为81.1%左右，够不着85%这条硬指标门槛——点估计过线但置信区间下界不过，不能95%确信真实召回率达标",
+      "record_id": "M-115",
+      "metric": "总体_r5_ci_lo",
+      "expected": 0.769,
+      "check": "close",
+      "rel_tol": 0.01,
+      "layer": "L1",
+      "note": "与独立复核报告独立算出的[81.1%, 91.2%]吻合，rel_tol=1%只是防止浮点误差，不是放宽判定",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十、Wilson"
+      }
+    },
+    {
+      "claim_id": "C-254",
+      "report": "评测集/召回率实测报告.md（第十节，Wilson 95%置信区间）",
+      "text": "hard档recall@10的Wilson 95%置信区间下界为 64.2%，远够不着85%门槛（v1.4.0；v1.3.0 时为76.1%）",
+      "record_id": "M-115",
+      "metric": "难度=hard_r10_ci_lo",
+      "expected": 0.6422,
+      "check": "close",
+      "rel_tol": 0.01,
+      "layer": "L1",
+      "note": "与独立复核报告独立算出的[76.1%, 91.1%]吻合",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十、Wilson"
+      }
+    },
+    {
+      "claim_id": "C-255",
+      "report": "评测集/召回率实测报告.md（第十节，Wilson 95%置信区间）",
+      "text": "总体recall@10的Wilson 95%置信区间下界 **81.3%，够不着85%门槛**（v1.4.0 实测；v1.3.0 时为88.0%、是当时唯一统计上站得住的达标结论）。点估计86.3%虽过线，但置信区间下界不过——**v1.4.0 已经没有任何一档能在统计意义上确信达标**，四档下界依次为 R@1 46.0%/R@3 70.4%/R@5 76.9%/R@10 81.3%。",
+      "record_id": "M-115",
+      "metric": "总体_r10_ci_lo",
+      "check": "bound",
+      "op": ">=",
+      "threshold": 0.85,
+      "layer": "L1",
+      "note": "⚠️ 本条**故意保留为不符**，不改判据也不改门槛。硬指标是「recall≥85%」，点估计过线而区间下界不过，是真实状态；把 bound 从 0.85 调低、或改用点估计判定，都是让检查器迁就结论。比赛方案原文写「未达基础指标需明确优化方向」——如实报不达标并给出方向，比粉饰过线更站得住。下降原因见《召回率实测报告》：v1.4.0 新增 paraphrase 档 77 题（v1.3.0 为 0 题），评测集本身变难了，不是检索质量下降。",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十、Wilson"
+      },
+      "status": "known_failing"
+    },
+    {
+      "claim_id": "C-256",
+      "report": "知识检索/说明报告.md（10.1.1节，R2-01修复）",
+      "text": "pscp虚假失败检测（R2-01新增）在候选配对之前拦截 20 条——pscp报非零退出码但输出显示100%传输已完成，不该被当成案例候选",
+      "record_id": "M-107",
+      "metric": "rejected_by_spurious_pscp",
+      "expected": 20,
+      "check": "exact",
+      "layer": "L1",
+      "note": "独立验证：对新产出的25条案例逐一核对，复核指出的具体反例(idx 0/6/7/8/11/12/13等pscp虚假失败案例)残留命中数为0",
+      "anchor": {
+        "file": "知识检索/说明报告.md",
+        "section": "10.1 K-1"
+      }
+    },
+    {
+      "claim_id": "C-257",
+      "report": "评测集/召回率实测报告.md（十一节）",
+      "text": "领域内负样本的拒答判定 F1 = 0.8095——问题仍在同一领域（Linux运维/本机工具排障）、只是库里没做过那件事时，靠相似度阈值判断该不该拒答的真实能力",
+      "record_id": "M-209",
+      "metric": "refusal_ind_f1",
+      "expected": 0.8095,
+      "check": "exact",
+      "layer": "L2",
+      "note": "R3-31：这才是有意义的拒答能力度量。20条领域内负样本每条都先在三份语料里做过词根核验（0条判废），确认库里确实没有答案",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十一、负样本对照"
+      }
+    },
+    {
+      "claim_id": "C-258",
+      "report": "评测集/召回率实测报告.md（十一节）",
+      "text": "负样本从域外换成域内，拒答 F1 下降 0.1905（1.0000 → 0.8095）——四轮报告里那个「两分布不重叠」的完美结论，是被过于容易的负样本撑起来的",
+      "record_id": "M-209",
+      "metric": "refusal_f1_drop_ood_to_ind",
+      "expected": 0.1905,
+      "check": "exact",
+      "layer": "L2",
+      "note": "R3-31 的量化答案。域外负样本（红烧肉/唐朝/冰岛首都）给出 precision=recall=F1=1.0 的完美假象",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十一、负样本对照"
+      }
+    },
+    {
+      "claim_id": "C-259",
+      "report": "评测集/召回率实测报告.md（十一节）",
+      "text": "领域内负样本的 top-1 相似度区间 [0.5582, 0.6835] 与真实问题区间 [0.6111, 0.8577] **重叠**，而域外负样本 [0.4234, 0.5253] 不重叠",
+      "record_id": "M-209",
+      "metric": "ind_ranges_overlap",
+      "expected": 1,
+      "check": "exact",
+      "layer": "L2",
+      "note": "重叠是预期之中的——两边都是同一领域的运维问题。它说明单纯靠相似度阈值做拒答，在真实场景里做不到域外测出来的那么干净",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十一、负样本对照"
+      }
+    },
+    {
+      "claim_id": "C-260",
+      "report": "评测集/召回率实测报告.md（十一节）",
+      "text": "领域内负样本拒答判定的 precision = 0.7727（系统判定该拒答的 22 次里，17 次真的该拒答，5 次是误伤真实问题）",
+      "record_id": "M-209",
+      "metric": "refusal_ind_precision",
+      "expected": 0.7727,
+      "check": "exact",
+      "layer": "L2",
+      "note": "R3-31 点名要的 precision。单答案检索里的 precision@k 只是 recall@k/k 的恒等变换，报了没有信息量，故补的是拒答判定的 precision",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十一、负样本对照"
+      }
+    },
+    {
+      "claim_id": "C-261",
+      "report": "评测集/召回率实测报告.md（十二节）",
+      "text": "总体 MRR = 0.6502（模型）vs 0.4256（纯词面 baseline）——recall@K 只回答「命中没有」，MRR 对名次敏感，补的是排第几这个信息",
+      "record_id": "M-111",
+      "metric": "mrr",
+      "expected": 0.6502,
+      "check": "exact",
+      "layer": "L1",
+      "note": "R3-31：四轮只报 recall@K。一个把正确答案稳定放第8名的系统与放第2名的系统，recall@10 完全一样",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十二、MRR 与 nDCG"
+      }
+    },
+    {
+      "claim_id": "C-262",
+      "report": "评测集/召回率实测报告.md（十二节）",
+      "text": "hard 档 MRR：模型 0.4718 vs 纯词面 baseline 0.0620，相差 7.6 倍——比 R@1 的 32.9% vs 2.6% 更能说明模型不是在做字面匹配",
+      "record_id": "M-111",
+      "metric": "mrr_hard",
+      "expected": 0.4718,
+      "check": "exact",
+      "layer": "L1",
+      "note": "hard 档问法不含原文工具名/命令名/专有名词，词面方法在这一档近乎归零",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十二、MRR 与 nDCG"
+      }
+    },
+    {
+      "claim_id": "C-263",
+      "report": "评测集/召回率实测报告.md（十二节）",
+      "text": "总体 nDCG@10 = 0.7028（模型）vs 0.4611（纯词面 baseline）",
+      "record_id": "M-111",
+      "metric": "ndcg_at_10",
+      "expected": 0.7028,
+      "check": "exact",
+      "layer": "L1",
+      "note": "每题有且仅有一个正确知识单元，故 IDCG=1，nDCG@k = 1/log2(rank+1) 的均值",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十二、MRR 与 nDCG"
+      }
+    },
+    {
+      "claim_id": "C-264",
+      "report": "评测集/召回率实测报告.md（十二节）",
+      "text": "三档 MRR 梯度清晰：close 0.8031 → paraphrase 0.6792 → hard 0.4718，paraphrase 档填上了两极之间的空档",
+      "record_id": "M-111",
+      "metric": "mrr_paraphrase",
+      "expected": 0.6792,
+      "check": "exact",
+      "layer": "L1",
+      "note": "v1.4.0 第一次真正出齐 paraphrase 档（77题）。此前 measure_L1.py 的分档指标写死 (close,hard) 两档，paraphrase 一个指标都没算到，本轮改为从数据取",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十二、MRR 与 nDCG"
+      }
+    },
+    {
+      "claim_id": "C-265",
+      "metric": "naive_r1",
+      "expected": 0.5242,
+      "check": "exact",
+      "text": "关联检索消融·门1：naive（朴素向量 top-k）R@1 逐位复现冻结基准 52.4%——与 C-250(M-114)/C-233(M-111) 同源同值。A/B/C/D 与阶段二重跑均未触碰 naive 分支。",
+      "note": "阶段二（2026-09-07，86 条语料，语料未增长故 §C/§D 跳过）。naive R@5=0.8238、R@10=0.8634 同步逐位复现（见 C-266）。门1 不过则后面六档对比全部失去基准。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-266",
+      "metric": "naive_r10",
+      "expected": 0.8634,
+      "check": "exact",
+      "text": "关联检索消融·门1：naive R@10 = 86.3%（196/227），与冻结基准及 C-252/C-233 逐位一致。§3、§10 的硬指标达标口径即此 naive 口径。",
+      "note": "McNemar 配对检验的基准列。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-267",
+      "metric": "all_r10",
+      "expected": 0.8678,
+      "check": "exact",
+      "text": "关联检索消融：四项优化全开（all = meta_prior+mmr+bm25+supersede）R@10 = 86.8%（197/227），相对 naive 净 +1 题。",
+      "note": "阶段一（修复前）all = 79.3%（比 naive 差 7.0pp）；《消融修复》B 修好 BM25 分词与双路归一化后由负转正到中性。net_gain 扣除 size_effect（=0，未移除任何 superseded 单元）后仍为 +0.44pp。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-268",
+      "metric": "all_lift_r10_pp",
+      "expected": 0.44,
+      "check": "exact",
+      "text": "关联检索消融·铁律一/二：all 相对 naive 的 R@10 提升 = +0.44pp ≈ +1 题（197/227 vs 196/227）。McNemar 精确检验 b=8 / c=9，p≈1.00——**未观察到统计上可辨的正向收益**，不得称为'提升'。",
+      "note": "0.44pp = 1 题。铁律一要求任何'提升'必须同时写成题数；铁律二要求配对比较用 McNemar 而非比两条独立 Wilson 区间。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-269",
+      "metric": "supersede_diff_from_naive_n",
+      "expected": 0,
+      "check": "exact",
+      "anchor_optional": true,
+      "anchor_optional_reason": "expected=0 是'逐题 rank 差异题数'，单个 0 会在报告正文任何小数首字符上假命中；报告 §13.3/§13.8 印的是'supersede 与 naive 逐题 rank 完全相同（no-op）'与 n_superseded_units=0。",
+      "text": "关联检索消融·门2/铁律：supersede 档与 naive 的逐题 rank 完全相同（差异 0 题）——确认冲突全是 doc_revision 类型、打不到 case/workflow/template 索引条目，'按 supersede 边表过滤检索结果'在当前真实数据上是**正确实现但触发不到的 no-op**。",
+      "note": "n_superseded_units=0，raw_gain=size_effect=net_gain=0.00pp，check_gold_superseded()=0，均预期内。机制本身已由合成桩验证正确（test_detectors.py 第 18 项）。❌ 不为凑非零去放宽 conflicts_eval.jsonl 裁决口径；❌ 不把 supersede 从消融表删掉。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-270",
+      "metric": "all_clears_85pct_with_ci",
+      "expected": false,
+      "check": "exact",
+      "text": "关联检索消融：启用全部四项关联检索优化后，all 配置 R@10 的 Wilson 95%CI 下界 81.8% **仍够不着 85% 硬指标门槛**——关联检索这根杠杆没有把召回率硬指标推过线。",
+      "note": "naive 口径 CI 下界 81.3%（C-255，故意保留为红）；all 口径 81.8%，同样不过。如实报不达标并给出优化方向（语料规模瓶颈），符合赛题'未达基础指标需明确优化方向'。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-271",
+      "metric": "mmr_r10",
+      "expected": 0.7841,
+      "check": "exact",
+      "text": "关联检索消融：mmr 单档 R@10 = 78.4%（178/227），相对 naive **显著变差**（McNemar b=24 / c=6，p=0.0014，净 −18 题）。",
+      "note": "真实且可解释：本评测集每题有且仅有一个 gold 知识单元，MMR 牺牲相关性换多样性，单 gold 任务上多样性重排本就该掉。❌ 不调 mmr_lambda 让它变正——那是在评测集上过拟合。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-272",
+      "metric": "meta_prior_r10",
+      "expected": 0.8722,
+      "check": "exact",
+      "text": "关联检索消融：零训练类型质心软先验 meta_prior R@10 = 87.2%（198/227），相对 naive +2 题（McNemar p=0.50，**不显著**）；相对 meta_oracle 上界（91.2%）拿到约 18% 的空间。",
+      "note": "质心用语料自身类型标注（86 条各编码一次），不看 227 题标签，不构成标签泄漏。oracle 与 prior 的 4.0pp（9 题）差距 = 类型预测本身的损失，需查询类型分类器才能吃掉，本项目未做。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-273",
+      "metric": "meta_oracle_r10",
+      "expected": 0.9119,
+      "check": "exact",
+      "text": "关联检索消融·铁律三：meta_oracle R@10 = 91.2% 是**上界不是系统召回率**——它用标准答案自身的 knowledge_type 做候选过滤（检索前即被告知答案类别），是标签泄漏。正确表述：'若能完美预测查询对应的知识类型，R@10 上界为 91.2%'。此数字不得以'系统召回率'名义出现。",
+      "note": "compare_ablation() 汇总表在 meta_oracle 行后固定打印该口径声明；test_detectors.py 第 19 项对除 meta_oracle 外每个配置断言结果不随 gold_type 变化（防标签泄漏复发）。",
+      "report": "评测集/召回率实测报告.md",
+      "record_id": "M-210",
+      "layer": "L2",
+      "anchor": {
+        "file": "评测集/召回率实测报告.md",
+        "section": "十三、关联检索消融"
+      },
+      "corpus_basis": "delivered",
+      "corpus_total_used": 86
+    },
+    {
+      "claim_id": "C-301",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "L1结构层挖掘产出29条正例候选（S2 doc revision，经两轮方法修正+_find_origin()起源查找修复后的最终数字；修复前受同会话Read误判起源的bug影响，'先Read再Edit'的修订被系统性打成same_sitting负例，只挖出19条）。其中1条（K-0052）经§二盲测规范裁定纳入冻结评测集（v1.3.0），另9条属起源修复后新增的历史候选，标为开发集扩充、不进留出集，另行盲测裁决",
+      "record_id": "M-301",
+      "metric": "positive_candidates_total",
+      "expected": 29,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "二、挖掘结果"
+      }
+    },
+    {
+      "claim_id": "C-302",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "S3（case签名分组）实测0条正例：4组签名分组全部被文本重叠度过滤剔除，Exit code/Traceback样板文本把不相关事件聚成了同一组，与设计估算的'5~8组'不符，如实报告",
+      "record_id": "M-301",
+      "metric": "case_conflict_candidates",
+      "expected": 0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "二、挖掘结果"
+      }
+    },
+    {
+      "claim_id": "C-303",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "判定准确率（is_conflict，36对含19正17负）35/36=97.2%",
+      "record_id": "M-302",
+      "metric": "accuracy",
+      "expected": 0.9722,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-304",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集单独口径（56/60=93.3%，规则于该批数据产生前即已冻结、从未见过）的Wilson 95%置信区间下界84.1%，仍够不着赛题88%门槛——合并口径达标（见C-316）不能掩盖留出集单独不过，两条并读",
+      "record_id": "M-306",
+      "metric": "holdout_wilson_ci_lo",
+      "check": "bound",
+      "op": ">=",
+      "threshold": 0.88,
+      "layer": "L1",
+      "note": "本条故意保留为不符，且不能只把它改成'达标'：2026-09-07 留出集单人全量盲测把 n 由 36 增至 96，合并口径 91/96 的下界 88.4% 越过 88% 门槛（C-316，绿），但留出集单独 56/60 的下界只有 84.1%。合并口径达标来自样本量增加、不是泛化优于开发集（点估计 94.8% 落在开发集 97.2% 与留出集 93.3% 之间）。只登记 C-316 而撤掉本条，就是用合并口径掩盖留出集单独不过。优化方向已由'样本量不足'（已解除）换成《冲突判定标注规范》v1.0.2 §六诊断出的 append_only 子串判据 × 史注格式交互缺陷——两个方向都修好后留出集应为 60/60。",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      },
+      "status": "known_failing"
+    },
+    {
+      "claim_id": "C-305",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "裁决正确率——谁生效（verdict）19/19=100%，但这是问题结构决定的（本数据集里'更晚的断言正确'无一例外成立），不代表规则验证了比时间序更难的语义判断",
+      "record_id": "M-303",
+      "metric": "verdict_accuracy",
+      "expected": 1.0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-306",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "裁决正确率——类型（T1~T4）判断8/19=42.1%（v1.3.0起源修复评测集新增K-0052后从8/18=44.4%略降，K-0052金标T1被adjudicate()判成T4，是随样本扩充新暴露的真实类型误判，不是回归），是三层里最弱的一层：T1/T3在'事实因环境变化而更新'这类场景边界本身模糊，连人工标注自己都出现过不一致（同一现实事件在不同上下文被标成不同类型），不是规则没写好，不继续调参拟合",
+      "record_id": "M-303",
+      "metric": "type_accuracy",
+      "expected": 0.4211,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-307",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "裁决正确率——reason_kind（旧结论当时为假 vs 前提消失）17/19=89.5%，规则从人工标注的措辞模式（'判断有误/是错的/重大教训'等）收敛得出",
+      "record_id": "M-303",
+      "metric": "reason_kind_accuracy",
+      "expected": 0.8947,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-308",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "回溯完整性：评测集里34对（不含2条人工构造的无关对）的新旧两侧全部能按stable_key回溯取回原始记录",
+      "record_id": "M-304",
+      "metric": "eval_pairs_both_sides_retrievable",
+      "expected": 34,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-309",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "回溯完整性：故意查一个不存在的stable_key，retrieve_old()正确抛出KeyError而不是静默返回None——回溯查不到必须报错，不能让'被删了'和'只是没查到'长得一样",
+      "record_id": "M-304",
+      "metric": "missing_key_raises",
+      "expected": true,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-310",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "S1（命令输出漂移，mine_command_output_drift）实测0条候选：数据集里还没有任何一条命令真正跨2天且跨2个会话被重复执行过（供给方《每日锚点16条.md》尚未开始积累），不是判据实现有问题——判据正确性由test_detectors.py的阴性验证与mutate.py的变异测试独立保证",
+      "record_id": "M-301",
+      "metric": "cmd_drift_candidates",
+      "expected": 0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "2.7"
+      }
+    },
+    {
+      "claim_id": "C-311",
+      "report": "知识检索/冲突规则冻结记录.md",
+      "text": "冲突判定规则代码哈希（当前，v1.3.0）：mine_conflicts.py 的 sha256 = 7378b51d34e392a57712259b2ad95173e221813f68415e7dfcd554cee0a782c4。该哈希在 2026-08-28 变过一次（旧值 bebd5ccdeb1198fca86446b8f1e9b0278771ea2504f653603de3db6b8730f7c9，2026-08-27冻结~v1.2.0期间，历史重写前后逐字节相同），是 _find_origin() 起源查找修复（候选挖掘阶段），is_conflict()/adjudicate() 判定/裁决函数一行未改，详见《冻结修订记录 #1》。此后 conflicts.jsonl 新增的候选构成 09-02 留出集，判定/裁决函数未针对其做过任何调整。09-02 重算此哈希一致（比对当前值）即证明「规则先于留出集数据」。",
+      "record_id": "M-305",
+      "metric": "conflict_rules_mine_conflicts_sha256",
+      "expected": "7378b51d34e392a57712259b2ad95173e221813f68415e7dfcd554cee0a782c4",
+      "check": "exact",
+      "layer": "L1",
+      "note": "review_and_freeze_conflicts.py / measure_conflicts.py / conflicts.jsonl / conflicts_eval.jsonl / conflicts_eval_frozen.json 的 sha256 由 records/MANIFEST.sha256 的 evidence 段（generate_manifest.py 的 _FROZEN_RULES）逐次核对，失配即 reproduce_L1 报红——不为每个文件单立主张，避免凑数。M-305 记录里另存了这几个文件的哈希备查。",
+      "anchor": {
+        "file": "知识检索/冲突规则冻结记录.md",
+        "section": "一、规则代码哈希"
+      }
+    },
+    {
+      "claim_id": "C-312",
+      "report": "知识检索/冲突规则冻结记录.md",
+      "text": "开发集/留出集分界线按**数据日期**定义（不按行号——起源查找修复后重挖，候选行号全部重排，「第 150 行起 = 留出集」在任何一次重挖后即失效，见《冻结修订记录 #1》§6）：conflicts.jsonl 里候选 new.asserted_at < 2026-08-26 属历史/开发集（规则在其上开发），>= 2026-08-26 属 D1~D7 采集窗口的留出集（规则未见过）。冻结时（D2 挖掘器尚未跑）留出集候选为 0，全部 149 条均在分界日期之前；conflicts_pool_lines=149 仅作规模快照，不再作分界依据。",
+      "record_id": "M-305",
+      "metric": "dev_holdout_boundary_date",
+      "expected": "2026-08-26",
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/冲突规则冻结记录.md",
+        "section": "三、开发集 / 留出集分界线"
+      }
+    },
+    {
+      "claim_id": "C-313",
+      "report": "知识检索/冲突规则冻结记录.md",
+      "text": "冻结时 conflicts_eval.jsonl（评测集）= 36 行（19 正 + 17 负），M-302~304 的 ground truth 即这 36 对，冻结后不再增删。",
+      "record_id": "M-305",
+      "metric": "conflicts_eval_lines",
+      "expected": 36,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/冲突规则冻结记录.md",
+        "section": "三、开发集 / 留出集分界线"
+      }
+    },
+    {
+      "claim_id": "C-314",
+      "report": "知识检索/冲突规则冻结记录.md",
+      "text": "conflicts_eval.jsonl 可确定性重建：build_eval_set() 连调两次逐字节一致（=1）。v1.1.0 修掉 adjudicated_at 用 datetime.now() 的缺陷后才成立——此前每次重跑换一个 sha256，一个「按 sha256 冻结」的产物却不能确定性重建，是缺陷。",
+      "record_id": "M-305",
+      "metric": "eval_set_build_determinism_agree",
+      "expected": 1,
+      "check": "exact",
+      "layer": "L1",
+      "note": "同类 bug 第三次（前两次：mine_workflows.py 的 set 遍历顺序、独立评审 P-4），见《勘误与修正记录》十七节。",
+      "anchor": {
+        "file": "知识检索/冲突规则冻结记录.md",
+        "section": "二、评测集冻结"
+      }
+    },
+    {
+      "claim_id": "C-315",
+      "report": "知识检索/冲突规则冻结记录.md",
+      "text": "冻结的评测集 conflicts_eval.jsonl（v1.3.0）sha256 = cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7，与 conflicts_eval_frozen.json 登记值一致；候选池 conflicts.jsonl sha256 = c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745。",
+      "record_id": "M-305",
+      "metric": "conflicts_eval_sha256",
+      "expected": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "check": "exact",
+      "layer": "L1",
+      "note": "版本史：v1.0.0(2026-08-16, b03056e6…) 内部草稿，从未 commit/锚定；v1.1.0(8d0c6f26…) adjudicated_at 常量化；v1.2.0(2f33dee2…) 脱敏补漏——identity_map 补 4 类标识、rescrub 源数据、重跑挖掘，conflicts.jsonl 除 4 类 token 一致替换外逐字节不变，18 正 18 负、label/type/reason_kind 全部逐字未变，M-302(35/36)/303/304 数字不受影响。v1.3.0(2026-08-28, cb6f60bc…) 起源查找修复 + 评测集修订——与前两次不同，是真实内容修订：_find_origin() 把同会话内的 Read 误当起源导致'先Read再Edit'的修订被系统性打成 same_sitting 负例，修复后 E-032/K-0052 由 not_conflict 改判 conflict（reason_kind=旧结论当时为假），评测集变为 19 正 17 负（不再对称，未挪数据凑齐 18/18）。§一 用修复版重跑冻结 36 对验证'只动候选挖掘、未动判定逻辑'，M-302 仍 35/36（CI 下界仍 85.8%，未变）；但 M-303 类型判断（T1~T4）从 8/18=44.4% 降到 8/19=42.1%——K-0052 金标 T1 被 adjudicate() 判成 T4，是随样本扩充新暴露的真实误判，不是回归，如实记录不回避。详见《冻结修订记录 #1》。",
+      "anchor": {
+        "file": "知识检索/冲突规则冻结记录.md",
+        "section": "二、评测集冻结"
+      }
+    },
+    {
+      "claim_id": "C-316",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "全部标注数据合并口径（91/96=94.8%，开发集36 + 留出集60）的Wilson 95%置信区间下界88.4%，≥赛题88%门槛——合并口径达标。必须与C-304（留出集单独口径，红）并读：达标来自样本量由36增至96、不是泛化优于开发集（点估计94.8%落在开发集97.2%与留出集93.3%之间）。",
+      "record_id": "M-306",
+      "metric": "combined_wilson_ci_lo",
+      "check": "bound",
+      "op": ">=",
+      "threshold": 0.88,
+      "layer": "L1",
+      "note": "本条为绿，但单独成立即误导：合并集含规则开发时看过的36条，开发期两次结构修订（same_sitting口径、append_only匹配方式）是bug修复不是精度调参；留出集单独56/60下界只有84.1%（C-304，红），仍未达门槛。C-304与本条缺一不可——只留本条＝用合并口径掩盖留出集单独不过。",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-317",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集判定准确率56/60=93.3%（规则于该批数据产生前即已冻结、从未见过；单人全量盲测裁决，2026-09-07）",
+      "record_id": "M-306",
+      "metric": "holdout_accuracy",
+      "expected": 0.9333,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-318",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "合并口径判定准确率91/96=94.8%（开发集35/36 + 留出集56/60）",
+      "record_id": "M-306",
+      "metric": "combined_accuracy",
+      "expected": 0.9479,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-319",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集分层准确率——C层（语义更正，必须读懂内容才能判）15/15=100%，是最有分量的一格：抽样前曾担心'量大但难度不够'，结果规则在最难的一层上全中",
+      "record_id": "M-306",
+      "metric": "stratum_C_accuracy",
+      "expected": 1.0,
+      "ndigits": 6,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-320",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集分层准确率——B层（环境失效，重启导致前提消失）8/8=100%",
+      "record_id": "M-306",
+      "metric": "stratum_B_accuracy",
+      "expected": 1.0,
+      "ndigits": 6,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-321",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集分层准确率——A层（数值漂移，仅读数变化）5/7=71.4%，2处误判即'史注漂移'（HO-K-0053/0036，当前值未变、只有史注变，被误判为冲突），单一根因见C-304/标注规范v1.0.2§六",
+      "record_id": "M-306",
+      "metric": "stratum_A_accuracy",
+      "expected": 0.7143,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-322",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "留出集分层准确率——负例28/30=93.3%，2处误判即'假追加'（HO-K-0204/0247，旧值被写进史注→旧文本成子串→误判为纯追加），与A层2处同一交互缺陷",
+      "record_id": "M-306",
+      "metric": "stratum_NEG_accuracy",
+      "expected": 0.9333,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-323",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "标注可靠性——重复题前后一致5/5=100%（5条题目隔29~70题在卷中出现两次，标注者知道存在但不知是哪几条）：这是单人全量标注唯一能自证的可靠性指标，不论往哪边偏、前后不一致都会暴露",
+      "record_id": "M-306",
+      "metric": "repeat_consistent",
+      "expected": 5,
+      "check": "exact",
+      "layer": "L1",
+      "note": "2026-09-06曾试5人分工盲测，因无法核实标注投入程度（开发集conflict 0/13与自身留出集75%矛盾、两轮零条理由、公共集完全一致率46.7%）整批弃用，原始文件保留但不进证据链、不写入claims、不参与任何指标计算。",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-324",
+      "report": "知识检索/知识冲突处理说明报告.md",
+      "text": "开发集复核——那13条此前只有Claude裁决过的正例，人工盲测复核后13/13维持conflict、改判0：报告中'开发集由AI裁决、未经人工复核'这条已知限制可撤下，改为'全部36对均经人工盲测复核'，冻结集正例仍19条、19正/17负比例不变",
+      "record_id": "M-306",
+      "metric": "dev_maintained_conflict",
+      "expected": 13,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/知识冲突处理说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-401",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "操作习惯类偏好提取19条（三道门槛：min_trigger=8/min_ratio=0.65/min_sessions=2）",
+      "record_id": "M-401",
+      "metric": "category_operation_habit",
+      "expected": 19,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "二、提取结果"
+      }
+    },
+    {
+      "claim_id": "C-402",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "安全策略类偏好实测0条：865条user_rejected记录92.3%来自单一异常日（2026-07-27，与mine_cases.py已记录的同一枚地雷），排除后正常拒绝率仅0.8%，无命令类型有统计支持的高拒绝率，如实报告空结果",
+      "record_id": "M-401",
+      "metric": "category_safety_policy",
+      "expected": 0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "二、提取结果"
+      }
+    },
+    {
+      "claim_id": "C-403",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "操作习惯类留出期行为预测准确率90.0%（1217/1352）",
+      "record_id": "M-402",
+      "metric": "operation_habit_accuracy",
+      "expected": 0.9001,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-404",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "操作习惯类准确率的Wilson 95%置信区间下界88.3%，超过赛题85%门槛——本模块唯一一个统计上确信达标的类别（不代表三类整体都达标，分开报）",
+      "record_id": "M-402",
+      "metric": "operation_habit_accuracy_ci_lo",
+      "check": "bound",
+      "op": ">=",
+      "threshold": 0.85,
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-405",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "操作习惯类相对多数基线的提升幅度+69.5个百分点（90.0% vs 20.5%），保守置信区间下界65.6%>0，可确信提取器优于'不看具体情境、只猜类别内全局众数'这条基线",
+      "record_id": "M-402",
+      "metric": "operation_habit_lift_ci_lo",
+      "check": "bound",
+      "op": ">",
+      "threshold": 0.0,
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-406",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "输出风格类提升幅度=0（该类别当前只挖到doc_format单一触发情境，类别级基线与该情境多数在数学上恒等），置信区间跨0，如实写'不能证明提取器优于多数基线'，按赛题要求指出优化方向（拓宽情境切分）而非隐藏这条弱结果",
+      "record_id": "M-402",
+      "metric": "output_style_lift",
+      "expected": 0.0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "四、评测结果"
+      }
+    },
+    {
+      "claim_id": "C-407",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "会话完整性切分零泄漏：训练期142会话/留出期95会话，交集为0",
+      "record_id": "M-403",
+      "metric": "session_overlap",
+      "expected": 0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "三、评测设计"
+      }
+    },
+    {
+      "claim_id": "C-408",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "已知横跨23天的会话（1cd1ff9f，与知识冲突模块挖掘时发现的同一个会话）被完整保留在训练期一侧，未被朴素按时间戳切分的方式腰斩",
+      "record_id": "M-403",
+      "metric": "known_23day_session_kept_together",
+      "expected": true,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "三、评测设计"
+      }
+    },
+    {
+      "claim_id": "C-409",
+      "report": "知识检索/偏好提取说明报告.md",
+      "text": "跨场景支持度分布：windows场景474次/kylin场景0次——本项目老数据集几乎全部来自Windows笔记本真实开发记录，kylin场景样本量不足以做有统计意义的跨场景对比（与知识冲突模块记录的同一条环境边界），机制（detect_scenario()/scenario.n_by_scenario）已就绪，卡的是数据积累时间不是实现缺失",
+      "record_id": "M-404",
+      "metric": "scenario_kylin_ratio",
+      "expected": 0.0,
+      "check": "exact",
+      "layer": "L1",
+      "anchor": {
+        "file": "知识检索/偏好提取说明报告.md",
+        "section": "五、跨场景适配"
+      }
+    },
+    {
+      "claim_id": "C-410",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "BGE 对照·系统侧 naive R@1 = 52.42%（119/227），与 C-265(M-210) 逐位一致——同一份被嵌入文本、同一套检索数学，用 BGE-M3对照/retrieve.py 复算。",
+      "record_id": "M-211",
+      "metric": "kylin_naive_r1",
+      "check": "exact",
+      "expected": 0.5242,
+      "layer": "L2",
+      "note": "系统侧向量取自 可复现性体系/vectors/*.tsv（KYSDK 固化产物），来源真实性属 L2、由 M-201/M-206 覆盖；本条只验证『给定这批向量，检索计分正确』。",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "五、口径与配置"
+      }
+    },
+    {
+      "claim_id": "C-411",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "BGE 对照·系统侧 naive R@10 = 86.34%（196/227），与 C-266(M-210) 逐位一致。",
+      "record_id": "M-211",
+      "metric": "kylin_naive_r10",
+      "check": "exact",
+      "expected": 0.8634,
+      "layer": "L2",
+      "note": "同 C-410。此值即报告 §3/§10 的硬指标达标口径（naive 口径）。",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "五、口径与配置"
+      }
+    },
+    {
+      "claim_id": "C-412",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "BGE-M3 dense（1024 维，无指令前缀，无截断）naive R@1 = 50.66%（115/227）。检索与计分纯 numpy，评委任何机器可复现。",
+      "record_id": "M-211",
+      "metric": "bge_dense_r1",
+      "check": "exact",
+      "expected": 0.5066,
+      "layer": "L1",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "一、主对比（naive，227 题）"
+      }
+    },
+    {
+      "claim_id": "C-413",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "BGE-M3 dense naive R@10 = 87.22%（198/227），对系统侧 +2 题。",
+      "record_id": "M-211",
+      "metric": "bge_dense_r10",
+      "check": "exact",
+      "expected": 0.8722,
+      "layer": "L1",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "一、主对比（naive，227 题）"
+      }
+    },
+    {
+      "claim_id": "C-414",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "McNemar（配对，227 题）R@10 不一致对：只系统命中 14 题。",
+      "record_id": "M-211",
+      "metric": "mcnemar_r10_only_kylin_n",
+      "check": "exact",
+      "expected": 14,
+      "layer": "L1",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "三、McNemar"
+      }
+    },
+    {
+      "claim_id": "C-415",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "McNemar R@10 不一致对：只 BGE 命中 16 题。14:16 无方向 → 系统指定 embedding 接口与 BGE-M3 在 R@10 上不可区分（『用系统接口不牺牲检索效果』的结果 B）。",
+      "record_id": "M-211",
+      "metric": "mcnemar_r10_only_bge_n",
+      "check": "exact",
+      "expected": 16,
+      "layer": "L1",
+      "note": "🔴 不得表述为『无显著差异』——那需要等价检验，样本量远不够（77 gold doc）。只作『不一致对无方向』的描述。",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "三、McNemar"
+      }
+    },
+    {
+      "claim_id": "C-416",
+      "report": "BGE-M3对照/说明报告.md",
+      "text": "BGE 对照·系统侧 naive R@3 = 76.21%（173/227）——此前在 claims.json 中【无任何主张】，本次为首次锚定。",
+      "record_id": "M-211",
+      "metric": "kylin_naive_r3",
+      "check": "exact",
+      "expected": 0.7621,
+      "layer": "L2",
+      "note": "🔴 R@3 上系统比 BGE-M3 多命中 14 题、McNemar b:c=29:15、二项精确 p≈0.049——**不得称『显著』**：看了 4 个截断点，Bonferroni 阈值 0.0125，过不了。只作描述性表述：『在实际注入口径 top-5 上系统多命中 12-14 题；top-10 上两者不可区分（p=0.86）』。",
+      "anchor": {
+        "file": "BGE-M3对照/说明报告.md",
+        "section": "一、主对比（naive，227 题）"
+      }
+    },
+    {
+      "claim_id": "C-420",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "模型消融 4×2（v2）：记忆机制在四档（2B/4B/9B/Gemini）× 三判据口径（strict/adj/ordered）全部 12 格上均产生正增益，Δ 从 +3 到 +7，无一格例外。这是三种口径下唯一都成立的结论。",
+      "record_id": "M-212",
+      "metric": "all_positive_all_criteria",
+      "check": "exact",
+      "expected": true,
+      "layer": "L1",
+      "note": "报告 §六.4 的『稳健』结论。其余结论（阶梯单调、9B 追平云端）均为口径依赖，见 C-421~C-423 / C-429。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "六、稳健性检验"
+      }
+    },
+    {
+      "claim_id": "C-421",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "严格口径（headline，跑前固定）Δ 阶梯 = +3/+4/+5/+5（2B/4B/9B/K），单调不减成立。",
+      "record_id": "M-212",
+      "metric": "ladder_monotone_strict",
+      "check": "exact",
+      "expected": true,
+      "layer": "L1",
+      "note": "🔴 该单调性口径依赖：见 C-422（宽口径下不成立）。必须与 C-422 并读，不许只登记本条。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "六、稳健性检验"
+      }
+    },
+    {
+      "claim_id": "C-422",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "宽口径（排子串误伤）Δ 阶梯 = +3/+5/+6/+5，9B(+6) > K(+5)，**单调不减不成立**。",
+      "record_id": "M-212",
+      "metric": "ladder_monotone_adj",
+      "check": "exact",
+      "expected": false,
+      "layer": "L1",
+      "note": "与 C-421 缺一不可——只留 C-421 = 用一个口径掩盖另一个（同 C-304/C-316 必须并存的道理）。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "六、稳健性检验"
+      }
+    },
+    {
+      "claim_id": "C-423",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "留一法：全 13 题逐条剔除后，剔掉 T-02 或 T-13 中任意一条，严格口径 Δ 阶梯的单调性即不成立——从 +3 到 +5 之间全部信号仅 2 条题。",
+      "record_id": "M-212",
+      "metric": "loo_ladder_breakers",
+      "check": "exact",
+      "expected": "T-02,T-13",
+      "layer": "L1",
+      "note": "报告 §六.2。阶梯结论『脆弱』的量化依据：噪声与信号同量级（无记忆组各档命中数在 2/3/2/3 之间抖动）。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "六、稳健性检验"
+      }
+    },
+    {
+      "claim_id": "C-424",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "主论点 A2 vs K1（2B+记忆 vs Gemini 无记忆）McNemar 不一致对：只 A2 对 4 题（严格口径）。A2 5/13 > K1 3/13，方向成立。",
+      "record_id": "M-212",
+      "metric": "mcnemar_a2_vs_k1_only_a2",
+      "check": "exact",
+      "expected": 4,
+      "layer": "L1",
+      "note": "K1 反超的 2 条（C-425）是判据放宽后的通识题（base64 / curl -L）。差 2 条净、n=13，只作描述性表述。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "三、主论点 与 张力题"
+      }
+    },
+    {
+      "claim_id": "C-425",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "主论点 A2 vs K1 McNemar 不一致对：只 K1 对 2 题。",
+      "record_id": "M-212",
+      "metric": "mcnemar_a2_vs_k1_only_k1",
+      "check": "exact",
+      "expected": 2,
+      "layer": "L1",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "三、主论点 与 张力题"
+      }
+    },
+    {
+      "claim_id": "C-426",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "张力题 A2 vs K2（2B+记忆 vs Gemini+记忆）McNemar 不一致对：只 A2 对 1 题（严格口径）。",
+      "record_id": "M-212",
+      "metric": "mcnemar_a2_vs_k2_only_a2",
+      "check": "exact",
+      "expected": 1,
+      "layer": "L1",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "三、主论点 与 张力题"
+      }
+    },
+    {
+      "claim_id": "C-427",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "张力题 A2 vs K2 McNemar 不一致对：只 K2 对 4 题。1:4，2B 完败于云端+记忆——记忆机制的收益依赖模型能力，2B 用不满。",
+      "record_id": "M-212",
+      "metric": "mcnemar_a2_vs_k2_only_k2",
+      "check": "exact",
+      "expected": 4,
+      "layer": "L1",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "三、主论点 与 张力题"
+      }
+    },
+    {
+      "claim_id": "C-428",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "八格·全 13 题·严格口径：K2（Gemini 3.1 Pro maxthinking + 记忆）= 8/13。",
+      "record_id": "M-212",
+      "metric": "k2",
+      "check": "exact",
+      "expected": 8,
+      "layer": "L1",
+      "note": "八格其余：a1=2 a2=5 b1=3 b2=7 c1=2 c2=7 k1=3（M-212 各指标）。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "二、结果"
+      }
+    },
+    {
+      "claim_id": "C-429",
+      "report": "评测集/模型消融/模型消融4x2-报告-v2.md",
+      "text": "『9B 追平云端 Gemini』是口径依赖结论：有序口径下 9B vs K（有记忆）= 8:11，不成立（严格口径下为 7:8）。",
+      "record_id": "M-212",
+      "metric": "c2_vs_k2_ordered",
+      "check": "exact",
+      "expected": "8:11",
+      "layer": "L1",
+      "note": "报告 §六.4：写进对外材料时须连口径条件一并给出，不能单说『9B 追平云端』。",
+      "anchor": {
+        "file": "评测集/模型消融/模型消融4x2-报告-v2.md",
+        "section": "六、稳健性检验"
+      }
+    },
+    {
+      "claim_id": "C-430",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "精准遗忘评测：20 条任务，10 条 case + 10 条 workflow，覆盖 20 个不同的 gold doc。",
+      "record_id": "M-213",
+      "metric": "n_tasks",
+      "check": "exact",
+      "expected": 20,
+      "layer": "L1",
+      "note": "forget_tasks.jsonl 由 build_forget_tasks.py 生成，gold_stable_key 从语料机算，不手填。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    },
+    {
+      "claim_id": "C-431",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "定位准确率：55.0%（11/20）——指令当查询、第一步返回的 top-1 doc_id 命中 gold_doc_id 的任务占比。",
+      "record_id": "M-213",
+      "metric": "locate_accuracy",
+      "check": "exact",
+      "expected": 0.55,
+      "layer": "L1",
+      "note": "首轮实测 30%（6/20），按预登记 §4 授权路径改写 14 条 miss 掉的指令后重跑一次得到本数字，只改一次。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    },
+    {
+      "claim_id": "C-432",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "遗忘生效率：100%（58/58）——确认后，gold=该单元的评测题重跑，该单元不在 top-10 的占比。",
+      "record_id": "M-213",
+      "metric": "forget_effective_rate",
+      "check": "exact",
+      "expected": 1.0,
+      "ndigits": 6,
+      "layer": "L1",
+      "note": "过滤在按 k 截断之前生效（memory_service.py 以 k+f 取候选再过滤再截断），理论上必达，与预登记预期一致。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    },
+    {
+      "claim_id": "C-433",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "副作用率（raw）：90.3%（4049/4482）——任何「遗忘前后 top-10 集合不同」都计入的原始值，未剔除正常 backfill。",
+      "record_id": "M-213",
+      "metric": "side_effect_free_rate_raw",
+      "check": "exact",
+      "expected": 0.9034,
+      "ndigits": 4,
+      "layer": "L1",
+      "note": "不是最终结论，仅作为对照——见 C-434 的 true 值与 genuine_anomalies 字段的逐条核验。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    },
+    {
+      "claim_id": "C-434",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "副作用率（true，预登记判据）：100%（0/4482 真异常）——raw 里 433 条「变化」逐条核验后全部是目标单元本来就在该题原始 top-10 里的正常 backfill，剔除后真异常为 0。",
+      "record_id": "M-213",
+      "metric": "side_effect_free_rate_true",
+      "check": "exact",
+      "expected": 1.0,
+      "ndigits": 6,
+      "layer": "L1",
+      "note": "与预登记预期一致；判据见 记忆服务/遗忘评测/预登记.md「一条容易误判的边界」。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    },
+    {
+      "claim_id": "C-435",
+      "report": "技术报告/技术报告-v1.0.md（§IV-K）",
+      "text": "真异常数：0——genuine_anomalies 字段为空列表，是 C-434 的直接证据（不是重新声明同一个百分比）。",
+      "record_id": "M-213",
+      "metric": "n_genuine_anomaly",
+      "check": "exact",
+      "expected": 0,
+      "layer": "L1",
+      "note": "score_forget.py 逐题判定：target_doc_id 不在 hits_before 里、结果却变了才计入真异常。",
+      "anchor": {
+        "file": "技术报告/技术报告-v1.0.md",
+        "section": "IV-K 精准遗忘"
+      }
+    }
+  ]
+}

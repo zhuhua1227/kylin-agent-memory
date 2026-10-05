@@ -1,0 +1,338 @@
+{
+  "record_id": "M-111",
+  "title": "知识检索召回率（L1，固化向量复算，评测集v1.4.0）",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "0c72380efb59796dda90a871d374ac9ca7e2adf63be1ac2a3bb757c2f1c24a15",
+  "command": "python measure_L1.py M-111",
+  "started_at": "2026-08-15T08:41:16.037462+00:00",
+  "duration_sec": 0.632,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "vectors\\docs.tsv",
+      "sha256": "f57904ded9c5539c5f089f93806393a5c243980c701cf16f579e6e4f1f9ad113",
+      "bytes": 934232,
+      "lines": 86
+    },
+    {
+      "path": "vectors\\eval_queries.tsv",
+      "sha256": "4a16ebe9b32394ce3f5aa053ca83b0c410fb214f929dc2e32d7001be494ce7ea",
+      "bytes": 2401041,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "doc_count": {
+      "value": 86,
+      "unit": "条",
+      "repeats": 1
+    },
+    "query_count": {
+      "value": 227,
+      "unit": "题",
+      "repeats": 1
+    },
+    "recall_at_1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_1": {
+      "value": 0.3524,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_3": {
+      "value": 0.467,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_5": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_10": {
+      "value": 0.5727,
+      "unit": "",
+      "repeats": 1
+    },
+    "difficulty_levels": {
+      "value": "close,hard,paraphrase",
+      "unit": "",
+      "repeats": 1
+    },
+    "n_close": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_1_close": {
+      "value": 0.7027,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_1_close": {
+      "value": 0.5946,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3_close": {
+      "value": 0.8919,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_3_close": {
+      "value": 0.7297,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5_close": {
+      "value": 0.9324,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_5_close": {
+      "value": 0.8243,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10_close": {
+      "value": 0.9459,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_10_close": {
+      "value": 0.8919,
+      "unit": "",
+      "repeats": 1
+    },
+    "n_hard": {
+      "value": 76,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_1_hard": {
+      "value": 0.3289,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_1_hard": {
+      "value": 0.0263,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3_hard": {
+      "value": 0.6184,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_3_hard": {
+      "value": 0.0921,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5_hard": {
+      "value": 0.6974,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_5_hard": {
+      "value": 0.1053,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10_hard": {
+      "value": 0.75,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_10_hard": {
+      "value": 0.1184,
+      "unit": "",
+      "repeats": 1
+    },
+    "n_paraphrase": {
+      "value": 77,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_1_paraphrase": {
+      "value": 0.5455,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_1_paraphrase": {
+      "value": 0.4416,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_3_paraphrase": {
+      "value": 0.7792,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_3_paraphrase": {
+      "value": 0.5844,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_5_paraphrase": {
+      "value": 0.8442,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_5_paraphrase": {
+      "value": 0.6494,
+      "unit": "",
+      "repeats": 1
+    },
+    "recall_at_10_paraphrase": {
+      "value": 0.8961,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_recall_at_10_paraphrase": {
+      "value": 0.7143,
+      "unit": "",
+      "repeats": 1
+    },
+    "mrr": {
+      "value": 0.6502,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_mrr": {
+      "value": 0.4256,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_ndcg_at_1": {
+      "value": 0.3524,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_3": {
+      "value": 0.6645,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_ndcg_at_3": {
+      "value": 0.4218,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_5": {
+      "value": 0.6899,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_ndcg_at_5": {
+      "value": 0.4453,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_10": {
+      "value": 0.7028,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_ndcg_at_10": {
+      "value": 0.4611,
+      "unit": "",
+      "repeats": 1
+    },
+    "mrr_close": {
+      "value": 0.8031,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_mrr_close": {
+      "value": 0.6931,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_10_close": {
+      "value": 0.8389,
+      "unit": "",
+      "repeats": 1
+    },
+    "mrr_hard": {
+      "value": 0.4718,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_mrr_hard": {
+      "value": 0.062,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_10_hard": {
+      "value": 0.5399,
+      "unit": "",
+      "repeats": 1
+    },
+    "mrr_paraphrase": {
+      "value": 0.6792,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_mrr_paraphrase": {
+      "value": 0.5275,
+      "unit": "",
+      "repeats": 1
+    },
+    "ndcg_at_10_paraphrase": {
+      "value": 0.7329,
+      "unit": "",
+      "repeats": 1
+    },
+    "hard_r1_model_minus_baseline_gap": {
+      "value": 0.3026,
+      "unit": "",
+      "repeats": 1
+    },
+    "baseline_l1_vs_l2_r1_gap": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "固化向量来自官方KYSDK的一次真实编码（见 vectors/fixed_vectors_manifest.json），本项只在这批向量上重算余弦排序与baseline，不重新调用KYSDK；数字应与 L2 的 M-207 逐位一致——这正是该测量存在的意义：任何人不需要麒麟环境，也能核对「检索排序确实是这样算出来的」"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-111] 知识检索召回率（L1，固化向量复算，评测集v1.4.0）  (层级 L1) =====\nL1固化向量复算：R@1=52.4%  R@10=86.3%（对照L2的M-207应逐位一致，因为固化向量就是M-207用的同一批embedding）\nhard档 R@1：模型=32.9% vs baseline=2.6%（领先 +30.3pp）\nL1/L2 词面 baseline R@1 逐位一致（0.3524）——这才是真正的交叉验证\n  [note] 固化向量来自官方KYSDK的一次真实编码（见 vectors/fixed_vectors_manifest.json），本项只在这批向量上重算余弦排序与baseline，不重新调用KYSDK；数字应与 L2 的 M-207 逐位一致——这正是该测量存在的意义：任何人不需要麒麟环境，也能核对「检索排序确实是这样算出来的」\n"
+}

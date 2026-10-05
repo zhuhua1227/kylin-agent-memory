@@ -1,0 +1,99 @@
+{
+  "threshold": 0.7,
+  "corpus_size": 95,
+  "pair_count": 18,
+  "involved_count": 24,
+  "involved_ratio": 0.2526,
+  "pairs": [
+    {
+      "a": 7,
+      "b": 8,
+      "similarity": 0.7073
+    },
+    {
+      "a": 11,
+      "b": 13,
+      "similarity": 0.7273
+    },
+    {
+      "a": 18,
+      "b": 20,
+      "similarity": 0.8841
+    },
+    {
+      "a": 18,
+      "b": 22,
+      "similarity": 0.8571
+    },
+    {
+      "a": 19,
+      "b": 21,
+      "similarity": 0.8877
+    },
+    {
+      "a": 20,
+      "b": 22,
+      "similarity": 0.9375
+    },
+    {
+      "a": 61,
+      "b": 62,
+      "similarity": 0.8339
+    },
+    {
+      "a": 71,
+      "b": 72,
+      "similarity": 0.7722
+    },
+    {
+      "a": 76,
+      "b": 77,
+      "similarity": 0.7701
+    },
+    {
+      "a": 86,
+      "b": 89,
+      "similarity": 0.8421
+    },
+    {
+      "a": 86,
+      "b": 90,
+      "similarity": 0.72
+    },
+    {
+      "a": 87,
+      "b": 88,
+      "similarity": 0.7733
+    },
+    {
+      "a": 89,
+      "b": 90,
+      "similarity": 0.8533
+    },
+    {
+      "a": 91,
+      "b": 92,
+      "similarity": 0.7333
+    },
+    {
+      "a": 91,
+      "b": 94,
+      "similarity": 0.7213
+    },
+    {
+      "a": 92,
+      "b": 93,
+      "similarity": 0.7273
+    },
+    {
+      "a": 92,
+      "b": 94,
+      "similarity": 0.8
+    },
+    {
+      "a": 93,
+      "b": 94,
+      "similarity": 0.8571
+    }
+  ]
+}

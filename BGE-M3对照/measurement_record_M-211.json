@@ -1,0 +1,110 @@
+{
+  "record_id": "M-211",
+  "title": "BGE-M3 对照实验（naive 档，227 题 / 77 gold doc）：系统 kylin-coreai-embedding vs BGE-M3 dense",
+  "layer": "L1",
+  "script": "BGE-M3对照/retrieve.py",
+  "script_sha256": "9985238268a6ab60741efa8a58aa3b43180a79ff1f2ce3ee6c3c70b9267f5cd6",
+  "command": "python retrieve.py --side kylin && python retrieve.py --side bge && python retrieve.py --mcnemar",
+  "started_at": "2026-09-10T03:00:55.054087+00:00",
+  "duration_sec": null,
+  "random_seed": null,
+  "environment": {
+    "os": "Windows-11-10.0.26340-SP0",
+    "python": "3.14.0",
+    "numpy": "2.4.0",
+    "note": "检索与计分纯 numpy（L1）；系统侧向量为已固化产物（ensemble-embd_gte-base_uint8-text，L2 来源），BGE 侧向量由 make_vectors_bge.py 在 Ubuntu CPU 上用 BAAI/bge-m3 / torch 2.14.0+cpu 新算（dense-only、无指令前缀、max_length 8192、无截断）"
+  },
+  "inputs": {
+    "texts.jsonl": "8c178c3a9af47c030fc5bcfab0e8a97d515898d7538bc67da3c06ed0c26b29c3",
+    "docs_kylin.npy": "6e9d62014e26b095957fcb48a53eaa17443340d57dccb7f56cf616684830b813",
+    "queries_kylin.npy": "84ce7ab2be5fa43d1744d08d0f82fa26630f3c61df437b188419cbcbee46f64f",
+    "docs_bge.npy": "9b31184a38c785005349620f54e261af9e5a79d2cf70911a8662c254fa4c828b",
+    "queries_bge.npy": "2b54ae3b221dc49290ed7564450b3dd44049b0c32a992807502da38bd3222afe",
+    "gold.npy": "84413e03faf5500cbca61834f8513d646e1cfad441e8b22ddcfec80194cd60f9"
+  },
+  "metrics": {
+    "kylin_naive_r1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r1": {
+      "value": 0.5066,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r3": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r3": {
+      "value": 0.7004,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r5": {
+      "value": 0.7709,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r10": {
+      "value": 0.8722,
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_r1_only_kylin_n": {
+      "value": 29,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r1_only_bge_n": {
+      "value": 25,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r3_only_kylin_n": {
+      "value": 29,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r3_only_bge_n": {
+      "value": 15,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r5_only_kylin_n": {
+      "value": 25,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r5_only_bge_n": {
+      "value": 13,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r10_only_kylin_n": {
+      "value": 14,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r10_only_bge_n": {
+      "value": 16,
+      "unit": "题",
+      "repeats": 1
+    }
+  },
+  "notes": "已知答案自检：retrieve.py --side kylin 逐位复现 C-265 (naive_r1=0.5242) 与 C-266 (naive_r10=0.8634)。R@3 在 claims.json 中无主张，本次为新增测量。227 题只覆盖 77 个 gold doc，有效样本量远小于 227，只报 McNemar 不一致对条数与方向，不下显著性/等价结论。单一语料单一领域，不构成对 BGE-M3 通用能力的评价。",
+  "succeeded": true,
+  "raw_stdout": "\n===== side = kylin  (dim=768) =====\n  R@1   = 52.42%   (119/227)\n  R@3   = 76.21%   (173/227)\n  R@5   = 82.38%   (187/227)\n  R@10  = 86.34%   (196/227)\n  单调性 R@1 ≤ R@3 ≤ R@5 ≤ R@10 : ✅\n\n  [已知答案自检] 对锚定值（C-265 R@1 / C-266 R@10）：\n    R@1: 实测 0.5242  vs 锚定 0.5242   ✅ 逐位一致\n    R@10: 实测 0.8634  vs 锚定 0.8634   ✅ 逐位一致\n    R@3（claims.json 无主张，本次为新增测量）= 76.21% (173/227)\n    R@5（仅 C-265 note 提及 82.4%，非硬门）= 82.38% (187/227)\n\n  ✅ 自检通过：retrieve.py 正确，可以继续做 BGE 侧。\n\n\n===== side = bge  (dim=1024) =====\n  R@1   = 50.66%   (115/227)\n  R@3   = 70.04%   (159/227)\n  R@5   = 77.09%   (175/227)\n  R@10  = 87.22%   (198/227)\n  单调性 R@1 ≤ R@3 ≤ R@5 ≤ R@10 : ✅\n\n\n===== McNemar（配对，227 题；只列不一致对的条数与方向）=====\n  R@1  : 只 Kylin 命中 29  只 BGE 命中 25  均命中 90  均未 83   二项精确双侧 p≈0.683（仅参考，n_disc=54，有效样本远小于 227，不作结论）\n  R@3  : 只 Kylin 命中 29  只 BGE 命中 15  均命中 144  均未 39   二项精确双侧 p≈0.049（仅参考，n_disc=44，有效样本远小于 227，不作结论）\n  R@5  : 只 Kylin 命中 25  只 BGE 命中 13  均命中 162  均未 27   二项精确双侧 p≈0.073（仅参考，n_disc=38，有效样本远小于 227，不作结论）\n  R@10 : 只 Kylin 命中 14  只 BGE 命中 16  均命中 182  均未 15   二项精确双侧 p≈0.856（仅参考，n_disc=30，有效样本远小于 227，不作结论）\n"
+}

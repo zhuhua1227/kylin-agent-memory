@@ -1,0 +1,78 @@
+﻿{
+    "url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1",
+    "repository_url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612",
+    "labels_url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1/labels{/name}",
+    "comments_url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1/comments",
+    "events_url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1/events",
+    "html_url":  "https://github.com/zhuhua1227/kylin-rag-xa202612/issues/1",
+    "id":  5059471352,
+    "node_id":  "I_kwDOTtilxM8AAAABLZFn-A",
+    "number":  1,
+    "title":  "评测集 v1.1.0 冻结锚定（sha256=e0a7f825f3...）",
+    "user":  {
+                 "login":  "zhuhua1227",
+                 "id":  312923328,
+                 "node_id":  "U_kgDOEqbUwA",
+                 "avatar_url":  "https://avatars.githubusercontent.com/u/312923328?v=4",
+                 "gravatar_id":  "",
+                 "url":  "https://api.github.com/users/zhuhua1227",
+                 "html_url":  "https://github.com/zhuhua1227",
+                 "followers_url":  "https://api.github.com/users/zhuhua1227/followers",
+                 "following_url":  "https://api.github.com/users/zhuhua1227/following{/other_user}",
+                 "gists_url":  "https://api.github.com/users/zhuhua1227/gists{/gist_id}",
+                 "starred_url":  "https://api.github.com/users/zhuhua1227/starred{/owner}{/repo}",
+                 "subscriptions_url":  "https://api.github.com/users/zhuhua1227/subscriptions",
+                 "organizations_url":  "https://api.github.com/users/zhuhua1227/orgs",
+                 "repos_url":  "https://api.github.com/users/zhuhua1227/repos",
+                 "events_url":  "https://api.github.com/users/zhuhua1227/events{/privacy}",
+                 "received_events_url":  "https://api.github.com/users/zhuhua1227/received_events",
+                 "type":  "User",
+                 "user_view_type":  "public",
+                 "site_admin":  false
+             },
+    "labels":  [
+
+               ],
+    "state":  "open",
+    "locked":  false,
+    "assignees":  [
+
+                  ],
+    "milestone":  null,
+    "comments":  0,
+    "created_at":  "2026-08-04T10:37:19Z",
+    "updated_at":  "2026-08-04T10:37:19Z",
+    "closed_at":  null,
+    "assignee":  null,
+    "author_association":  "OWNER",
+    "active_lock_reason":  null,
+    "sub_issues_summary":  {
+                               "total":  0,
+                               "completed":  0,
+                               "percent_completed":  0
+                           },
+    "issue_dependencies_summary":  {
+                                       "blocked_by":  0,
+                                       "total_blocked_by":  0,
+                                       "blocking":  0,
+                                       "total_blocking":  0
+                                   },
+    "body":  "本 issue 用于给评测集冻结顺序做外部时间戳锚定——GitHub issue 评论的时间戳由服务端生成，无法由发布者伪造（不同于 git commit 时间，那是提交者本地可任意填写的）。\n\n用途：证明「先冻结评测集、后跑模型评测」这个顺序是真实的，而不是看到模型输出之后倒过来选一份评测集凑数。这是本项目里唯一无法靠重跑验证的主张（性能类数字都能重新测，但没法重新证明\"当时没有作弊\"）。\n\n## 冻结的评测集 v1.1.0\n\n```json\n{\n  \"version\": \"1.1.0\",\n  \"frozen_at\": \"2026-08-04T04:59:00.022533+00:00\",\n  \"file\": \"评测集/eval_set.jsonl\",\n  \"sha256\": \"e0a7f825f320749facf3ec146a5176e63e62b464ae4768631a59d0a5428d0b9e\",\n  \"question_count\": 239,\n  \"by_difficulty\": {\"close\": 118, \"hard\": 121},\n  \"by_knowledge_type\": {\"case\": 104, \"workflow\": 135},\n  \"generation_model\": \"openai/gemini-3.1-pro-preview（经 192.168.100.3:8082 litellm代理）\",\n  \"knowledge_base_source\": \"cases.jsonl(55条) + workflows.jsonl(97条)，见 知识检索/说明报告.md\"\n}\n```\n\n任何人都可以直接对仓库里的 `评测集/eval_set.jsonl` 算 SHA256，核对是否等于上面这个哈希：\n\n```bash\nsha256sum 评测集/eval_set.jsonl\n```\n\n完整的生成过程、人工复核记录、冻结脚本见 `评测集/说明报告.md` 与 `评测集/review_and_freeze.py`。此后本仓库若继续对同一份评测集做偏好提取、知识冲突处理等模型评测，均以此哈希对应的版本为准。\n",
+    "closed_by":  null,
+    "reactions":  {
+                      "url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1/reactions",
+                      "total_count":  0,
+                      "+1":  0,
+                      "-1":  0,
+                      "laugh":  0,
+                      "hooray":  0,
+                      "confused":  0,
+                      "heart":  0,
+                      "rocket":  0,
+                      "eyes":  0
+                  },
+    "timeline_url":  "https://api.github.com/repos/zhuhua1227/kylin-rag-xa202612/issues/1/timeline",
+    "performed_via_github_app":  null,
+    "state_reason":  null,
+    "pinned_comment":  null
+}

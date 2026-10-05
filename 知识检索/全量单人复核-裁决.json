@@ -1,0 +1,548 @@
+[
+ {
+  "id": "HO-K-0242",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "同一 boot 记录的「当前」标注被撤改为「曾为当前」，boot 0 已结束；检索旧条会误认为该 boot 仍在运行",
+  "n": 1
+ },
+ {
+  "id": "HO-K-0168",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "报告份数/总量/最新文件读数被下一次复测整体取代，旧条自带「已不再是」取代标注",
+  "n": 2
+ },
+ {
+  "id": "HO-K-0451",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "同段仅措辞更换（脱离会话→挂会话、所用可执行文件→脚本本身等），信息量未变，另纯追加 /proc/1/environ 报错记录",
+  "n": 3
+ },
+ {
+  "id": "HO-K-0472",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "仅「无 .dat」→「无 .datac」一个扩展名细节变动，不影响目录清单与「未触碰」结论；其余为追加",
+  "n": 4
+ },
+ {
+  "id": "HO-K-0338",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "takeaway 换说法（unrelated to mount-fs ≈ not E-not-a-mount），语义相同；其余为追加",
+  "n": 5
+ },
+ {
+  "id": "HO-K-0288",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "符号链接数 1→0，claude 链接已删；旧断言被明确否定",
+  "n": 6
+ },
+ {
+  "id": "HO-K-0170",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新报告」指针从 08-26 翻新到 08-27，旧断言被明确标注已不再是",
+  "n": 7
+ },
+ {
+  "id": "K-0044",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0044：人设「严格防剧透」被用户亲自改定的正确人设（爱恶作剧/小黄腔）更正，别用错",
+  "n": 8
+ },
+ {
+  "id": "HO-K-0047",
+  "layer": "A",
+  "verdict": "conflict",
+  "note": "workspace 总大小读数 23MB→29MB，旧读数被取代",
+  "n": 9
+ },
+ {
+  "id": "HO-K-0447",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，netctl 按可执行路径判定的详证为纯追加",
+  "n": 10
+ },
+ {
+  "id": "HO-K-0387",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "IPC socket 在监听的结论原样保留，三者依赖程度分析为纯追加且不与之矛盾",
+  "n": 11
+ },
+ {
+  "id": "K-0024",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0024：做种盘拔除、PT 做种事实停摆，旧「做种运行中」前提消失",
+  "n": 12
+ },
+ {
+  "id": "HO-K-0053",
+  "layer": "A",
+  "verdict": "not_conflict",
+  "note": "当前值未变（两段都是 3），仅「原为 2/原为 3」史注不同，无信息量变化（K-0067 型润色）",
+  "n": 13
+ },
+ {
+  "id": "K-0025",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0025：J 盘由「濒死在线」变「已物理拔除退役」，状态被取代",
+  "n": 14
+ },
+ {
+  "id": "HO-K-0437",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧结论原样保留，日志解析方法记录为纯追加",
+  "n": 15
+ },
+ {
+  "id": "K-0020",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0020：07-26「迁移完成+自动化运行」被 07-31 新状态（架构总览/保护调整）取代，premise_disappeared",
+  "n": 16
+ },
+ {
+  "id": "HO-K-0253",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧句是历史观察（08-25 那次 boot 的启动时刻结论）仍成立，仅追加「彼 boot 已结束」注",
+  "n": 17
+ },
+ {
+  "id": "HO-K-0204",
+  "layer": "NEG",
+  "verdict": "conflict",
+  "note": "运行态读数被下一次复测整体取代（自 08-31/PID 35559 → 自 09-01/PID 35562）；若两条属同坐连续写入，§四 由脚本事后排除",
+  "n": 18
+ },
+ {
+  "id": "HO-K-0371",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "遗留独立 dbus-daemon 3 个（PID 54450/54470/184198）→2 个（54744/54762），被追踪的异常本身已翻新",
+  "n": 19
+ },
+ {
+  "id": "HO-K-0230",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "udevd 读数翻新：PID 35430/23h+ 基于彼 boot，已重启失效，新条按新 boot 重新计",
+  "n": 20
+ },
+ {
+  "id": "HO-K-0088",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "负载/busy 读数翻新（0.18/0.19/0.10、3.8% → 0.09/0.11/0.13）；健康结论未变，但读数即该记录的载荷，按 K-0021「被新读数取代」口径判冲突",
+  "n": 21
+ },
+ {
+  "id": "HO-K-0075",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "两段完全相同（0（原为 0）），无任何信息变化",
+  "n": 22
+ },
+ {
+  "id": "HO-K-0107",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「主配置=fstab」被更正为「udev rules×sysctl+fstab」，调优者只看 fstab 会漏 read_ahead/dirty 写回，旧表述被明确标注已不再是",
+  "n": 23
+ },
+ {
+  "id": "K-0076",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0076：用户亲自纠正两处理解偏差（臃肿所指、要的就是库存多），旧动机描述被明确要求按新的来",
+  "n": 24
+ },
+ {
+  "id": "K-0048",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0048：mako 模型由 maxthinking 换成 pro-preview，旧配置被取代",
+  "n": 25
+ },
+ {
+  "id": "HO-K-0039",
+  "layer": "A",
+  "verdict": "conflict",
+  "note": "logs 总行数读数 67→92，旧读数被取代",
+  "n": 26
+ },
+ {
+  "id": "HO-K-0449",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，端口连接测试记录为纯追加",
+  "n": 27
+ },
+ {
+  "id": "HO-K-0273",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "fstab UUID 稳定性的结论原样保留，mount-config 风险总评为纯追加",
+  "n": 28
+ },
+ {
+  "id": "HO-K-0203",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "当前断言相同（Main PID 35559），仅「原为 35564/35563」史注更正，无信息量变化",
+  "n": 29
+ },
+ {
+  "id": "HO-K-0258",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "仅删一个内部编号「856581-」，其余原样保留；持久层健康总结为纯追加",
+  "n": 30
+ },
+ {
+  "id": "K-0060",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0060：「PTTime 是 ratioless 不用做种」被查证推翻（有分享率+考核），旧结论当时为假",
+  "n": 31
+ },
+ {
+  "id": "HO-K-0501",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "服务运行读数翻新：Main PID 143352（08-29 起）→ 173484（09-02 boot），旧读数被明确标注已不再是",
+  "n": 32
+ },
+ {
+  "id": "HO-K-0366",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧结论原样保留，dbus-daemon 启动模式核查为纯追加",
+  "n": 33
+ },
+ {
+  "id": "HO-K-0142",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新一条 cron 日志」指针翻新（08-26T09:17 → 08-27T18:00），旧指针被标注已不再是",
+  "n": 34
+ },
+ {
+  "id": "K-0088",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0088：tv-autostart 由「建成并实测通过」变「用户明确不需要、已停用」，前提消失",
+  "n": 35
+ },
+ {
+  "id": "HO-K-0045",
+  "layer": "A",
+  "verdict": "conflict",
+  "note": "根分区剩余空间读数 15751→15506 MB，旧读数被取代",
+  "n": 36
+ },
+ {
+  "id": "HO-K-0223",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "旧条断言 boot bffaf「至今」仍在运行，该前提已随 08-29 重启失效，新条明确更正",
+  "n": 37
+ },
+ {
+  "id": "HO-K-0181",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新 NM 日志」指针翻新（08-27T20:18 → 09-01T12:55），旧指针被标注已不再是",
+  "n": 38
+ },
+ {
+  "id": "HO-K-0134",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新一条 dbus 日志」指针翻新（08-27T16:44 → 08-28T09:03），旧指针被标注已不再是",
+  "n": 39
+ },
+ {
+  "id": "HO-K-0346",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "Wayland 判定原样保留并被复述确认，桌面环境标识核查为纯追加",
+  "n": 40
+ },
+ {
+  "id": "HO-K-0317",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "exectl 开关状态 0→2（warning），安全模块态势读数翻新，旧值被标注已不再是",
+  "n": 41
+ },
+ {
+  "id": "K-0100",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0100：「固化已完成、成果保留」被 07-28 验证推翻（临时层重启蒸发、假解锁），旧结论当时为假",
+  "n": 42
+ },
+ {
+  "id": "HO-K-0361",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，system vs session 总线对比为纯追加",
+  "n": 43
+ },
+ {
+  "id": "HO-K-0404",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，主题配置格式（INI 非 JSON）记录为纯追加",
+  "n": 44
+ },
+ {
+  "id": "HO-K-0289",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "表中「/usr/local/bin/claude 链接=yes」被改为「链接现已不存在」，同一事实被否定（与 .3→.4 切换一致）",
+  "n": 45
+ },
+ {
+  "id": "HO-K-0193",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "服务运行读数翻新：自 08-29/PID 36639 → 自 08-31/PID 36864，旧读数被标注已不再是",
+  "n": 46
+ },
+ {
+  "id": "K-0021",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0021：MEMORY.md 索引行被新版摘要整体取代（new_supersedes_old，摘要滚动更新口径）",
+  "n": 47
+ },
+ {
+  "id": "HO-K-0308",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧句原样保留，swappiness 读数与建议为纯追加",
+  "n": 48
+ },
+ {
+  "id": "HO-K-0268",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "仅「as expected」→「consistent」措辞变化，语义相同；其余为追加",
+  "n": 49
+ },
+ {
+  "id": "HO-K-0461",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，审计记录充分性综合判断为纯追加",
+  "n": 50
+ },
+ {
+  "id": "HO-K-0307",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "结论同向（not a fault、最需关注的内存项）仅措辞改写，swapon 记录为追加",
+  "n": 51
+ },
+ {
+  "id": "HO-K-0107",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "同 23：主配置表述被更正为 udev/sysctl+fstab（重复题，与 23 同判）",
+  "n": 52
+ },
+ {
+  "id": "HO-K-0370",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "双总线核查读数翻新：session/system 守护 PID 36676/35563 → 36588/35568；结构正确的结论未变，但 PID 即该记录载荷，按 K-0021 取代口径判冲突",
+  "n": 53
+ },
+ {
+  "id": "HO-K-0048",
+  "layer": "A",
+  "verdict": "conflict",
+  "note": "workspace 文件总数读数 2584→3264，旧读数被取代",
+  "n": 54
+ },
+ {
+  "id": "HO-K-0488",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧节原样保留，扫描工具用法与扫描状态为纯追加",
+  "n": 55
+ },
+ {
+  "id": "K-0123",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0123：「免费种不计下载」判断被实测推翻（免费种照样计），旧结论当时为假",
+  "n": 56
+ },
+ {
+  "id": "HO-K-0033",
+  "layer": "A",
+  "verdict": "conflict",
+  "note": "workspace 总大小读数 14MB→23MB，旧读数被取代",
+  "n": 57
+ },
+ {
+  "id": "HO-K-0379",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，.desktop 悬空引用检查为纯追加",
+  "n": 58
+ },
+ {
+  "id": "HO-K-0113",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新一条接口相关记录」指针翻新（08-29T07:03 → 09-01 19:06），旧指针被标注已不再是",
+  "n": 59
+ },
+ {
+  "id": "HO-K-0453",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧行原样保留，netctl 对批量任务影响的综合判断为纯追加且与旧结论一致",
+  "n": 60
+ },
+ {
+  "id": "HO-K-0230",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "同 20：udevd 读数按新 boot 翻新（重复题，与 20 同判）",
+  "n": 61
+ },
+ {
+  "id": "K-0078",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0078：「4K 蓝光原盘会卡别下」的粗略结论被电视端实测校准（8.8MB/s=70.4Mbps）取代，旧结论当时为假",
+  "n": 62
+ },
+ {
+  "id": "HO-K-0432",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧结论原样保留，白名单数量与覆盖判断为纯追加且同向",
+  "n": 63
+ },
+ {
+  "id": "HO-K-0247",
+  "layer": "NEG",
+  "verdict": "conflict",
+  "note": "旧条整条即 PID 断言（36418），被新读数（36367，旧值仅存于史注内）取代；结构上是假追加，属 K-0067 型规则局限的反向情形",
+  "n": 64
+ },
+ {
+  "id": "HO-K-0098",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "仅「今日可用」→「今日」一词之差，数值与语义完全相同",
+  "n": 65
+ },
+ {
+  "id": "HO-K-0036",
+  "layer": "A",
+  "verdict": "not_conflict",
+  "note": "当前值未变（两段都是 0），仅「原为 121/原为 0」史注不同，无信息量变化",
+  "n": 66
+ },
+ {
+  "id": "HO-K-0086",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新一条 workqueue 告警」指针与主角翻新（08-27 drain_vmap → 08-28 process_srcu），旧指针被标注已不再是",
+  "n": 67
+ },
+ {
+  "id": "HO-K-0437",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "同 15：旧结论原样保留，日志解析记录为纯追加（重复题，与 15 同判）",
+  "n": 68
+ },
+ {
+  "id": "HO-K-0253",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "同 17：历史观察仍成立，仅追加「彼 boot 已结束」注（重复题，与 17 同判）",
+  "n": 69
+ },
+ {
+  "id": "HO-K-0502",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "仅「启动 utils 09-02 boot 内」→「启动于 09-02 该 boot」措辞修正，PID/时刻数值相同",
+  "n": 70
+ },
+ {
+  "id": "HO-K-0165",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "目录统计读数翻新（6.5→6.8MB、最新 mtime 08-28→08-29），旧读数被标注已不再是",
+  "n": 71
+ },
+ {
+  "id": "K-0023",
+  "layer": "DEV",
+  "verdict": "conflict",
+  "note": "沿用冻结裁定 K-0023：索引行新版明确「tv-autostart 已停用、PT 盘拔除影片消失」，旧行的在用前提消失",
+  "n": 72
+ },
+ {
+  "id": "HO-K-0105",
+  "layer": "C",
+  "verdict": "conflict",
+  "note": "「最新一条 I/O 相关记录」翻新（08-29 sdb Buffer I/O → 09-01 blk_mq CPU-hog），旧指针被标注已不再是",
+  "n": 73
+ },
+ {
+  "id": "HO-K-0216",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "服务计时翻新：启动于 08-25/PID 35371 → 08-29/PID 35365，旧读数依赖彼 boot、前提已不存在",
+  "n": 74
+ },
+ {
+  "id": "HO-K-0338",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "同 5：takeaway 换说法语义相同，其余为追加（重复题，与 5 同判）",
+  "n": 75
+ },
+ {
+  "id": "HO-K-0189",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "两段核心结论相同（accounts-daemon 无异常、唯一瑕疵是上 boot 的历史 SIGKILL），仅易逝读数表述改写",
+  "n": 76
+ },
+ {
+  "id": "HO-K-0431",
+  "layer": "NEG",
+  "verdict": "not_conflict",
+  "note": "旧节原样保留，exctl 拦截历史摘要为纯追加且与旧结论一致",
+  "n": 77
+ },
+ {
+  "id": "HO-K-0120",
+  "layer": "B",
+  "verdict": "conflict",
+  "note": "「最新相关输出」指针翻新（module-blacklist @08-26 → boot-summary @08-29），脚本命名说明同步更新，旧指针被标注已不再是",
+  "n": 78
+ }
+]

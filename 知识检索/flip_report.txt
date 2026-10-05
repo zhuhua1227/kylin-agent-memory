@@ -1,0 +1,86 @@
+共 10 条 same_sitting -> candidate 翻转
+
+冻结36对的new-stable_key集合大小: 35
+
+翻转的记录里，落在冻结36对里的: 1
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md:2026-07-26T13:35:25.758000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md
+  [before-fix] old_origin_session=1cd1ff9f old_ts=2026-07-26 | new_session=1cd1ff9f new_ts=2026-07-26
+  [after-fix]  old_origin_session=60ffb19f old_ts=2026-07-18
+  old_text: '- [PTTime 做种](pttime-seedbox.md) — qbit-pt容器(8081)接PT打工号；Fak'
+  new_text: '- [PTTime 做种](pttime-seedbox.md) — ✅2026-07-26迁移到VM100(500G盘'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md:2026-08-01T11:28:47.908000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md
+  [before-fix] old_origin_session=d305abd3 old_ts=2026-08-01 | new_session=d305abd3 new_ts=2026-08-01
+  [after-fix]  old_origin_session=d305abd3 old_ts=2026-07-15
+  old_text: '- [麒麟 RAG 比赛项目](kylin-rag-project.md) — 挑战杯XA-202612 OS Agen'
+  new_text: '- [麒麟 RAG 比赛项目](kylin-rag-project.md) — 挑战杯XA-202612；VM102@1'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md:2026-08-04T05:22:58.445000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md
+  [before-fix] old_origin_session=28454cd3 old_ts=2026-08-04 | new_session=28454cd3 new_ts=2026-08-04
+  [after-fix]  old_origin_session=28454cd3 old_ts=2026-08-03
+  old_text: '- [麒麟 RAG 比赛项目](kylin-rag-project.md) — 挑战杯XA-202612；VM102@1'
+  new_text: '- [麒麟 RAG 比赛项目](kylin-rag-project.md) — 挑战杯XA-202612；VM102@1'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md:2026-08-07T12:24:33.029000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md
+  [before-fix] old_origin_session=2fd0b580 old_ts=2026-08-07 | new_session=2fd0b580 new_ts=2026-08-07
+  [after-fix]  old_origin_session=2fd0b580 old_ts=2026-08-05
+  old_text: '- [MC混合登录服务器](minecraft-hybrid-server.md) — VM100上Paper26.2+'
+  new_text: '- [MC服务器](minecraft-hybrid-server.md) — VM100上现为NeoForge1.21'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md:2026-08-08T02:01:16.731000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\MEMORY.md
+  [before-fix] old_origin_session=2fd0b580 old_ts=2026-08-08 | new_session=2fd0b580 new_ts=2026-08-08
+  [after-fix]  old_origin_session=c4db194e old_ts=2026-07-11
+  old_text: '- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — ✅已接入，新建 age'
+  new_text: '- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — 3个agent：mak'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\server-pve-network.md:2026-08-07T12:24:54.468000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\server-pve-network.md
+  [before-fix] old_origin_session=2fd0b580 old_ts=2026-08-07 | new_session=2fd0b580 new_ts=2026-08-07
+  [after-fix]  old_origin_session=2fd0b580 old_ts=2026-08-05
+  old_text: '**笔记本联网路径（重要）**：笔记本 `[REDACTED_IP]` 走 **WLAN → 主路由 [REDACTED'
+  new_text: '**笔记本联网路径（2026-08-07 更正，之前记录已过时）**：笔记本走 WLAN → 主路由 [REDACTED'
+  在冻结36对里: True
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\pttime-seedbox.md:2026-07-26T13:35:13.065000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\pttime-seedbox.md
+  [before-fix] old_origin_session=1cd1ff9f old_ts=2026-07-26 | new_session=1cd1ff9f new_ts=2026-07-26
+  [after-fix]  old_origin_session=1cd1ff9f old_ts=2026-07-18
+  old_text: 'description: PTTime PT站做种：qbit-pt容器(8081)、FakeIP+封端口两大坑与pt-h'
+  new_text: 'description: PTTime PT站做种：已从笔记本迁移到VM100(500G盘SATA直通+cron自动化)'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\pttime-seedbox.md:2026-07-28T01:58:25.025000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\pttime-seedbox.md
+  [before-fix] old_origin_session=1cd1ff9f old_ts=2026-07-28 | new_session=1cd1ff9f new_ts=2026-07-28
+  [after-fix]  old_origin_session=1cd1ff9f old_ts=2026-07-26
+  old_text: 'description: PTTime PT站做种：已从笔记本迁移到VM100(500G盘SATA直通+cron自动化)'
+  new_text: 'description: PTTime PT站做种整体架构(切session先看开头总览)：VM100 qbit-pt容'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\minecraft-hybrid-server.md:2026-08-08T02:00:10.749000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\minecraft-hybrid-server.md
+  [before-fix] old_origin_session=2fd0b580 old_ts=2026-08-08 | new_session=2fd0b580 new_ts=2026-08-08
+  [after-fix]  old_origin_session=2fd0b580 old_ts=2026-08-07
+  old_text: '**备份**：`/opt/minecraft/backup.sh` 写死指向 Paper 的 world 路径，**现在'
+  new_text: '**备份（2026-08-08 重建，旧方案已废弃）**：旧的 `/opt/minecraft/backup.sh`(P'
+  在冻结36对里: False
+
+--- new_stable_key=doc:C:\Users\device_a\.claude\projects\C--Users-device_a\memory\minecraft-hybrid-server.md:2026-08-08T02:00:29.193000+00:00 ---
+  file: C:\Users\device_a\.claude\projects\C--Users-device_a\memory\minecraft-hybrid-server.md
+  [before-fix] old_origin_session=2fd0b580 old_ts=2026-08-08 | new_session=2fd0b580 new_ts=2026-08-08
+  [after-fix]  old_origin_session=2fd0b580 old_ts=2026-08-07
+  old_text: '**已装 mod**：Create 6.0.10（含自带的 Flywheel 渲染引擎、Ponder 教程系统）、Far'
+  new_text: '**已装 mod**：Create 6.0.10（含自带的 Flywheel 渲染引擎、Ponder 教程系统）、Far'
+  在冻结36对里: False
+

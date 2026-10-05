@@ -1,0 +1,13 @@
+{
+  "positive_count": 27,
+  "negative_count": 19,
+  "tp": 27,
+  "fn": 0,
+  "tn": 19,
+  "fp": 0,
+  "recall": 1.0,
+  "precision": 1.0,
+  "false_positive_rate": 0.0,
+  "fn_ids": [],
+  "fp_ids": []
+}

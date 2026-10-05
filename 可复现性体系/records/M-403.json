@@ -1,0 +1,55 @@
+{
+  "record_id": "M-403",
+  "title": "偏好提取：会话完整性切分（零泄漏）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_preferences.py",
+  "script_sha256": null,
+  "command": "python measure_preferences.py M-403",
+  "started_at": "2026-08-27T06:39:50.102489+00:00",
+  "duration_sec": 0.286,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+      "bytes": 21459731,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "train_sessions": {
+      "value": 142,
+      "unit": "个",
+      "repeats": 1
+    },
+    "test_sessions": {
+      "value": 95,
+      "unit": "个",
+      "repeats": 1
+    },
+    "session_overlap": {
+      "value": 0,
+      "unit": "个",
+      "repeats": 1
+    },
+    "known_23day_session_kept_together": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [],
+  "succeeded": true,
+  "raw_stdout": "===== [M-403] 偏好提取：会话完整性切分（零泄漏）  (层级 L1) =====\n训练期 142 会话 / 留出期 95 会话 / 重叠 0 会话\n已知横跨23天的会话（1cd1ff9f）：在训练期=True 在留出期=False\n"
+}

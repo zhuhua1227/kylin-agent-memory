@@ -1,0 +1,62 @@
+{
+  "record_id": "M-113",
+  "title": "脱敏能力：召回率/精确率/误伤率实测（独立评审D-8/D-9）",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "72634310565553bc34cd46b6eac4050499f82b1a71181d9bca928d5d64b9d406",
+  "command": "python measure_L1.py M-113",
+  "started_at": "2026-08-15T03:33:19.883060+00:00",
+  "duration_sec": 0.002,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\labeled_redaction_testset.json",
+      "sha256": "7cc82d516732f1ef51696af9cdbdc82ecb098e0081058b8a4a43c6693bd0aaa6",
+      "bytes": 7379,
+      "lines": 236
+    }
+  ],
+  "metrics": {
+    "positive_count": {
+      "value": 27,
+      "unit": "条",
+      "repeats": 1
+    },
+    "negative_count": {
+      "value": 19,
+      "unit": "条",
+      "repeats": 1
+    },
+    "recall": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "precision": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "false_positive_rate": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "标注集规模（22正+16负）小于理想的100~200条，是时间投入下的合理取舍，但已经是从0到有：此前连一次真实测量都没做过"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-113] 脱敏能力：召回率/精确率/误伤率实测（独立评审D-8/D-9）  (层级 L1) =====\n召回率 27/27=100.0%  精确率 27/27=100.0%  误伤率 0/19=0.0%\n  [note] 标注集规模（22正+16负）小于理想的100~200条，是时间投入下的合理取舍，但已经是从0到有：此前连一次真实测量都没做过\n"
+}

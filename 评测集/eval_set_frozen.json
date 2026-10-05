@@ -1,0 +1,29 @@
+{
+  "version": "1.4.0",
+  "frozen_at": "2026-08-15T06:20:14.753991+00:00",
+  "file": "eval_set.jsonl",
+  "sha256": "c0727f48a36c884a9de8910325f9ef4f1fc6020b4fcdcccbf815366640220d96",
+  "question_count": 227,
+  "by_difficulty": {
+    "close": 74,
+    "paraphrase": 77,
+    "hard": 76
+  },
+  "by_knowledge_type": {
+    "case": 89,
+    "workflow": 135,
+    "template": 3
+  },
+  "generation_model": "openai/gemini-3.1-pro-preview（经 192.168.100.3:8082 litellm代理）",
+  "knowledge_base_source": "cases.jsonl(31条); workflows.jsonl(54条); templates.jsonl(1条)，见 知识检索/说明报告.md",
+  "knowledge_base_sha256": {
+    "cases.jsonl": "ab42d314ba846ace073b76dc13f9cb4736cb6dfe08a7dda4dfcc34d4390400a8",
+    "workflows.jsonl": "0fc530279e9c343583fd18ad65cdd5b2c7006af82104e42c7234d017fa37cd2c",
+    "templates.jsonl": "a467ad511f0acb444ae2ed50485fe404c2a3a2ea6f90f68bb0c906444bd8d635"
+  },
+  "knowledge_base_lines": {
+    "cases.jsonl": 31,
+    "workflows.jsonl": 54,
+    "templates.jsonl": 1
+  }
+}

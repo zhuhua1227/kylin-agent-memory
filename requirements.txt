@@ -1,0 +1,11 @@
+# R2-30（P-8）：本项目 L1 层（reproduce_L1.py 及其覆盖的全部 M-101~M-113）
+# 刻意保持"纯 Python、任何机器可跑"的约束，唯一的第三方依赖是 numpy——
+# 用于 numpy 存储后端的向量运算基准测试与暴力检索对比。除此之外全部
+# import 都是标准库或项目内部模块，扫描全部 .py 文件核对过，不是漏列。
+#
+# L2 层（需要银河麒麟 V11 + 官方 KYSDK embedding SDK）依赖麒麟系统自带的
+# libkylin-coreai-embedding / kylin-ai-runtime 等包，这些不是 pip 包，
+# 通过 apt 从麒麟软件源安装，不在这份 requirements.txt 的管理范围内，
+# 详见 证明向量维度/前置步骤-不可变系统解锁与KYSDK部署命令手册.md。
+
+numpy>=1.24

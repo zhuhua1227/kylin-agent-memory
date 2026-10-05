@@ -1,0 +1,108 @@
+{
+  "record_id": "M-401",
+  "title": "偏好提取：三类产出量与门槛过滤统计",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_preferences.py",
+  "script_sha256": null,
+  "command": "python mine_preferences.py",
+  "started_at": "2026-08-27T06:39:45.014806+00:00",
+  "duration_sec": 1.735,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+      "bytes": 21459731,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "tool_exec_total": {
+      "value": 9266,
+      "unit": "",
+      "repeats": 1
+    },
+    "rejected_by_min_trigger": {
+      "value": 685,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_min_ratio": {
+      "value": 5,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_min_sessions": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rejected_by_required_choice": {
+      "value": 57,
+      "unit": "条",
+      "repeats": 1
+    },
+    "extracted_operation_habit": {
+      "value": 19,
+      "unit": "条",
+      "repeats": 1
+    },
+    "extracted_output_style": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    },
+    "extracted_safety_policy": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "safety_outlier_excluded": {
+      "value": 799,
+      "unit": "",
+      "repeats": 1
+    },
+    "preferences_total": {
+      "value": 20,
+      "unit": "",
+      "repeats": 1
+    },
+    "category_operation_habit": {
+      "value": 19,
+      "unit": "条",
+      "repeats": 1
+    },
+    "category_output_style": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    },
+    "category_safety_policy": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "preference_version_changes": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "safety_policy 实测 0 条——865 条 user_rejected 记录里 92.3% 来自2026-07-27 单一会话（session=bada921e）的批处理污染，与mine_cases.py 文档字符串记录的同一枚地雷；排除异常日后正常拒绝率仅 0.8%，无任何命令类型有统计支持的高拒绝率。如实报告为空结果，不强行调松门槛凑出'高证据强度'的结论。",
+    "output_style 只在收窄 DOC_STYLE_EXTENSIONS 为设计方案原定的.md/.txt/.json 三种后才有产出（1条）；混入.html/.yaml/.csv时 .md 占比被稀释到 0.65 门槛以下，产出为 0——修的是范围定义错误，不是调松门槛，见 mine_preferences.py 对应注释。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-401] 偏好提取：三类产出量与门槛过滤统计  (层级 L1) =====\n提取合计 20 条，按类别：{'operation_habit': 19, 'output_style': 1}\n过滤统计：{'tool_exec_total': 9266, 'rejected_by_min_trigger': 685, 'rejected_by_min_ratio': 5, 'rejected_by_min_sessions': 0, 'rejected_by_required_choice': 57, 'extracted_operation_habit': 19, 'extracted_output_style': 1, 'extracted_safety_policy': 0, 'safety_outlier_days': ['2026-07-27'], 'safety_outlier_excluded': 799, 'preferences_total': 20}\n偏好版本变更（复用知识冲突裁决器）：1 条\n  pref:operation_habit:disk_usage: du → df （T2，new_supersedes_old）\n  [note] safety_policy 实测 0 条——865 条 user_rejected 记录里 92.3% 来自2026-07-27 单一会话（session=bada921e）的批处理污染，与mine_cases.py 文档字符串记录的同一枚地雷；排除异常日后正常拒绝率仅 0.8%，无任何命令类型有统计支持的高拒绝率。如实报告为空结果，不强行调松门槛凑出'高证据强度'的结论。\n  [note] output_style 只在收窄 DOC_STYLE_EXTENSIONS 为设计方案原定的.md/.txt/.json 三种后才有产出（1条）；混入.html/.yaml/.csv时 .md 占比被稀释到 0.65 门槛以下，产出为 0——修的是范围定义错误，不是调松门槛，见 mine_preferences.py 对应注释。\n"
+}

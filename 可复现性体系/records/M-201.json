@@ -1,0 +1,68 @@
+{
+  "record_id": "M-201",
+  "title": "官方 KYSDK embedding 输出 768 维（两种独立方法交叉验证）",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "5378cd54faa6f89de74c687435b1ec7d784842fbfe18872b43391c25c1466029",
+  "command": "python3 measure_L2.py M-201",
+  "started_at": "2026-08-03T21:46:46.706362+00:00",
+  "duration_sec": 0.074,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_d",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) N100",
+    "cpu_count": 2,
+    "mem_total_mb": 3916,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [],
+  "metrics": {
+    "model_dim_from_metadata": {
+      "value": 768,
+      "unit": "维",
+      "repeats": 1
+    },
+    "vector_length_from_result": {
+      "value": 768,
+      "unit": "维",
+      "repeats": 1
+    },
+    "crosscheck_agree": {
+      "value": 1,
+      "unit": "",
+      "repeats": 1
+    },
+    "first5_values": {
+      "value": "-0.061744 0.067857 -0.087588 0.019701 -0.013820",
+      "unit": "",
+      "repeats": 1
+    },
+    "model_name": {
+      "value": "ensemble-embd_gte-base_uint8-text",
+      "unit": "",
+      "repeats": 1
+    },
+    "exit_code": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [],
+  "succeeded": true,
+  "raw_stdout": "===== [M-201] 官方 KYSDK embedding 输出 768 维（两种独立方法交叉验证）  (层级 L2) =====\n模型数量: 1\n模型名: ensemble-embd_gte-base_uint8-text\n前5个值: -0.061744 0.067857 -0.087588 0.019701 -0.013820\nmodel_dim=768\nvector_length=768\n交叉验证: 一致\n\n"
+}

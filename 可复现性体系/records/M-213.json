@@ -1,0 +1,81 @@
+{
+  "record_id": "M-213",
+  "title": "精准遗忘（自然语言指令驱动，20 任务；定位/遗忘生效/副作用三指标）",
+  "layer": "L1",
+  "script": "记忆服务/遗忘评测/score_forget.py",
+  "script_sha256": "c33706b22c84c189967d01ab85bee29ab2df298fae811b14aad77a3e255f5628",
+  "command": "cd 记忆服务/遗忘评测 && python score_forget.py",
+  "started_at": "2026-09-13T10:53:19.879149+00:00",
+  "duration_sec": null,
+  "random_seed": null,
+  "environment": {
+    "os": "Windows-11-10.0.26340-SP0",
+    "python": "3.14.0",
+    "note": "计分层（本 record）纯 Python，从 runs_forget.jsonl / locate_log.jsonl 重算 → L1，任何机器可复现。生成层（forget_eval_runner.py 跑 20 任务 × 227 题基线/复跑，需要 memory_service.py 常驻 + KYSDK embedding）在 device_c（Kylin V11，Python 3.12.3）上跑，属 L2，不在本层证明——那份环境指纹见 forget_ledger_eval.jsonl 里各条记录的时间戳。"
+  },
+  "inputs": {
+    "runs_forget.jsonl": "7106ebdec19eac655709b072770eab39b3f59723e6014d96c701f5fb47062fa3",
+    "locate_log.jsonl": "5eb5c995451dac52915952bc8592267765453be7b386df03ce1b144ba3c14ae7",
+    "score_forget.py": "c33706b22c84c189967d01ab85bee29ab2df298fae811b14aad77a3e255f5628"
+  },
+  "metrics": {
+    "n_tasks": {
+      "value": 20,
+      "unit": "任务",
+      "repeats": 1
+    },
+    "n_located": {
+      "value": 11,
+      "unit": "/20",
+      "repeats": 1
+    },
+    "locate_accuracy": {
+      "value": 0.55,
+      "unit": "",
+      "repeats": 1
+    },
+    "n_target_total": {
+      "value": 58,
+      "unit": "题",
+      "repeats": 1
+    },
+    "n_target_forgotten": {
+      "value": 58,
+      "unit": "题",
+      "repeats": 1
+    },
+    "forget_effective_rate": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "n_bystander_total": {
+      "value": 4482,
+      "unit": "题",
+      "repeats": 1
+    },
+    "n_expected_backfill": {
+      "value": 433,
+      "unit": "题",
+      "repeats": 1
+    },
+    "n_genuine_anomaly": {
+      "value": 0,
+      "unit": "题",
+      "repeats": 1
+    },
+    "side_effect_free_rate_raw": {
+      "value": 0.9033913431503793,
+      "unit": "",
+      "repeats": 1
+    },
+    "side_effect_free_rate_true": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": "定位准确率 55.0%（11/20）低于预登记的 60~85%，未低于预登记写好的 50% 判据线——按《记忆服务/遗忘评测/预登记.md》§4 预先授权的路径，把首轮 miss 掉的 14 条指令改写得更贴近文档实际内容后重跑一次定位与完整评测（只改一次，不迭代调到分数好看为止；首轮 6/20、改写后 11/20，doc_id/gold_stable_key 未变）。遗忘生效率 100%（58/58）与副作用率（true）100%（0/4482 真异常）均达到预登记预期。副作用率的 raw 值 90.3% 不是 bug：433 条『变化』全部是目标 doc 本来就排在该旁观题原始 top-10 里、遗忘后由下一名候选补位的正常 backfill（逐条核验：target_doc_id ∈ hits_before），score_forget.py 的 genuine_anomalies 字段为空列表即为证据。生成层 20×227 次检索调用 memory_service.py（config=all, backend=kylin），forget_ledger_eval.jsonl 为独立评测账本（--forget-ledger 指定），不与生产账本混用。",
+  "succeeded": true,
+  "raw_stdout": "见 记忆服务/遗忘评测/score_forget_result.json；本 record 由手工对照 score_forget.py 输出登记（未接入 make_records_experiments.py 的自动生成，字段与 M-212 同构）"
+}

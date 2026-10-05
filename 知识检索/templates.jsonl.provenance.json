@@ -1,0 +1,11 @@
+{
+  "artifact": "templates.jsonl",
+  "artifact_sha256": "159161cb2fbf58d391f9a71d38e7e287e99e98ceed8ad124f78b1f4ff54d6c16",
+  "script": "知识检索/mine_templates.py",
+  "script_sha256": "fda9b7e11c50770eec17893e687d1771352ce2e15380b5817a36a6f51289c03a",
+  "inputs": {
+    "知识检索/cases.jsonl": "cba294b498e93434e19a08fa2a98fd199ef0cadd697bf32048df37623098a3d1",
+    "知识检索/workflows.jsonl": "4e24a6e781ad0f59f0867044a26ea4e84f23f1755a288befe09095965f5366e5"
+  },
+  "generated_at": "2026-08-15T05:42:07.008633+00:00"
+}

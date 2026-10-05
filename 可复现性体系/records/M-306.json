@@ -1,0 +1,253 @@
+{
+  "record_id": "M-306",
+  "title": "留出集裁决结果接入（分层准确率 + 开发/留出/合并三口径 + 重复题一致性）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_conflicts.py",
+  "script_sha256": null,
+  "command": "python measure_conflicts.py M-306",
+  "started_at": "2026-09-07T15:05:40.402021+00:00",
+  "duration_sec": 0.001,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\全量单人复核-裁决.json",
+      "sha256": "e313102125bec6cdb2b22d7c00493b9ab6b5e2173bdcdbb31d1e0101b908ac9f",
+      "bytes": 16087,
+      "lines": 547
+    },
+    {
+      "path": "..\\知识检索\\conflicts_eval.jsonl",
+      "sha256": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "bytes": 76379,
+      "lines": 36
+    }
+  ],
+  "metrics": {
+    "rows_total": {
+      "value": 78,
+      "unit": "条",
+      "repeats": 1
+    },
+    "rows_deduped": {
+      "value": 73,
+      "unit": "条",
+      "repeats": 1
+    },
+    "repeat_pairs": {
+      "value": 5,
+      "unit": "对",
+      "repeats": 1
+    },
+    "repeat_consistent": {
+      "value": 5,
+      "unit": "对",
+      "repeats": 1
+    },
+    "repeat_consistency_rate": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "dev_review_n": {
+      "value": 13,
+      "unit": "条",
+      "repeats": 1
+    },
+    "dev_maintained_conflict": {
+      "value": 13,
+      "unit": "条",
+      "repeats": 1
+    },
+    "stratum_C_hits": {
+      "value": 15,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_C_n": {
+      "value": 15,
+      "unit": "条",
+      "repeats": 1
+    },
+    "stratum_C_accuracy": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_C_wilson_ci_lo": {
+      "value": 0.7961,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_C_wilson_ci_hi": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_B_hits": {
+      "value": 8,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_B_n": {
+      "value": 8,
+      "unit": "条",
+      "repeats": 1
+    },
+    "stratum_B_accuracy": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_B_wilson_ci_lo": {
+      "value": 0.6756,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_B_wilson_ci_hi": {
+      "value": 1.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_A_hits": {
+      "value": 5,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_A_n": {
+      "value": 7,
+      "unit": "条",
+      "repeats": 1
+    },
+    "stratum_A_accuracy": {
+      "value": 0.7143,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_A_wilson_ci_lo": {
+      "value": 0.3589,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_A_wilson_ci_hi": {
+      "value": 0.9178,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_NEG_hits": {
+      "value": 28,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_NEG_n": {
+      "value": 30,
+      "unit": "条",
+      "repeats": 1
+    },
+    "stratum_NEG_accuracy": {
+      "value": 0.9333,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_NEG_wilson_ci_lo": {
+      "value": 0.7868,
+      "unit": "",
+      "repeats": 1
+    },
+    "stratum_NEG_wilson_ci_hi": {
+      "value": 0.9815,
+      "unit": "",
+      "repeats": 1
+    },
+    "holdout_hits": {
+      "value": 56,
+      "unit": "",
+      "repeats": 1
+    },
+    "holdout_n": {
+      "value": 60,
+      "unit": "对",
+      "repeats": 1
+    },
+    "holdout_accuracy": {
+      "value": 0.9333,
+      "unit": "",
+      "repeats": 1
+    },
+    "holdout_wilson_ci_lo": {
+      "value": 0.8407,
+      "unit": "",
+      "repeats": 1
+    },
+    "holdout_wilson_ci_hi": {
+      "value": 0.9738,
+      "unit": "",
+      "repeats": 1
+    },
+    "devset_hits": {
+      "value": 35,
+      "unit": "",
+      "repeats": 1
+    },
+    "devset_n": {
+      "value": 36,
+      "unit": "对",
+      "repeats": 1
+    },
+    "devset_accuracy": {
+      "value": 0.9722,
+      "unit": "",
+      "repeats": 1
+    },
+    "devset_wilson_ci_lo": {
+      "value": 0.8583,
+      "unit": "",
+      "repeats": 1
+    },
+    "combined_hits": {
+      "value": 91,
+      "unit": "",
+      "repeats": 1
+    },
+    "combined_n": {
+      "value": 96,
+      "unit": "对",
+      "repeats": 1
+    },
+    "combined_accuracy": {
+      "value": 0.9479,
+      "unit": "",
+      "repeats": 1
+    },
+    "combined_wilson_ci_lo": {
+      "value": 0.8838,
+      "unit": "",
+      "repeats": 1
+    },
+    "combined_wilson_ci_hi": {
+      "value": 0.9776,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "合并口径达标（91/96，下界 88.4% >= 88%）来自样本量增加，不是泛化优于开发集：点估计 94.8% 落在开发集 97.2% 与留出集 93.3% 之间，**留出集单独下界 84.1% 未达门槛**。C-304（留出集，红）与 C-316（合并，绿）并存，只留一条即为「用合并口径掩盖留出集」。",
+    "合并集包含规则开发时看过的 36 条。两点说明：① 开发期两次结构修订（same_sitting 口径、append_only 匹配方式）是 bug 修复，不是精度调参；② 留出集点估计 93.3% 与开发集 97.2% 的差距落在各自 Wilson 区间内，无显著退化。",
+    "留出集 4 处误判单一根因（《留出集裁决结果记录.md》§四）：提示词 B 组⑤ 要求笔记写「读数：<值>（原为 <旧值>，已不再是）」，而挖掘器 append_only 用「旧文本 ⊂ 新文本」子串匹配，两者交互双向失效——史注漂移（HO-K-0053/0036，当前值未变误判为冲突）+ 假追加（HO-K-0204/0247，旧值进史注误判为纯追加）。**已作为判例补入《冲突判定标注规范》v1.0.2 §六，代码未改、指标未重算、冻结完好**；两个方向都修好后留出集应为 60/60——该缺陷当前在压低成绩而非抬高。",
+    "规则侧判断由抽样层决定，不在此重跑 is_conflict()：层在看到任何结果之前即写入《留出集抽样与裁决-协议》v1.0（C 15 / B 8 / A 7 / NEG 30，随机种子同时提交）。留出集候选的 new.asserted_at 全部 >= 2026-08-26，规则冻结哈希（M-305 登记）先于这批数据——重算 M-305 的 mine_conflicts.py sha256 一致即证明「规则先于留出集数据」。",
+    "开发集复核 13/13 维持 conflict、改判 0——报告中「开发集由 AI 裁决、未经人工复核」这条已知限制可撤下，改为「全部 36 对均经人工盲测复核」。冻结集正例仍 19 条，19 正 / 17 负比例不变。",
+    "重复题前后一致 5/5 是单人全量标注唯一能自证的可靠性指标（5 条题目隔 29~70 题出现两次，标注者知道存在但不知是哪几条）。2026-09-06 曾试 5 人分工盲测，因无法核实标注投入程度（开发集 conflict 0/13 与自身留出集 75% 矛盾、两轮零条理由、公共集完全一致率 46.7%）整批弃用，原始文件保留但不进证据链、不写入 claims。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-306] 留出集裁决结果接入（分层准确率 + 开发/留出/合并三口径 + 重复题一致性）  (层级 L1) =====\n  C   15/15 = 100.0%  Wilson 95% CI [79.6%, 100.0%]\n  B    8/8  = 100.0%  Wilson 95% CI [67.6%, 100.0%]\n  A    5/7  =  71.4%  Wilson 95% CI [35.9%, 91.8%]\n  NEG 28/30 =  93.3%  Wilson 95% CI [78.7%, 98.2%]\n  去重：78 行 - 5 条重复题 = 73 条唯一（60 留出 + 13 开发集复核）\n  重复题前后一致 5/5；开发集 13 条维持 conflict 13/13\n  开发集 35/36 = 97.2%（下界 85.8%）  留出集 56/60 = 93.3%（下界 84.1%）  合并 91/96 = 94.8%（下界 88.4%）\n  [note] 合并口径达标（91/96，下界 88.4% >= 88%）来自样本量增加，不是泛化优于开发集：点估计 94.8% 落在开发集 97.2% 与留出集 93.3% 之间，**留出集单独下界 84.1% 未达门槛**。C-304（留出集，红）与 C-316（合并，绿）并存，只留一条即为「用合并口径掩盖留出集」。\n  [note] 合并集包含规则开发时看过的 36 条。两点说明：① 开发期两次结构修订（same_sitting 口径、append_only 匹配方式）是 bug 修复，不是精度调参；② 留出集点估计 93.3% 与开发集 97.2% 的差距落在各自 Wilson 区间内，无显著退化。\n  [note] 留出集 4 处误判单一根因（《留出集裁决结果记录.md》§四）：提示词 B 组⑤ 要求笔记写「读数：<值>（原为 <旧值>，已不再是）」，而挖掘器 append_only 用「旧文本 ⊂ 新文本」子串匹配，两者交互双向失效——史注漂移（HO-K-0053/0036，当前值未变误判为冲突）+ 假追加（HO-K-0204/0247，旧值进史注误判为纯追加）。**已作为判例补入《冲突判定标注规范》v1.0.2 §六，代码未改、指标未重算、冻结完好**；两个方向都修好后留出集应为 60/60——该缺陷当前在压低成绩而非抬高。\n  [note] 规则侧判断由抽样层决定，不在此重跑 is_conflict()：层在看到任何结果之前即写入《留出集抽样与裁决-协议》v1.0（C 15 / B 8 / A 7 / NEG 30，随机种子同时提交）。留出集候选的 new.asserted_at 全部 >= 2026-08-26，规则冻结哈希（M-305 登记）先于这批数据——重算 M-305 的 mine_conflicts.py sha256 一致即证明「规则先于留出集数据」。\n  [note] 开发集复核 13/13 维持 conflict、改判 0——报告中「开发集由 AI 裁决、未经人工复核」这条已知限制可撤下，改为「全部 36 对均经人工盲测复核」。冻结集正例仍 19 条，19 正 / 17 负比例不变。\n  [note] 重复题前后一致 5/5 是单人全量标注唯一能自证的可靠性指标（5 条题目隔 29~70 题出现两次，标注者知道存在但不知是哪几条）。2026-09-06 曾试 5 人分工盲测，因无法核实标注投入程度（开发集 conflict 0/13 与自身留出集 75% 矛盾、两轮零条理由、公共集完全一致率 46.7%）整批弃用，原始文件保留但不进证据链、不写入 claims。\n"
+}

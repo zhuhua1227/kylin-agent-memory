@@ -1,0 +1,10 @@
+{
+  "artifact": "preferences.jsonl",
+  "artifact_sha256": "cdf2f1f7b58eb6161b193ecfb438b13069cc1a4181d91d1430f25fc8e1c4e80a",
+  "script": "知识检索/mine_preferences.py",
+  "script_sha256": "5d8e07b2b44e4acd011ab41b624e92e85f15d9c238de409625265f92f31a9178",
+  "inputs": {
+    "多源数据整合/dataset/memory_source_records.jsonl": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee"
+  },
+  "generated_at": "2026-08-27T06:39:33.557919+00:00"
+}

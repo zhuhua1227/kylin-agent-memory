@@ -1,0 +1,198 @@
+{
+  "record_id": "M-212",
+  "title": "模型消融 4×2（v2；Qwen3.5-2B/4B/9B + Gemini-3.1-Pro maxthinking；13 题环境特异任务）",
+  "layer": "L1",
+  "script": "评测集/模型消融/robustness_v2.py + score_ablation.py",
+  "script_sha256": "508156d8dee45803a55350c324522232b83d5e3d9e92d2089939a2f4f959f477",
+  "command": "cd 评测集/模型消融 && python score_ablation.py --tasks tasks_v2.jsonl --runs runs_v2.jsonl --runs2 runs_krow_v2.jsonl --md results_v2.md && python robustness_v2.py > robustness_v2.md",
+  "started_at": "2026-09-10T08:58:36.275488+00:00",
+  "duration_sec": null,
+  "random_seed": 42,
+  "environment": {
+    "os": "Windows-11-10.0.26340-SP0",
+    "python": "3.14.0",
+    "numpy": "2.4.0",
+    "note": "计分层纯 Python（零 LLM 裁判），从 runs_v2.jsonl / runs_krow_v2.jsonl 重算 → L1。生成层（本地 llama.cpp Qwen3.5 Q4_K_M / 云端 Gemini 经 catie）属 L2，不在本层证明。thinking：本地三档关、K 行 maxthinking（不一致，报告 §六.6 登记）。"
+  },
+  "inputs": {
+    "tasks_v2.jsonl": "515eb666d63a1cf755e0545cb993826d8ab9ecd6441c7e33a80b39884604310f",
+    "runs_v2.jsonl": "8f033f4a3f33aad557c7def3095ceda5255e0a0a6796e0125f6748b77783a206",
+    "runs_krow_v2.jsonl": "fe2460e24f07ecf2772004b851aefb69b703447a4e90502f37e6878147a662dd",
+    "score_ablation.py": "2934bd1889d1937b1ec3cc96448c75713ae031bd5fcedf93e1521cdf41735c21"
+  },
+  "metrics": {
+    "a1": {
+      "value": 2,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "a2": {
+      "value": 5,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "b1": {
+      "value": 3,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "b2": {
+      "value": 7,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "c1": {
+      "value": 2,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "c2": {
+      "value": 7,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "k1": {
+      "value": 3,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "k2": {
+      "value": 8,
+      "unit": "/13",
+      "repeats": 1
+    },
+    "delta_2b_strict": {
+      "value": 3,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_4b_strict": {
+      "value": 4,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_9b_strict": {
+      "value": 5,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_k_strict": {
+      "value": 5,
+      "unit": "题",
+      "repeats": 1
+    },
+    "ladder_monotone_strict": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    },
+    "delta_2b_adj": {
+      "value": 3,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_4b_adj": {
+      "value": 5,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_9b_adj": {
+      "value": 6,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_k_adj": {
+      "value": 5,
+      "unit": "题",
+      "repeats": 1
+    },
+    "ladder_monotone_adj": {
+      "value": false,
+      "unit": "",
+      "repeats": 1
+    },
+    "delta_2b_ordered": {
+      "value": 4,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_4b_ordered": {
+      "value": 5,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_9b_ordered": {
+      "value": 6,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_k_ordered": {
+      "value": 7,
+      "unit": "题",
+      "repeats": 1
+    },
+    "ladder_monotone_ordered": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    },
+    "all_positive_all_criteria": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    },
+    "delta_min_all_criteria": {
+      "value": 3,
+      "unit": "题",
+      "repeats": 1
+    },
+    "delta_max_all_criteria": {
+      "value": 7,
+      "unit": "题",
+      "repeats": 1
+    },
+    "loo_ladder_breakers": {
+      "value": "T-02,T-13",
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_a2_vs_k1_only_a2": {
+      "value": 4,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_a2_vs_k1_only_k1": {
+      "value": 2,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_a2_vs_k2_only_a2": {
+      "value": 1,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_a2_vs_k2_only_k2": {
+      "value": 4,
+      "unit": "题",
+      "repeats": 1
+    },
+    "c2_vs_k2_strict": {
+      "value": "7:8",
+      "unit": "",
+      "repeats": 1
+    },
+    "c2_vs_k2_adj": {
+      "value": "8:9",
+      "unit": "",
+      "repeats": 1
+    },
+    "c2_vs_k2_ordered": {
+      "value": "8:11",
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": "🔴 结论强度随主张一起登记（报告 §六.4）：只有『记忆机制在四档 × 三口径均产生正增益』是稳健结论；『Δ 阶梯单调不减』口径依赖（宽口径下不成立）且脆弱（留一法剔 T-02 或 T-13 即破）；『9B 追平云端』口径依赖（有序口径下不成立）。n=13、8 格共用同一批题，仅为演示性对照、不具统计效力，结论按报告 §四只作描述性表述。",
+  "succeeded": true,
+  "raw_stdout": "见 评测集/模型消融/results_v2.md 与 robustness_v2.md；本 record 由 make_records_experiments.py 复算生成"
+}

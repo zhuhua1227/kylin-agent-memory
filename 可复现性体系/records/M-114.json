@@ -1,0 +1,223 @@
+{
+  "record_id": "M-114",
+  "title": "语料规模对召回率的机械影响（子采样对照实验，R2-02）",
+  "layer": "L1",
+  "script": "measure_corpus_size_effect.py",
+  "script_sha256": "fb5f8537007557c8345ad5afadeed4580a94bb3a3f7c0a1f9e401c4c53ea147e",
+  "command": "python measure_corpus_size_effect.py",
+  "started_at": "2026-08-15T02:55:36.382808+00:00",
+  "duration_sec": 74.476,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\可复现性体系\\vectors\\docs.tsv",
+      "sha256": "f57904ded9c5539c5f089f93806393a5c243980c701cf16f579e6e4f1f9ad113",
+      "bytes": 934232,
+      "lines": 86
+    },
+    {
+      "path": "..\\可复现性体系\\vectors\\eval_queries.tsv",
+      "sha256": "4a16ebe9b32394ce3f5aa053ca83b0c410fb214f929dc2e32d7001be494ce7ea",
+      "bytes": 2401041,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "corpus_86_recall_at_1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_86_recall_at_3": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_86_recall_at_5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_86_recall_at_10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_80_recall_at_1": {
+      "value": 0.5349,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_80_recall_at_3": {
+      "value": 0.7711,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_80_recall_at_5": {
+      "value": 0.828,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_80_recall_at_10": {
+      "value": 0.8705,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_70_recall_at_1": {
+      "value": 0.558,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_70_recall_at_3": {
+      "value": 0.7818,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_70_recall_at_5": {
+      "value": 0.8358,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_70_recall_at_10": {
+      "value": 0.8814,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_60_recall_at_1": {
+      "value": 0.5775,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_60_recall_at_3": {
+      "value": 0.7977,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_60_recall_at_5": {
+      "value": 0.8426,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_60_recall_at_10": {
+      "value": 0.8944,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_50_recall_at_1": {
+      "value": 0.6081,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_50_recall_at_3": {
+      "value": 0.8172,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_50_recall_at_5": {
+      "value": 0.8568,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_50_recall_at_10": {
+      "value": 0.9134,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_40_recall_at_1": {
+      "value": 0.6455,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_40_recall_at_3": {
+      "value": 0.8297,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_40_recall_at_5": {
+      "value": 0.8747,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_40_recall_at_10": {
+      "value": 0.9332,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_30_recall_at_1": {
+      "value": 0.6837,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_30_recall_at_3": {
+      "value": 0.8512,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_30_recall_at_5": {
+      "value": 0.8919,
+      "unit": "",
+      "repeats": 1
+    },
+    "corpus_30_recall_at_10": {
+      "value": 0.9521,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_recall_at_1": {
+      "value": 0.1405,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_largeend_recall_at_1": {
+      "value": 0.1065,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_recall_at_3": {
+      "value": 0.0785,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_largeend_recall_at_3": {
+      "value": 0.0607,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_recall_at_5": {
+      "value": 0.0599,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_largeend_recall_at_5": {
+      "value": 0.0378,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_recall_at_10": {
+      "value": 0.0793,
+      "unit": "",
+      "repeats": 1
+    },
+    "slope_per_50_largeend_recall_at_10": {
+      "value": 0.0558,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "跨版本对照本次跳过：题目集从 239 题变为 227 题，本段算法的「同一批题目」前提不成立。子采样曲线仍有效。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-114] 语料规模对召回率的机械影响（子采样对照实验，R2-02）  (层级 L1) =====\n语料= 86条  R@1=52.42%  R@3=76.21%  R@5=82.38%  R@10=86.34%\n语料= 80条  R@1=53.49%  R@3=77.11%  R@5=82.80%  R@10=87.05%\n语料= 70条  R@1=55.80%  R@3=78.18%  R@5=83.58%  R@10=88.14%\n语料= 60条  R@1=57.75%  R@3=79.77%  R@5=84.26%  R@10=89.44%\n语料= 50条  R@1=60.81%  R@3=81.72%  R@5=85.68%  R@10=91.34%\n语料= 40条  R@1=64.55%  R@3=82.97%  R@5=87.47%  R@10=93.32%\n语料= 30条  R@1=68.37%  R@3=85.12%  R@5=89.19%  R@10=95.21%\n\n（N=86 一行不作子采样，理论上应与 M-111/M-207 的真实召回率\n 逐位吻合，是本脚本实现正确性的内部校验，不吻合说明本脚本有 bug）\n  N=86 本脚本算出：R@1=52.42%  R@5=82.38%  R@10=86.34%\n  M-111/M-207 实测：R@1=52.42%  R@5=82.38%  R@10=86.34%\n\n每减少 50 条语料，机械涨幅（线性拟合斜率，非精确值，报区间不报点）：\n  R@1: 全7点拟合 +14.05pp/50条   大端3点拟合 +10.65pp/50条\n  R@3: 全7点拟合 + 7.85pp/50条   大端3点拟合 + 6.07pp/50条\n  R@5: 全7点拟合 + 5.99pp/50条   大端3点拟合 + 3.78pp/50条\n  R@10: 全7点拟合 + 7.93pp/50条   大端3点拟合 + 5.58pp/50条\n  （全点拟合含 N=25，会把凹曲线的陡峭远端算进来，偏高；大端拟合偏低。真值在两者之间。）\n\n==============================================================================\n⚠️ 跨版本对照已跳过：两个版本的题目集不同（基准 239 题 vs 当前 227 题）。\n本段算法假定两版用同一批题目，只有语料规模在变；题目集换了之后，\n实测差值里混进了「题目难度变了」这个未被建模的变量，\n倒推出的「质量升降」不成立。**同一批题目才比得了**——\n上面那张「语料规模 → 召回率」的子采样曲线不受影响，它是\n在同一批题目上做的，仍然有效；不成立的只是跨版本那一步减法。\n==============================================================================\n  [note] 跨版本对照本次跳过：题目集从 239 题变为 227 题，本段算法的「同一批题目」前提不成立。子采样曲线仍有效。\n"
+}

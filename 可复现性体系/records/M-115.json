@@ -1,0 +1,517 @@
+{
+  "record_id": "M-115",
+  "title": "召回率 Wilson 95% 置信区间（kylin 后端，R2-09）",
+  "layer": "L1",
+  "script": "measure_recall_ci.py",
+  "script_sha256": "1162842e02e20ff13953a45ee26a2e2d247d384960b4ff817b244acd7dda390c",
+  "command": "python measure_recall_ci.py --backend kylin",
+  "started_at": "2026-08-15T02:26:58.568415+00:00",
+  "duration_sec": 0.0,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "recall_results_kylin.jsonl",
+      "sha256": "a824d14dae153fac3fa6f253b127d30af6a90c4057b32872b07addf14b3cb817",
+      "bytes": 76318,
+      "lines": 227
+    }
+  ],
+  "metrics": {
+    "总体_r1_hits": {
+      "value": 119,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r1_n": {
+      "value": 227,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r1_ci_lo": {
+      "value": 0.4594,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r1_ci_hi": {
+      "value": 0.5883,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r3_hits": {
+      "value": 173,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r3_n": {
+      "value": 227,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r3_ci_lo": {
+      "value": 0.7027,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r3_ci_hi": {
+      "value": 0.8129,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r5_hits": {
+      "value": 187,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r5_n": {
+      "value": 227,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r5_ci_lo": {
+      "value": 0.769,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r5_ci_hi": {
+      "value": 0.8678,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r10_hits": {
+      "value": 196,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r10_n": {
+      "value": 227,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r10_ci_lo": {
+      "value": 0.8127,
+      "unit": "",
+      "repeats": 1
+    },
+    "总体_r10_ci_hi": {
+      "value": 0.9021,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r1_hits": {
+      "value": 52,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r1_n": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r1_ci_lo": {
+      "value": 0.5907,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r1_ci_hi": {
+      "value": 0.7947,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r3_hits": {
+      "value": 66,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r3_n": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r3_ci_lo": {
+      "value": 0.8009,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r3_ci_hi": {
+      "value": 0.9442,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r5_hits": {
+      "value": 69,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r5_n": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r5_ci_lo": {
+      "value": 0.8514,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r5_ci_hi": {
+      "value": 0.9708,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r10_hits": {
+      "value": 70,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r10_n": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r10_ci_lo": {
+      "value": 0.8691,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=close_r10_ci_hi": {
+      "value": 0.9788,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r1_hits": {
+      "value": 25,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r1_n": {
+      "value": 76,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r1_ci_lo": {
+      "value": 0.2338,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r1_ci_hi": {
+      "value": 0.4406,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r3_hits": {
+      "value": 47,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r3_n": {
+      "value": 76,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r3_ci_lo": {
+      "value": 0.506,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r3_ci_hi": {
+      "value": 0.7194,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r5_hits": {
+      "value": 53,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r5_n": {
+      "value": 76,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r5_ci_lo": {
+      "value": 0.5867,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r5_ci_hi": {
+      "value": 0.7891,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r10_hits": {
+      "value": 57,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r10_n": {
+      "value": 76,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r10_ci_lo": {
+      "value": 0.6422,
+      "unit": "",
+      "repeats": 1
+    },
+    "难度=hard_r10_ci_hi": {
+      "value": 0.8337,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r1_hits": {
+      "value": 40,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r1_n": {
+      "value": 89,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r1_ci_lo": {
+      "value": 0.3503,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r1_ci_hi": {
+      "value": 0.5527,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r3_hits": {
+      "value": 69,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r3_n": {
+      "value": 89,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r3_ci_lo": {
+      "value": 0.6782,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r3_ci_hi": {
+      "value": 0.8496,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r5_hits": {
+      "value": 74,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r5_n": {
+      "value": 89,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r5_ci_lo": {
+      "value": 0.7404,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r5_ci_hi": {
+      "value": 0.8951,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r10_hits": {
+      "value": 78,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r10_n": {
+      "value": 89,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r10_ci_lo": {
+      "value": 0.7921,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=case_r10_ci_hi": {
+      "value": 0.9296,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r1_hits": {
+      "value": 79,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r1_n": {
+      "value": 135,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r1_ci_lo": {
+      "value": 0.5008,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r1_ci_hi": {
+      "value": 0.6648,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r3_hits": {
+      "value": 104,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r3_n": {
+      "value": 135,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r3_ci_lo": {
+      "value": 0.6925,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r3_ci_hi": {
+      "value": 0.8332,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r5_hits": {
+      "value": 113,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r5_n": {
+      "value": 135,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r5_ci_lo": {
+      "value": 0.7656,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r5_ci_hi": {
+      "value": 0.8898,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r10_hits": {
+      "value": 118,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r10_n": {
+      "value": 135,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r10_ci_lo": {
+      "value": 0.8076,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=workflow_r10_ci_hi": {
+      "value": 0.9199,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r1_hits": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r1_n": {
+      "value": 3,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r1_ci_lo": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r1_ci_hi": {
+      "value": 0.5615,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r3_hits": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r3_n": {
+      "value": 3,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r3_ci_lo": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r3_ci_hi": {
+      "value": 0.5615,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r5_hits": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r5_n": {
+      "value": 3,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r5_ci_lo": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r5_ci_hi": {
+      "value": 0.5615,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r10_hits": {
+      "value": 0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r10_n": {
+      "value": 3,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r10_ci_lo": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    },
+    "类型=template_r10_ci_hi": {
+      "value": 0.5615,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "Wilson score interval，95%置信水平（z=1.96）。逐题结果来自已有的recall_results_kylin.jsonl，本脚本不重新调用embedding/检索，纯粹是对已有命中/未命中结果做统计层面的区间估计。小样本组（如template n=9）的区间会很宽，这本身就是「样本太小、数字不能太当真」的量化体现，不是脚本的缺陷。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-115] 召回率 Wilson 95% 置信区间（kylin 后端，R2-09）  (层级 L1) =====\n\n总体（n=227）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    119/227     52.4%   [ 45.9%,  58.8%]   否\n  3    173/227     76.2%   [ 70.3%,  81.3%]   否\n  5    187/227     82.4%   [ 76.9%,  86.8%]   否\n  10   196/227     86.3%   [ 81.3%,  90.2%]   否\n\n难度=close（n=74）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    52/74       70.3%   [ 59.1%,  79.5%]   否\n  3    66/74       89.2%   [ 80.1%,  94.4%]   否\n  5    69/74       93.2%   [ 85.1%,  97.1%]   是\n  10   70/74       94.6%   [ 86.9%,  97.9%]   是\n\n难度=hard（n=76）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    25/76       32.9%   [ 23.4%,  44.1%]   否\n  3    47/76       61.8%   [ 50.6%,  71.9%]   否\n  5    53/76       69.7%   [ 58.7%,  78.9%]   否\n  10   57/76       75.0%   [ 64.2%,  83.4%]   否\n\n类型=case（n=89）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    40/89       44.9%   [ 35.0%,  55.3%]   否\n  3    69/89       77.5%   [ 67.8%,  85.0%]   否\n  5    74/89       83.1%   [ 74.0%,  89.5%]   否\n  10   78/89       87.6%   [ 79.2%,  93.0%]   否\n\n类型=workflow（n=135）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    79/135      58.5%   [ 50.1%,  66.5%]   否\n  3    104/135     77.0%   [ 69.3%,  83.3%]   否\n  5    113/135     83.7%   [ 76.6%,  89.0%]   否\n  10   118/135     87.4%   [ 80.8%,  92.0%]   否\n\n类型=template（n=3）\n  K    命中/n      点估计       Wilson 95% CI       下界≥85%?   \n  1    0/3          0.0%   [  0.0%,  56.2%]   否\n  3    0/3          0.0%   [  0.0%,  56.2%]   否\n  5    0/3          0.0%   [  0.0%,  56.2%]   否\n  10   0/3          0.0%   [  0.0%,  56.2%]   否\n  [note] Wilson score interval，95%置信水平（z=1.96）。逐题结果来自已有的recall_results_kylin.jsonl，本脚本不重新调用embedding/检索，纯粹是对已有命中/未命中结果做统计层面的区间估计。小样本组（如template n=9）的区间会很宽，这本身就是「样本太小、数字不能太当真」的量化体现，不是脚本的缺陷。\n"
+}

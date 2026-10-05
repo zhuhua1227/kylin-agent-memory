@@ -1,0 +1,26 @@
+{
+  "_note": "独立评审D-5：merge_and_validate.py此前只查字段是否存在/非空，没有类型与枚举校验。这份文件是显式schema定义，配合同目录validate_schema()使用。不依赖jsonschema第三方库（保持L1纯Python、任何机器可跑的约束），自己写了个约20行的轻量校验器读取本文件。",
+  "common": {
+    "source": {"type": "str", "required": true},
+    "record_type": {"type": "str", "required": true, "enum": ["tool_execution", "user_input", "config_item"]},
+    "timestamp": {"type": "str", "required": true}
+  },
+  "tool_execution": {
+    "session_id": {"type": "str", "required": true},
+    "tool_name": {"type": "str", "required": true},
+    "tool_input": {"type": ["dict", "str"], "required": true},
+    "tool_output": {"type": "str", "required": true},
+    "is_error": {"type": "bool", "required": false},
+    "execution_status": {"type": "str", "required": false,
+      "enum": ["success", "no_output", "user_rejected", "execution_failed"]}
+  },
+  "user_input": {
+    "text": {"type": "str", "required": true}
+  },
+  "config_item": {
+    "config_path": {"type": "str", "required": true},
+    "config_value": {"type": "any", "required": true,
+      "_note": "合法值可以是str/bool/int/float/None（如is_answer_key语境下config_value=False是合法值），不做类型限制，只查字段存在"},
+    "is_answer_key": {"type": "bool", "required": false}
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "record_id": "M-305",
+  "title": "冲突判定规则冻结锚点（rule sha256 + 开发/留出分界日期 + 评测集确定性）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\review_and_freeze_conflicts.py",
+  "script_sha256": null,
+  "command": "python measure_conflicts.py M-305",
+  "started_at": "2026-09-07T15:05:39.850288+00:00",
+  "duration_sec": 0.011,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\conflicts.jsonl",
+      "sha256": "c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745",
+      "bytes": 382031,
+      "lines": 149
+    },
+    {
+      "path": "..\\知识检索\\conflicts_eval.jsonl",
+      "sha256": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "bytes": 76379,
+      "lines": 36
+    }
+  ],
+  "metrics": {
+    "conflict_rules_mine_conflicts_sha256": {
+      "value": "7378b51d34e392a57712259b2ad95173e221813f68415e7dfcd554cee0a782c4",
+      "unit": "",
+      "repeats": 1
+    },
+    "conflict_rules_review_and_freeze_conflicts_sha256": {
+      "value": "b2e75014b1c5341de013f256d6b0c21c34f7d193c69ee3e6d7305bf914420364",
+      "unit": "",
+      "repeats": 1
+    },
+    "conflict_rules_measure_conflicts_sha256": {
+      "value": "147e5012d4038c28ad1738177e8f87252aede37e5318c11986c2ba6fddd5a053",
+      "unit": "",
+      "repeats": 1
+    },
+    "conflict_rules_mine_cases_sha256": {
+      "value": "8f0b3d71c2fb84eb3f7cf7cb6f72f8b9379cc82a9be058a42cda819135734b81",
+      "unit": "",
+      "repeats": 1
+    },
+    "conflicts_pool_lines": {
+      "value": 149,
+      "unit": "行",
+      "repeats": 1
+    },
+    "conflicts_eval_lines": {
+      "value": 36,
+      "unit": "行",
+      "repeats": 1
+    },
+    "conflicts_pool_sha256": {
+      "value": "c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745",
+      "unit": "",
+      "repeats": 1
+    },
+    "conflicts_eval_sha256": {
+      "value": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+      "unit": "",
+      "repeats": 1
+    },
+    "dev_holdout_boundary_date": {
+      "value": "2026-08-26",
+      "unit": "",
+      "repeats": 1
+    },
+    "dev_candidate_count": {
+      "value": 149,
+      "unit": "条",
+      "repeats": 1
+    },
+    "holdout_candidate_count": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "undated_s4_signal_count": {
+      "value": 0,
+      "unit": "条",
+      "repeats": 1
+    },
+    "eval_set_build_determinism_agree": {
+      "value": 1,
+      "unit": "",
+      "repeats": 1
+    },
+    "eval_set_frozen_version": {
+      "value": "1.3.0",
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "这条记录本身不证明规则'对'——它证明的是'规则在 commit <sha> 时长这样、之后没动过'。09-02 用 reproduce_L1.py --check-only 重算这几个 sha256，一致 = 规则确实先于 D2~D7 留出集数据冻结，不一致 = 报告里所有'留出集'措辞作废。commit sha 与推送时间记在 知识检索/冲突规则冻结记录.md。",
+    "v1.1.0 = v1.0.0(2026-08-16) 的确定性修复：adjudicated_at 从 datetime.now() 改成固定常量。18 正 18 负、label/type/reason_kind 逐字未变，M-302/303/304 的数字全部不受影响，见 review_and_freeze_conflicts.py 的 VERSION 注释与《勘误与修正记录》。",
+    "v1.2.0 → v1.3.0（2026-08-28）与前两次不同，是真实内容修订，不是数字不受影响的空跑：_find_origin() 起源查找 bug 修复后，E-032/K-0052 由 not_conflict 改判 conflict（reason_kind=旧结论当时为假），19 正 17 负，不再对称。§一 用修复版重跑冻结 36 对验证'只动候选挖掘、未动判定逻辑'，结果仍 35/36（M-302 不变、CI 下界仍 85.8%）。但 M-303 的类型判断（T1~T4）确实从 8/18=44.4% 降到 8/19=42.1%，因为 K-0052 是新纳入的真实类型误判（金标T1，adjudicate()判T4），如实记录，不因指标下降而回避。详见《冻结修订记录 #1》。",
+    "分界线口径变更（v1.3.0，《冻结修订记录 #1》§6）：开发集/留出集由「conflicts.jsonl 行号（第 150 行起 = 留出集）」改为「候选的数据日期（new.asserted_at >= 2026-08-26 = 留出集）」。理由：起源查找修复后重挖，候选行号全部重排，行号定义在任何一次重挖后即失效；数据日期不随挖掘器版本变化。冻结时（D2 挖掘器尚未跑）留出集候选为 0——全部 149 条候选的 new.asserted_at 均 < 2026-08-26。conflicts_pool_lines / conflicts_eval_lines 仍登记，作为规模快照而非分界依据。",
+    "measure_conflicts.py sha256 于 2026-09-07 变更一次（新增 M-306，把留出集单人全量盲测裁决结果接入可复现性体系）——**is_conflict()/adjudicate() 判定逻辑、M-301~305 的测量口径一行未动**，conflict_rules_mine_conflicts_sha256（7378b51d…）不变，「规则先于留出集数据」的证明链不受影响。变更前 measure_conflicts.py 为 a20de134…（2026-09-02 起源修复收尾时），此后为当前值。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-305] 冲突判定规则冻结锚点（rule sha256 + 开发/留出分界日期 + 评测集确定性）  (层级 L1) =====\n  mine_conflicts_sha256                  7378b51d34e392a57712259b2ad95173e221813f68415e7dfcd554cee0a782c4\n  review_and_freeze_conflicts_sha256     b2e75014b1c5341de013f256d6b0c21c34f7d193c69ee3e6d7305bf914420364\n  measure_conflicts_sha256               147e5012d4038c28ad1738177e8f87252aede37e5318c11986c2ba6fddd5a053\n  mine_cases_sha256                      8f0b3d71c2fb84eb3f7cf7cb6f72f8b9379cc82a9be058a42cda819135734b81\n  规模快照：conflicts.jsonl 149 行 / conflicts_eval.jsonl 36 行\n  分界线（按数据日期 new.asserted_at >= 2026-08-26）：开发集 149 条 / 留出集 0 条 / 无日期(S4信号) 0 条\n  build_eval_set() 连调两次逐字节一致：是  （评测集冻结版本 v1.3.0）\n  [note] 这条记录本身不证明规则'对'——它证明的是'规则在 commit <sha> 时长这样、之后没动过'。09-02 用 reproduce_L1.py --check-only 重算这几个 sha256，一致 = 规则确实先于 D2~D7 留出集数据冻结，不一致 = 报告里所有'留出集'措辞作废。commit sha 与推送时间记在 知识检索/冲突规则冻结记录.md。\n  [note] v1.1.0 = v1.0.0(2026-08-16) 的确定性修复：adjudicated_at 从 datetime.now() 改成固定常量。18 正 18 负、label/type/reason_kind 逐字未变，M-302/303/304 的数字全部不受影响，见 review_and_freeze_conflicts.py 的 VERSION 注释与《勘误与修正记录》。\n  [note] v1.2.0 → v1.3.0（2026-08-28）与前两次不同，是真实内容修订，不是数字不受影响的空跑：_find_origin() 起源查找 bug 修复后，E-032/K-0052 由 not_conflict 改判 conflict（reason_kind=旧结论当时为假），19 正 17 负，不再对称。§一 用修复版重跑冻结 36 对验证'只动候选挖掘、未动判定逻辑'，结果仍 35/36（M-302 不变、CI 下界仍 85.8%）。但 M-303 的类型判断（T1~T4）确实从 8/18=44.4% 降到 8/19=42.1%，因为 K-0052 是新纳入的真实类型误判（金标T1，adjudicate()判T4），如实记录，不因指标下降而回避。详见《冻结修订记录 #1》。\n  [note] 分界线口径变更（v1.3.0，《冻结修订记录 #1》§6）：开发集/留出集由「conflicts.jsonl 行号（第 150 行起 = 留出集）」改为「候选的数据日期（new.asserted_at >= 2026-08-26 = 留出集）」。理由：起源查找修复后重挖，候选行号全部重排，行号定义在任何一次重挖后即失效；数据日期不随挖掘器版本变化。冻结时（D2 挖掘器尚未跑）留出集候选为 0——全部 149 条候选的 new.asserted_at 均 < 2026-08-26。conflicts_pool_lines / conflicts_eval_lines 仍登记，作为规模快照而非分界依据。\n  [note] measure_conflicts.py sha256 于 2026-09-07 变更一次（新增 M-306，把留出集单人全量盲测裁决结果接入可复现性体系）——**is_conflict()/adjudicate() 判定逻辑、M-301~305 的测量口径一行未动**，conflict_rules_mine_conflicts_sha256（7378b51d…）不变，「规则先于留出集数据」的证明链不受影响。变更前 measure_conflicts.py 为 a20de134…（2026-09-02 起源修复收尾时），此后为当前值。\n"
+}

@@ -1,0 +1,30 @@
+{
+  "note": "🔴 第三轮独立复核 R3-31（四轮一字未改）：out_of_kb_questions.json 的 20 条负样本全是红烧肉/唐朝/冰岛首都——**与知识库话题毫不相干**。用它们测「该拒答时是否拒答」，测的是一件太容易的事：任何 embedding 都能把菜谱和 SSH 排错分开，分数拉开根本不能说明系统有拒答能力。真正难、也真正会在实际使用中发生的，是**问题就在同一个领域内，只是这个知识库里恰好没有答案**——用户问的还是 Linux 运维、还是这台机器上的工具排障，只是从没做过那件事。这一档此前完全空白。",
+
+  "construction": "每一条都先在三份语料（cases/workflows/templates 共 86 条知识单元）里做过关键词核验，确认相关词根出现 0 次才收录——见 verify_absence 字段。**这一步不能省**：一条其实在库里有答案的问题被当成负样本，会把一次正确检索记成误报，测量本身就坏了。核验方法与逐条结果由 measure_ook.py 在测量时重新执行一遍（不信任本文件的自述），词根若在语料中出现则该条直接判废、不参与统计。",
+
+  "why_harder": "领域内负样本与真实问题共享大量表层词汇（连接/检查/挂载/服务/失败/配置），纯词面方法必然给出高分；向量方法要区分它们，靠的必须是「这件具体的事做没做过」而不是「像不像运维问题」。因此两档分数的间隙，才是拒答能力的真实度量。",
+
+  "questions": [
+    {"id": "INK-01", "query": "帮我把这个服务做成开机自启，重启之后不用手动拉起来", "topic": "systemd 服务自启", "verify_absence": ["systemd", "systemctl"]},
+    {"id": "INK-02", "query": "这台机器的防火墙把端口挡住了，帮我放行一下", "topic": "防火墙放行", "verify_absence": ["iptables", "防火墙"]},
+    {"id": "INK-03", "query": "每天凌晨三点自动跑一次这个脚本，怎么配", "topic": "定时任务", "verify_absence": ["crontab", "cron", "定时"]},
+    {"id": "INK-04", "query": "根分区快满了，帮我把剩下的空间扩进去", "topic": "磁盘扩容", "verify_absence": ["lvm", "分区", "扩容"]},
+    {"id": "INK-05", "query": "帮我配个反向代理，把这个端口的服务转出去", "topic": "nginx 反代", "verify_absence": ["nginx", "反向代理"]},
+    {"id": "INK-06", "query": "把这个视频压一下码率，太大了传不动", "topic": "ffmpeg 转码", "verify_absence": ["ffmpeg", "转码"]},
+    {"id": "INK-07", "query": "帮我配一下免密登录，每次都要输密码太烦了", "topic": "SSH 密钥免密", "verify_absence": ["ssh-keygen", "免密"]},
+    {"id": "INK-08", "query": "把这个目录增量同步到另一台机器上，只传变化的部分", "topic": "rsync 增量同步", "verify_absence": ["rsync"]},
+    {"id": "INK-09", "query": "断开连接之后进程也跟着没了，怎么让它一直跑着", "topic": "tmux/screen 常驻", "verify_absence": ["tmux"]},
+    {"id": "INK-10", "query": "帮我给这个项目建个独立的 Python 环境，别污染系统的", "topic": "虚拟环境", "verify_absence": ["venv", "conda", "虚拟环境"]},
+    {"id": "INK-11", "query": "服务起不来，看看系统日志里报了什么", "topic": "journalctl 排障", "verify_absence": ["journalctl"]},
+    {"id": "INK-12", "query": "内存不够了，加点交换空间", "topic": "swap 调优", "verify_absence": ["swap"]},
+    {"id": "INK-13", "query": "帮我把这个数据库备份出来，定期存一份", "topic": "数据库备份", "verify_absence": ["数据库备份", "postgres"]},
+    {"id": "INK-14", "query": "显卡驱动装了但是识别不到，帮我看看", "topic": "显卡驱动", "verify_absence": ["cuda", "显卡驱动"]},
+    {"id": "INK-15", "query": "把这个装到容器里跑，别直接装在系统上", "topic": "容器化部署", "verify_absence": ["podman", "容器"]},
+    {"id": "INK-16", "query": "这个环境变量加了不生效，重开终端也没用", "topic": "环境变量持久化", "verify_absence": ["环境变量"]},
+    {"id": "INK-17", "query": "帮我做个软链接指过去，别复制一份占地方", "topic": "软链接", "verify_absence": ["软链接", "symlink"]},
+    {"id": "INK-18", "query": "麒麟的安全模块把我的程序拦了，怎么单独放行这一个", "topic": "kysec 放行", "verify_absence": ["selinux", "kysec"]},
+    {"id": "INK-19", "query": "npm 装依赖一直失败，换个源试试", "topic": "npm 换源", "verify_absence": ["npm", "node_modules"]},
+    {"id": "INK-20", "query": "帮我改一下 vim 的配置，缩进老是乱", "topic": "vim 配置", "verify_absence": ["vim"]}
+  ]
+}

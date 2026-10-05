@@ -1,0 +1,384 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>负例盲测复查</title><style>
+:root{--bg:#f5f7f5;--card:#fff;--ink:#1a1f1c;--body:#3d453f;--muted:#7a827c;
+      --line:#dee4de;--green:#2f6b57;--rust:#b0502a;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--body);font-size:15px;line-height:1.7;
+ font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 90px}
+h1{font-size:24px;color:var(--ink);margin:0 0 6px}
+.lede{color:var(--muted);font-size:14px;margin:0 0 22px}
+.rule{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin-bottom:26px}
+.rule b{color:var(--ink)}
+.rule ul{margin:10px 0 0;padding-left:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
+.card header{display:flex;gap:12px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line);background:#fafbfa}
+.num{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--green)}
+.file{font-size:13px;color:var(--muted)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pair section{padding:14px 16px}
+.pair section:first-child{border-right:1px solid var(--line);background:#fcfcfb}
+h4{margin:0 0 8px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:13.5px;line-height:1.65;
+ font-family:inherit;color:var(--body);max-height:340px;overflow:auto}
+.card footer{display:flex;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+label{display:flex;gap:6px;align-items:center;cursor:pointer;font-size:14px}
+.note{flex:1;min-width:200px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font:inherit;font-size:13px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+ padding:12px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
+button{padding:9px 22px;border:0;border-radius:5px;background:var(--green);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{background:#bbb;cursor:not-allowed}
+#prog{color:var(--muted);font-size:14px}
+#out{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-top:24px;display:none}
+#out h3{margin:0 0 12px;color:var(--ink)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+td,th{border-bottom:1px solid var(--line);padding:7px 10px;text-align:left}
+.bad{color:var(--rust);font-weight:600}
+.ok{color:var(--green)}
+@media(max-width:760px){.pair{grid-template-columns:1fr}.pair section:first-child{border-right:0;border-bottom:1px solid var(--line)}}
+</style></head><body><div class="wrap">
+<h1>负例盲测复查</h1>
+<p class="lede">共 21 条。结构标签、原裁决、时间戳均已隐藏。种子 20260827，可复现。</p>
+<div class="rule">
+<b>判断标准：「后」这段，是否让「前」那段里的某个说法不再成立了？</b>
+<ul>
+<li><b>冲突</b> —— 前说 A，后说「A 是错的 / A 已过时 / 更正为 B」</li>
+<li><b>不是冲突</b> —— 后只是<b>补充</b>新内容，前仍成立；或只是换个说法（润色）；或两段根本不是一件事</li>
+</ul>
+</div>
+
+<article class="card" data-n="1">
+  <header><span class="num">01</span><span class="file">pve-usb-renesas-dead.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>相关:[[server-pve-network]]、[[pttime-seedbox]]</pre></section>
+    <section><h4>后</h4><pre>**2026-07-30/31 后续：一次意外断电顺带&quot;治好&quot;了瑞萨USB(但代价是主板级惊吓)**。PVE 主机不明原因关机重启，用户现场排查时：①拆了一块无线网卡 ②把 NVMe 系统盘重新插拔了一次。重启后卡在 BIOS，**Advanced→NVMe Configuration 显示 &quot;No NVMe Device Found&quot;**——那块 NVMe 是 PVE 系统本身+全部三台虚机(VM100/101/102)唯一存储，一度像是主板级故障。**重新把 NVMe 插紧固定后正常识别**，大概率是拔插时没插到位/螺丝没拧紧，不是芯片真的坏了。**副作用：外部 USB 口意外恢复了**(</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q1" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q1" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="2">
+  <header><span class="num">02</span><span class="file">MEMORY.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3 上 CloudDrive2 挂百度网盘当片库(不用买硬盘)，虚机加 [REDACTED_IP] 网卡让电视能连，实测 6.7-11MB/s；+ AutoBangumi/qB 自动追番(蜜柑RSS)，FakeIP×SSRF、qB须root等五大坑；+ 电视[REDACTED_IP]开机ADB自动进Jellyfin；+ ✅字幕预热自动化(收藏范围/0-6点窗口)根治&quot;获取额外数据&quot;卡5-10分钟；+ PT打工号(500G盘/qbit-pt就绪)撞上联通CGNAT大内网</pre></section>
+    <section><h4>后</h4><pre>- [Jellyfin + 百度网盘影音栈](jellyfin-baidu-media.md) — 100.3上CloudDrive2挂百度网盘当片库；追番/字幕预热自动化跑通；❌tv-autostart已停用(用户不要了)；⚠️疯狂动物城2/Lucky S1因PT盘拔除从库消失(未决定是否找回)</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q2" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q2" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="3">
+  <header><span class="num">03</span><span class="file">jellyfin-baidu-media.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**PVE 开机自启（2026-07-13 补）**</pre></section>
+    <section><h4>后</h4><pre>## 手动加片流程 &amp; 坑（2026-07-13《星际穿越》实操）
+
+用户从百度网盘转存分享 → 文件落在**网盘根目录**，需搬进 `Media/Movies/&lt;英文名 (年份)&gt;/`。CloudDrive2 内部 `mv` 是**秒完成**（云端 rename，不走流量）。命名用**英文原名**（`Interstellar (2014)/Interstellar (2014).mkv`）TMDB 匹配最稳，Jellyfin 元数据语言是简中，界面照样显示《星际穿越》。加完 `POST /Library/Refresh` + `POST /Items/&lt;id&gt;/Refresh?metadat</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q3" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q3" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="4">
+  <header><span class="num">04</span><span class="file">kylin-rag-project.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**⚠️ 风险(别踩)**:</pre></section>
+    <section><h4>后</h4><pre>**2026-08-01 全新部署重建成功(768再现)**:因 hotfix 假解锁死结,用 `ostree admin deploy &lt;refspec&gt;` 建全新部署+重启,新部署上 `unlock --hotfix` 才真正给到可写 `/usr`(实测 `grep &#x27; /usr &#x27; /proc/mounts` 要取**最后一行**,前面那行 ro 是中间层)。**关键坑**:`kylin-ai-subsystem` 元包在 dpkg 数据库&quot;版本已正确&quot;时**只重装自己(4.7KB)、不碰那 71 个依赖**,而全新 `/usr` 上这些依赖全是出厂旧文件(2月12日)→ 必须逐个 `a</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q4" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q4" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="5">
+  <header><span class="num">05</span><span class="file">butler-anime-bot.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**注意**：openclaw skill 机制本质也是 exec 调脚本,绕不开 exec,所以 exec+AGENTS.md 约束是合理路径。</pre></section>
+    <section><h4>后</h4><pre>**注意**：openclaw skill 机制本质也是 exec 调脚本,绕不开 exec,所以 exec+AGENTS.md 约束是合理路径。
+
+## 2026-07-14：加了「点歌」能力
+
+家人在 QQ 说&quot;我想听 Hotel California&quot;→ 自动下载进 Jellyfin 音乐库(带同步歌词)。CLI 实测通过。
+- 新脚本 **`/usr/local/bin/dianbo-music`**（模式同 dianbo-anime：搜 **Deezer API** → 调 `song-dl url &lt;deezer链接&gt;` → 下载+归位+抓.lrc+刷新 Jellyfin → 输出</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q5" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q5" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="6">
+  <header><span class="num">06</span><span class="file">kylin-rag-project.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>① 环境在 OSTree **hotfix 可写覆盖层(`* .1 Unlocked:hotfix`)**,且有 **`.2` pending 槽** → **重启整机可能掉进干净槽、全部丢失**,固化(CP4)未做,只注销别关机重启。② thin pool `pve/data` 已 `lvextend +14G`(→155G)后仍 ~87%,VG 仅剩 ~2G,再开 VM 需加硬盘。</pre></section>
+    <section><h4>后</h4><pre>① 固化(CP4)已完成(2026-07-15):`sudo ostree admin undeploy 0` 删掉了干净的 `.2` 槽,现 `* .1 Unlocked:hotfix` 为默认启动槽、`.0` 为 pinned 干净回滚 → 重启会正确进 `.1`,成果保留。② ⚠️ **存储告急**:thin pool `pve/data`(155G)已用 **~94.5%,仅剩 ~8.9G**(CP2 装 runtime+模型实占约 10G);VG 仅剩 ~2G 扩不动;VM100(ubuntu ~105G)无 discard+无 agent 难安全回收,VM102 已 discard</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q6" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q6" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="7">
+  <header><span class="num">07</span><span class="file">jellyfin-baidu-media.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**电视端**：小米电视（安卓底层），侧载 `jellyfin-androidtv-v0.19.9-release.apk`（GitHub releases，**笔记本直连 GitHub 慢，从虚机走代理下再 pscp 回来**）。登录用 **Quick Connect**：电视显示 6 位码 → API `POST /QuickConnect/Authorize?code=&lt;码&gt;&amp;userId=&lt;管理员id&gt;&amp;api_key=&lt;key&gt;` 一键授权，**不用遥控器戳密码**（注意必须带 userId，否则 400）。**Jellyfin 管理员用户名是 `root`**。
+
+---</pre></section>
+    <section><h4>后</h4><pre>**电视端**：小米电视（安卓底层），侧载 `jellyfin-androidtv-v0.19.9-release.apk`（GitHub releases，**笔记本直连 GitHub 慢，从虚机走代理下再 pscp 回来**）。登录用 **Quick Connect**：电视显示 6 位码 → API `POST /QuickConnect/Authorize?code=&lt;码&gt;&amp;userId=&lt;管理员id&gt;&amp;api_key=&lt;key&gt;` 一键授权，**不用遥控器戳密码**（注意必须带 userId，否则 400）。**Jellyfin 管理员用户名是 `root`**。
+
+### 📺 电视</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q7" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q7" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="8">
+  <header><span class="num">08</span><span class="file">jellyfin-baidu-media.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>### 开机自动进 Jellyfin（2026-07-17 建成并实测通过）</pre></section>
+    <section><h4>后</h4><pre>### 开机自动进 Jellyfin（2026-07-17 建成，**❌ 2026-07-31 用户明确表示不再需要，已停用**）
+
+**现状**：`tv-autostart.service` 现在是 `disabled + inactive`。这次会话现场核查发现它已经不生效了(此前记录写的&quot;已enable&quot;是过时状态)，问用户是否要恢复，**用户明确答复不需要了**——不要再重新 enable 这个服务，脚本本体`/opt/media-stack/tv-autostart.sh`还留着但不用管它。以下是它当初的建设过程记录，仅供history参考，不代表当前状态：
+</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q8" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q8" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="9">
+  <header><span class="num">09</span><span class="file">MEMORY.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- [PTTime 做种](pttime-seedbox.md) — 📐开头有整体架构总览(切session先看)；VM100 qbit-pt+阿里云反向隧道，底仓保护已取消，PTT-Self保护尼古喵喵/media库</pre></section>
+    <section><h4>后</h4><pre>- [PTTime 做种](pttime-seedbox.md) — ⚠️2026-07-31做种盘已拔除，16个种子全missingFiles，PT做种事实停摆(架构总览记录的是拔盘前状态)</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q9" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q9" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="10">
+  <header><span class="num">10</span><span class="file">MEMORY.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- [Ubuntu 虚机 OpenClaw](openclaw-gateway-vm.md) — 100.3 上 openclaw-gateway 服务、agent lucy、china-stock 插件坑与修复</pre></section>
+    <section><h4>后</h4><pre>- [Ubuntu 虚机 OpenClaw](openclaw-gateway-vm.md) — 100.3 上 openclaw-gateway 服务、agent lucy、升级到 2026.6.11、china-stock 插件坑与修复
+- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — @openclaw/qqbot 官方API方案、群@-only限制、等用户给 AppID/AppSecret 后执行</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q10" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q10" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="11">
+  <header><span class="num">11</span><span class="file">openclaw-qqbot-plan.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- 语义记忆 memory-core 仍全局不可用（缺 openai embedding key），用的是文件式记忆。</pre></section>
+    <section><h4>后</h4><pre>- 语义记忆 memory-core 仍全局不可用（缺 openai embedding key），用的是文件式记忆。
+- **干活模式（2026-07-06 加）**：原 SOUL.md 那句&quot;群聊一两句话别长篇大论&quot;把她锁成只会抛梗，正经写代码/查资料出不来。已在 SOUL.md 加「## 认真做事（干活模式）」：闲聊保持俏皮，但群友正经求助(查资料/写代码/技术问题)时「把事做对做好＞扮演」、不受篇幅限制、人设只点缀。实测写 Python 回文函数=完整代码块+茉子口吻点缀，闲聊仍俏皮。备份 SOUL.md.bak-userpersona-20260706。
+- **exec 决策待定*</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q11" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q11" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="12">
+  <header><span class="num">12</span><span class="file">MEMORY.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — ✅已接入，新建 agent「常陆茉子」(mako)、cron工具schema坑、群@-only限制</pre></section>
+    <section><h4>后</h4><pre>- [OpenClaw 接入 QQ 机器人](openclaw-qqbot-plan.md) — ✅已接入，新建 agent「常陆茉子」(mako)、cron工具schema坑、群@-only限制
+- [Z-Image-Turbo 生图部署](zimage-turbo-deploy.md) — G盘 ComfyUI+diffusers 双路，8GB显存跑通，魔搭/阿里云镜像，uv缓存移G盘避免C盘爆</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q12" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q12" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="13">
+  <header><span class="num">13</span><span class="file">server-pve-network.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**排障提示**：单线程从镜像下载只有 ~12Mbps 是跨运营商单连接限速的正常现象，非带宽故障（8 线程并发实测 ~439Mbps）。qemu-guest-agent 未装，进虚机只能 SSH。</pre></section>
+    <section><h4>后</h4><pre>**文件收件箱 + 受限传输账号（VM100 上，2026-07-06）**：`/receive`（属主 `transmit:user_a`，`2775` setgid，落地文件自动归组 user_a 便于 user_a 管理）作公共收件目录。专用账号 **`transmit` / 密码[REDACTED_SECRET] sudo，home `/home/transmit`）：sshd 用主配置末尾的 `Match User transmit` + `ForceCommand /usr/bin/rrsync /receive` 锁死——**只能 rsync、进不了 shell、限制在 /rec</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q13" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q13" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="14">
+  <header><span class="num">14</span><span class="file">openclaw-gateway-vm.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>Ubuntu 虚机（hostname `device_e`，IP `[REDACTED_IP]`，SSH 用户 `user_a`/密码[REDACTED_SECRET] sudo）上跑着 **OpenClaw**（AI Agent 框架，`/usr/local/bin/openclaw`，手动安装非包管理器，版本 2026.4.23）。见 [[server-pve-network]]。</pre></section>
+    <section><h4>后</h4><pre>Ubuntu 虚机（hostname `device_e`，IP `[REDACTED_IP]`，SSH 用户 `user_a`/密码[REDACTED_SECRET] sudo）上跑着 **OpenClaw**（AI Agent 框架）。见 [[server-pve-network]]。
+
+**安装方式**：其实是 **npm 全局包 `openclaw`**，装在独立 node `/opt/node-v24.16.0-linux-x64`（node v24.16.0 / npm 11.13.0）下，`/usr/local/bin/openclaw` → 该 node 的 bin 软链。升级</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q14" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q14" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="15">
+  <header><span class="num">15</span><span class="file">tg-pan-index.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>## ⚠️ 两个必须处理的数据特性</pre></section>
+    <section><h4>后</h4><pre>## 🔴🔴 死链问题——**索引里近一半是失效链接**（2026-07-17 用户发现风骚律师链接失效后查证）
+- **抽样 39 个（2024/25/26 各13）：失效率 46%**。按年份：**2024 约62% / 2025 约62% / 2026 约15%**——**越老死得越多**。
+- **判活方法（不用登录，实测准确）**：GET `https://pan.baidu.com/s/&lt;surl&gt;`（不带 pwd）：
+  - **死链** → 标题 `百度网盘-链接不存在`，**`errno = -7`**，不跳转
+  - **活链** → 302 到 `/share/init?s</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q15" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q15" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="16">
+  <header><span class="num">16</span><span class="file">jellyfin-baidu-media.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**PVE 开机自启（2026-07-13 补）**</pre></section>
+    <section><h4>后</h4><pre>**注意**：openclaw skill 机制本质也是 exec 调脚本,绕不开 exec,所以 exec+AGENTS.md 约束是合理路径。
+
+## 2026-07-14：加了「点歌」能力
+
+家人在 QQ 说&quot;我想听 Hotel California&quot;→ 自动下载进 Jellyfin 音乐库(带同步歌词)。CLI 实测通过。
+- 新脚本 **`/usr/local/bin/dianbo-music`**（模式同 dianbo-anime：搜 **Deezer API** → 调 `song-dl url &lt;deezer链接&gt;` → 下载+归位+抓.lrc+刷新 Jellyfin → 输出</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q16" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q16" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="17">
+  <header><span class="num">17</span><span class="file">openclaw-gateway-vm.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**服务**：`openclaw-gateway.service`（systemd，User=root，HOME=/root，端口 18789，工作目录 /root/.openclaw/workspace）。配置在 `/root/.openclaw/openclaw.json`。有 agent `lucy`、接入飞书(feishu)机器人。</pre></section>
+    <section><h4>后</h4><pre>**服务**：`openclaw-gateway.service`（systemd，User=root，HOME=/root，端口 18789，工作目录 /root/.openclaw/workspace）。配置在 `/root/.openclaw/openclaw.json`。有 agent `lucy`、接入飞书(feishu)机器人。
+
+**模型配置**：provider `catie-sukaka-v1`（catie 中转站，baseUrl `https://catiecli.sukaka.top/v1`，api openai-completions）。改模型只需改 `agents.l</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q17" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q17" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="18">
+  <header><span class="num">18</span><span class="file">openclaw-qqbot-plan.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**用户选择（2026-07-05）**：群聊+私聊都要；群里「消息都尝试响应」→ 配 `groups.requireMention:false`（但受上面@-only限制）。用户**自己去 q.qq.com 注册**，稍后给我 AppID/AppSecret。
+
+**待办 Part B（拿到凭证后我执行）**：① `openclaw plugins install @openclaw/qqbot` ② `qqbot` 加进 `plugins.allow` ③ 写 `plugins.entries.qqbot`（appId + clientSecretFile[chmod 600] + gro</pre></section>
+    <section><h4>后</h4><pre>**✅ 已完成接入（2026-07-05）**：AppID `[REDACTED_APPID]`，AppSecret 存 `/root/.openclaw/credentials/qqbot-main.secret`(chmod 600)。配置在**顶层 `channels.qqbot.accounts.main`**（appId + clientSecretFile + groups.default.requireMention:false），`qqbot` 已入 `plugins.allow`。日志确认 `Access token obtained` + `WebSocket connec</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q18" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q18" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="19">
+  <header><span class="num">19</span><span class="file">pve-usb-renesas-dead.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>相关:[[server-pve-network]]、[[pttime-seedbox]]</pre></section>
+    <section><h4>后</h4><pre>**v2 优化（查了官方资料后精简重写）**：查 Gemini 3 官方提示词指南 + Google 自己的 Gemini CLI 开源系统提示词得出：①**thought signatures**（Gemini 3 原生推理连续性机制）帮不上忙——那是原生 Gemini API 格式的东西，我们走 gg/catie 的 OpenAI 兼容层完全不暴露这个，结构性限制过不去；②官方明确说 Gemini 3 对**简洁直白**指令效果最好，反而会&quot;过度分析&quot;针对老模型写的冗长提示词工程文本；③Gemini CLI 自己处理&quot;做不到&quot;就是一两句极简祈使句，没有大段自我辩解；④但连 Gemini C</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q19" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q19" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="20">
+  <header><span class="num">20</span><span class="file">jellyfin-baidu-media.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>- **兜底 cron（2026-07-14，用户明确授权）**：`*/30 * * * * /usr/local/bin/music-sweep`（root crontab，与 openclaw-reindex-lucy 并存）。因为 **Lidarr 下载的专辑不经过 song-dl**（qB→网盘直落），歌词会缺；music-sweep 每 30 分钟对全库跑一遍 organize+lyrics，**有变化才刷 Jellyfin**（幂等，无变化零动作）。日志 `/var/log/music-sweep.log`(滚动500行)。覆盖三条入库路径：song-dl / Lidarr / 手</pre></section>
+    <section><h4>后</h4><pre>- **兜底 cron（2026-07-14，用户明确授权）**：`*/30 * * * * /usr/local/bin/music-sweep`（root crontab，与 openclaw-reindex-lucy 并存）。因为 **Lidarr 下载的专辑不经过 song-dl**（qB→网盘直落），歌词会缺；music-sweep 每 30 分钟对全库跑一遍，**有变化才刷 Jellyfin**（幂等，无变化零动作）。日志 `/var/log/music-sweep.log`(滚动500行)。
+  - **完整流水线（step 顺序）**：`music-organize`（归位散文</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q20" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q20" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+
+<article class="card" data-n="21">
+  <header><span class="num">21</span><span class="file">server-pve-network.md</span></header>
+  <div class="pair">
+    <section><h4>前</h4><pre>**笔记本联网路径（重要）**：笔记本 `[REDACTED_IP]` 走 **WLAN → 主路由 [REDACTED_IP] 联通(河北邯郸)出口直连**，**不经过软路由/代理**。软路由 istoreos 的代理只服务 N100 小主机那条链路，笔记本无法借用。所以笔记本上 Epic/Steam 等下载优化只能靠 DNS/本机手段，不能靠软路由分流。</pre></section>
+    <section><h4>后</h4><pre>**笔记本联网路径（2026-08-07 更正，之前记录已过时）**：笔记本走 WLAN → 主路由 [REDACTED_IP] → 联通出口，这段没变；但**笔记本本地另外装了 Clash Verge + v2rayN（TUN模式），会话中实测出口公网 IP 是 `[REDACTED_IP]`，跟 istoreos 上 mihomo 配的 LA-9929 节点是同一个远程 hy2 服务器**——即笔记本并非&quot;不经过代理&quot;，只是走的是笔记本本地独立的代理客户端，不是借用软路由。两边虽是同协议(hy2)同节点，但因为软路由那边要多绕好几跳虚拟化网络(PVE虚拟交换机+istoreos内核网络栈+</pre></section>
+  </div>
+  <footer>
+    <label><input type="radio" name="q21" value="conflict"><span>冲突</span></label>
+    <label><input type="radio" name="q21" value="not_conflict"><span>不是冲突</span></label>
+    <input class="note" placeholder="理由（可选）">
+  </footer>
+</article>
+<div id="out"></div></div>
+<div class="bar"><span id="prog">0 / 21</span><button id="go" disabled>提交并评分</button></div>
+<script>
+const KEY=[{"n": 1, "eval_id": "E-028", "truth": "not_conflict", "decoy": false, "file": "pve-usb-renesas-dead.md"}, {"n": 2, "eval_id": "E-017", "truth": "conflict", "decoy": true, "file": "MEMORY.md"}, {"n": 3, "eval_id": "E-024", "truth": "not_conflict", "decoy": false, "file": "jellyfin-baidu-media.md"}, {"n": 4, "eval_id": "E-026", "truth": "not_conflict", "decoy": false, "file": "kylin-rag-project.md"}, {"n": 5, "eval_id": "E-025", "truth": "not_conflict", "decoy": false, "file": "butler-anime-bot.md"}, {"n": 6, "eval_id": "E-034", "truth": "not_conflict", "decoy": false, "file": "kylin-rag-project.md"}, {"n": 7, "eval_id": "E-033", "truth": "not_conflict", "decoy": false, "file": "jellyfin-baidu-media.md"}, {"n": 8, "eval_id": "E-008", "truth": "conflict", "decoy": true, "file": "jellyfin-baidu-media.md"}, {"n": 9, "eval_id": "E-005", "truth": "conflict", "decoy": true, "file": "MEMORY.md"}, {"n": 10, "eval_id": "E-030", "truth": "not_conflict", "decoy": false, "file": "MEMORY.md"}, {"n": 11, "eval_id": "E-022", "truth": "not_conflict", "decoy": false, "file": "openclaw-qqbot-plan.md"}, {"n": 12, "eval_id": "E-021", "truth": "not_conflict", "decoy": false, "file": "MEMORY.md"}, {"n": 13, "eval_id": "E-023", "truth": "not_conflict", "decoy": false, "file": "server-pve-network.md"}, {"n": 14, "eval_id": "E-029", "truth": "not_conflict", "decoy": false, "file": "openclaw-gateway-vm.md"}, {"n": 15, "eval_id": "E-027", "truth": "not_conflict", "decoy": false, "file": "tg-pan-index.md"}, {"n": 16, "eval_id": "E-036", "truth": "not_conflict", "decoy": false, "file": "jellyfin-baidu-media.md"}, {"n": 17, "eval_id": "E-020", "truth": "not_conflict", "decoy": false, "file": "openclaw-gateway-vm.md"}, {"n": 18, "eval_id": "E-031", "truth": "not_conflict", "decoy": false, "file": "openclaw-qqbot-plan.md"}, {"n": 19, "eval_id": "E-035", "truth": "not_conflict", "decoy": false, "file": "pve-usb-renesas-dead.md"}, {"n": 20, "eval_id": "E-019", "truth": "not_conflict", "decoy": false, "file": "jellyfin-baidu-media.md"}, {"n": 21, "eval_id": "E-032", "truth": "not_conflict", "decoy": false, "file": "server-pve-network.md"}], N=21;
+const prog=document.getElementById('prog'), go=document.getElementById('go');
+function upd(){const d=document.querySelectorAll('input[type=radio]:checked').length;
+ prog.textContent=d+' / '+N; go.disabled=(d<N);}
+document.addEventListener('change',upd);
+go.onclick=()=>{
+ const ans={};document.querySelectorAll('input[type=radio]:checked').forEach(r=>ans[+r.name.slice(1)]=r.value);
+ const notes={};document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())notes[i+1]=e.value.trim();});
+ let dOK=0,dTot=0,flips=[];
+ KEY.forEach(k=>{const a=ans[k.n];
+  if(k.decoy){dTot++;if(a==='conflict')dOK++;else flips.push({n:k.n,f:k.file,t:'诱饵漏判',e:k.eval_id});}
+  else if(a==='conflict')flips.push({n:k.n,f:k.file,t:'原判负例→改判冲突',e:k.eval_id});});
+ const valid=(dOK===dTot);
+ let h='<h3>结果</h3>';
+ h+='<p>诱饵：<b class="'+(valid?'ok':'bad')+'">'+dOK+' / '+dTot+' 命中</b>'+
+    (valid?' —— 本轮有效':' —— <b class="bad">整轮作废，需重做</b>')+'</p>';
+ const real=flips.filter(x=>x.t!=='诱饵漏判');
+ h+='<p>原判负例中改判为冲突的：<b>'+real.length+' 条</b></p>';
+ if(real.length){h+='<table><tr><th>题号</th><th>文件</th><th>eval_id</th><th>你写的理由</th></tr>';
+  real.forEach(x=>{h+='<tr><td>'+x.n+'</td><td>'+x.f+'</td><td>'+(x.e||'')+'</td><td>'+(notes[x.n]||'')+'</td></tr>';});
+  h+='</table>';}
+ h+='<p style="color:#7a827c;font-size:13px;margin-top:14px">把这张表连同诱饵命中数抄进 <code>知识检索/负例盲测复查记录.md</code>。</p>';
+ const o=document.getElementById('out');o.innerHTML=h;o.style.display='block';o.scrollIntoView({behavior:'smooth'});
+};
+upd();
+</script></body></html>

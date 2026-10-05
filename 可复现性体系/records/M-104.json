@@ -1,0 +1,88 @@
+{
+  "record_id": "M-104",
+  "title": "暴力检索三种实现对比（20000 条 × 768 维）",
+  "layer": "L1",
+  "script": "measure_L1.py",
+  "script_sha256": "0c72380efb59796dda90a871d374ac9ca7e2adf63be1ac2a3bb757c2f1c24a15",
+  "command": "python measure_L1.py M-104",
+  "started_at": "2026-08-21T11:41:11.894121+00:00",
+  "duration_sec": 8.086,
+  "random_seed": 42,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [],
+  "metrics": {
+    "stage01_naive_ms": {
+      "value": 1878.4595,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 3,
+      "runs": [
+        1782.7262,
+        1774.3264,
+        1878.4595
+      ],
+      "mean": 1811.837367,
+      "p50": 1782.7262,
+      "p95": 1878.4595,
+      "min": 1774.3264,
+      "max": 1878.4595,
+      "stdev": 57.84912
+    },
+    "prenorm_python_ms": {
+      "value": 477.4181,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 3,
+      "runs": [
+        415.1796,
+        477.4181,
+        419.4742
+      ],
+      "mean": 437.3573,
+      "p50": 419.4742,
+      "p95": 477.4181,
+      "min": 415.1796,
+      "max": 477.4181,
+      "stdev": 34.760059
+    },
+    "prenorm_numpy_ms": {
+      "value": 2.1281,
+      "value_kind": "p95",
+      "unit": "ms",
+      "repeats": 10,
+      "runs": [
+        2.1281,
+        1.6928,
+        1.5244,
+        1.4194,
+        1.3937,
+        1.3597,
+        1.2958,
+        1.3423,
+        1.4845,
+        1.4244
+      ],
+      "mean": 1.50651,
+      "p50": 1.4194,
+      "p95": 2.1281,
+      "min": 1.2958,
+      "max": 2.1281,
+      "stdev": 0.245369
+    }
+  },
+  "notes": [
+    "三种实现算法等价，①与②的差距全部来自「每次比较都重新归一化查询向量」这一处重复劳动"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-104] 暴力检索三种实现对比（20000 条 × 768 维）  (层级 L1) =====\n  [note] 三种实现算法等价，①与②的差距全部来自「每次比较都重新归一化查询向量」这一处重复劳动\n"
+}

@@ -1,0 +1,145 @@
+{
+  "record_id": "M-211",
+  "title": "BGE-M3 对照实验（naive 档，227 题 / 77 gold doc）：系统 kylin-coreai-embedding vs BGE-M3 dense",
+  "layer": "L1",
+  "script": "BGE-M3对照/retrieve.py",
+  "script_sha256": "6298e8f2376d86f8e16421dcd982052bf02d582dfd0d52cc3b6601c5cb9057e5",
+  "command": "cd BGE-M3对照 && python retrieve.py --side kylin && python retrieve.py --side bge && python retrieve.py --mcnemar",
+  "started_at": "2026-09-10T08:58:36.148051+00:00",
+  "duration_sec": null,
+  "random_seed": null,
+  "environment": {
+    "os": "Windows-11-10.0.26340-SP0",
+    "python": "3.14.0",
+    "numpy": "2.4.0",
+    "note": "检索与计分纯 numpy（L1）。系统侧向量取自 可复现性体系/vectors/{docs,eval_queries}.tsv（KYSDK 固化产物，来源属 L2，由 M-201/M-206 覆盖）。BGE 侧向量由 make_vectors_bge.py 在 Ubuntu CPU 用 BAAI/bge-m3 / torch 2.14.0+cpu 新算（dense-only、无指令前缀、max_length 8192、doc 最长 393 token 无截断）"
+  },
+  "inputs": {
+    "texts.jsonl": "51131ce828b5fb533c7288ea5f2ba3e6365ab45e2941988aca89f983dd50f5b3",
+    "docs_kylin.npy": "6e9d62014e26b095957fcb48a53eaa17443340d57dccb7f56cf616684830b813",
+    "queries_kylin.npy": "84ce7ab2be5fa43d1744d08d0f82fa26630f3c61df437b188419cbcbee46f64f",
+    "docs_bge.npy": "9b31184a38c785005349620f54e261af9e5a79d2cf70911a8662c254fa4c828b",
+    "queries_bge.npy": "2b54ae3b221dc49290ed7564450b3dd44049b0c32a992807502da38bd3222afe",
+    "gold.npy": "84413e03faf5500cbca61834f8513d646e1cfad441e8b22ddcfec80194cd60f9"
+  },
+  "metrics": {
+    "kylin_naive_r1": {
+      "value": 0.5242,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r1": {
+      "value": 0.5066,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r3": {
+      "value": 0.7621,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r3": {
+      "value": 0.7004,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r5": {
+      "value": 0.8238,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r5": {
+      "value": 0.7709,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_naive_r10": {
+      "value": 0.8634,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_dense_r10": {
+      "value": 0.8722,
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_r1_only_kylin_n": {
+      "value": 29,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r1_only_bge_n": {
+      "value": 25,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r3_only_kylin_n": {
+      "value": 29,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r3_only_bge_n": {
+      "value": 15,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r5_only_kylin_n": {
+      "value": 25,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r5_only_bge_n": {
+      "value": 13,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r10_only_kylin_n": {
+      "value": 14,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r10_only_bge_n": {
+      "value": 16,
+      "unit": "题",
+      "repeats": 1
+    },
+    "mcnemar_r1_binom_p2": {
+      "value": 0.6835,
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_r3_binom_p2": {
+      "value": 0.0488,
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_r5_binom_p2": {
+      "value": 0.073,
+      "unit": "",
+      "repeats": 1
+    },
+    "mcnemar_r10_binom_p2": {
+      "value": 0.8555,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_r_at_k_monotone": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    },
+    "bge_r_at_k_monotone": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    },
+    "n_gold_docs": {
+      "value": 77,
+      "unit": "个",
+      "repeats": 1
+    }
+  },
+  "notes": "已知答案自检：kylin_naive_r1 与 C-265 逐位一致、kylin_naive_r10 与 C-266 逐位一致。kylin_naive_r3=0.7621 此前在 claims.json 中【无任何主张】，本次为首次锚定。🔴 McNemar 的 p 值仅供参考、不得表述为『显著』：看了 4 个截断点，Bonferroni 阈值 0.0125，R@3 的 p≈0.049 过不了。227 题只覆盖 77 个 gold doc（约 2.95 题/doc），有效样本量远小于 227。单一语料单一领域，不构成对 BGE-M3 通用能力的评价。",
+  "succeeded": true,
+  "raw_stdout": "见 BGE-M3对照/results.md 与 perquery_{kylin,bge}.json；本 record 由 make_records_experiments.py 复算生成"
+}

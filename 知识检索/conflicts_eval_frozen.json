@@ -1,0 +1,35 @@
+{
+  "version": "1.3.0",
+  "frozen_at": "2026-08-28T11:56:29.349100+00:00",
+  "file": "conflicts_eval.jsonl",
+  "sha256": "cb6f60bc8cc0877bc10847abd14d04415290028bf81bce8d95e48afea2d4dac7",
+  "pair_count": 36,
+  "by_label": {
+    "conflict": 19,
+    "not_conflict": 17
+  },
+  "by_type": {
+    "T2": 4,
+    "T1": 8,
+    "T3": 3,
+    "T4": 4,
+    "NOT_CONFLICT": 17
+  },
+  "adjudicated_by": "claude_code_review",
+  "conflicts_pool_source": "知识检索/conflicts.jsonl（149 条，见 mine_conflicts.py）",
+  "conflicts_pool_sha256": "c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745",
+  "conflicts_pool_lines": 149,
+  "dev_holdout_boundary": {
+    "basis": "candidate.new.asserted_at（数据日期，不是行号）",
+    "boundary_date": "2026-08-26",
+    "dev_set": "new.asserted_at < 2026-08-26（历史数据，规则在其上开发）",
+    "holdout_set": "new.asserted_at >= 2026-08-26（D1~D7 采集窗口，规则未见过）",
+    "at_freeze": {
+      "dev": 149,
+      "holdout": 0,
+      "undated_s4_signals": 0
+    },
+    "rationale": "行号定义不耐重挖：起源查找修复后候选行号全部重排，「第 150 行起 = 留出集」在任何一次重挖后即失效。详见《冻结修订记录 #1》§6。"
+  },
+  "sample_size_note": "n=36 < 50：设计方案估算 S2 矿脉可产出 30~70 对真冲突，实测（两轮方法修正后）S2 结构候选 19 条（1条复核后否决为非冲突），S3 全部5 组因签名过粗（Exit code/Traceback 样板文本聚类了不相关事件）被文本重叠度过滤，未产出正例。如实按小样本处理，不注水凑数。"
+}

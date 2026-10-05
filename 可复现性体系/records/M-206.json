@@ -1,0 +1,105 @@
+{
+  "record_id": "M-206",
+  "title": "官方 embedding + 官方向量引擎端到端检索正确性",
+  "layer": "L2",
+  "script": "measure_L2.py",
+  "script_sha256": "5378cd54faa6f89de74c687435b1ec7d784842fbfe18872b43391c25c1466029",
+  "command": "python3 measure_L2.py M-206",
+  "started_at": "2026-08-03T21:46:47.211276+00:00",
+  "duration_sec": 0.413,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_d",
+    "os": "Kylin V11",
+    "kernel": "6.6.0-63-generic",
+    "arch": "x86_64",
+    "cpu_model": "Intel(R) N100",
+    "cpu_count": 2,
+    "mem_total_mb": 3916,
+    "python": "3.12.3",
+    "packages": {
+      "kylin-ai-runtime": "1.2.0.4-0k0.1",
+      "kylin-ai-vector-engine": "1.2.0.1-0k1.0",
+      "kylin-gte-base-model": "1.0.0.1-0k0.9",
+      "kytensor-client": "2.49.0.6-ok7k0.14",
+      "kytensor-server": "2.49.0.6-ok7k0.14",
+      "libkylin-coreai-embedding": "1.2.0.0-0k0.4",
+      "libkylin-coreai-embedding-dev": "1.2.0.0-0k0.4",
+      "libkysdk-vector-engine-client": "1.2.0.0-0k1.1"
+    },
+    "numpy": "1.24.2"
+  },
+  "inputs": [],
+  "metrics": {
+    "vector_dim": {
+      "value": 768,
+      "unit": "维",
+      "repeats": 1
+    },
+    "kylin_top1_score": {
+      "value": 0.9441,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_top1_text": {
+      "value": "怎么重启网络服务",
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_top2_score": {
+      "value": 0.7118,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_top2_text": {
+      "value": "网络连接不上怎么办",
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_top3_score": {
+      "value": 0.5326,
+      "unit": "",
+      "repeats": 1
+    },
+    "kylin_top3_text": {
+      "value": "如何清理系统缓存文件",
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top1_score": {
+      "value": 0.9441,
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top1_text": {
+      "value": "怎么重启网络服务",
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top2_score": {
+      "value": 0.7118,
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top2_text": {
+      "value": "网络连接不上怎么办",
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top3_score": {
+      "value": 0.5326,
+      "unit": "",
+      "repeats": 1
+    },
+    "numpy_top3_text": {
+      "value": "如何清理系统缓存文件",
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "两个后端结果应与阶段01 记录逐位一致（0.9441 / 0.7118 / 0.5326）"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-206] 官方 embedding + 官方向量引擎端到端检索正确性  (层级 L2) =====\n后端 kylin：\n  第1名  相似度=0.9441   原文：怎么重启网络服务\n  第2名  相似度=0.7118   原文：网络连接不上怎么办\n  第3名  相似度=0.5326   原文：如何清理系统缓存文件\n后端 numpy：\n  第1名  相似度=0.9441   原文：怎么重启网络服务\n  第2名  相似度=0.7118   原文：网络连接不上怎么办\n  第3名  相似度=0.5326   原文：如何清理系统缓存文件\n  [note] 两个后端结果应与阶段01 记录逐位一致（0.9441 / 0.7118 / 0.5326）\n"
+}

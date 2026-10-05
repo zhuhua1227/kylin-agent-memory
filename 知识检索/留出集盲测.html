@@ -1,0 +1,827 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<title>留出集盲测裁决</title><style>
+:root{--bg:#f5f7f5;--card:#fff;--ink:#1a1f1c;--body:#3d453f;--muted:#7a827c;
+--line:#dee4de;--green:#2f6b57;--rust:#b0502a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);font-size:15px;
+line-height:1.7;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:32px 20px 90px}
+h1{font-size:24px;color:var(--ink);margin:0 0 6px}
+.rule{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin:18px 0 26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;margin-bottom:18px;overflow:hidden}
+.card header{padding:10px 16px;border-bottom:1px solid var(--line);background:#fafbfa}
+.num{font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--green)}
+.pair{display:grid;grid-template-columns:1fr 1fr}
+.pair section{padding:14px 16px}
+.pair section:first-child{border-right:1px solid var(--line);background:#fcfcfb}
+h4{margin:0 0 8px;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+pre{white-space:pre-wrap;word-break:break-word;margin:0;font-size:13.5px;line-height:1.65;
+font-family:inherit;max-height:340px;overflow:auto}
+.card footer{display:flex;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.note{flex:1;min-width:200px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;font:inherit;font-size:13px}
+.bar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+padding:12px 20px;display:flex;gap:16px;align-items:center;justify-content:center}
+button{padding:9px 22px;border:0;border-radius:5px;background:var(--green);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:disabled{background:#bbb;cursor:not-allowed}
+#out{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-top:24px;display:none}
+textarea{width:100%;height:220px;font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.bad{color:var(--rust);font-weight:600}.ok{color:var(--green)}
+@media(max-width:760px){.pair{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>留出集盲测裁决</h1>
+<div class="rule"><b>判断标准（《冲突判定标注规范》v1.0.1 §五）：「后」是否让「前」里的某个说法不再成立？</b>
+<ul><li><b>冲突</b> —— 前说 A，后说「A 是错的 / 已过时 / 更正为 B」</li>
+<li><b>不是冲突</b> —— 纯追加（前仍成立）／润色（信息没变）／部分推翻但核心用途未变／两段不是一件事</li></ul>
+<b>注意</b>：本轮不显示时间戳，「同会话同天」那条排除规则由脚本事后套用，你只判语义。</div>
+
+<article class="card"><header><span class="num">01</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 与前类似：`getstatus` 静默忽略未知参数、`setstatus` 严格报用法、`ksaf-auth-daemon` 报 DBus 解析错——不同工具错误处理各异，应据工具类型选正确核查方式。</pre></section>
+<section><h4>后</h4><pre>- 与前类似：`getstatus` 静默忽略未知参数、`setstatus` 严格报用法、`ksaf-auth-daemon` 报 DBus 解析错——不同工具错误处理各异，应据工具类型选正确核查方式。
+
+## 记录：端口连接测试（网络控制与可达性交叉验证，2026-09-01）
+
+- **模拟未授权应用联网 → 连未监听本地端口 `[REDACTED_IP]:59993`：** 报错原样 `connect: Connection refused`（`/dev/tcp/…: Connection refused`，exit=1，ECONNREFUSED），且确认该端口无监听。
+- **换成可达性核查（实际监听列表）：** `ss -ltn` → 当前 **10 个** TCP 监听端口：`*:22`(sshd)、`[REDACTED_IP]/54:53`、`[REDACTED_IP]:53/631/8000/8750`、`[::1]:53/631/8001` 等。
+- **意义：** 用&quot;未监听端口 → ECONNREFUSED&quot;复现系统对未授权网络访问的可达性拒绝；再用真实监听列表交叉验证可达端点。未装包。</pre></section></div>
+<footer>
+<label><input type="radio" name="q1" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q1" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">02</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动 utils 2026-09-02 09-02 boot 内（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动于 2026-09-02 该 boot（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q2" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q2" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">03</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **为何对无人值守场景重要：** 无人值守/批量任务常以 `setsid`/`nohup`/`systemd-run` 等脱机、脱离会话方式后台运行。若 netctl 靠祖先链/会话归属判定，脱离运行的批处理脚本的**父会话/窗口归属会被切断**，可能被当成&quot;来路不明&quot;而错判（该禁不禁、该放不放）、或需人工授权中断任务。而本机制基于**可执行路径**判定，`setsid` 后台化也不会改变判定，无人值守工具（如 claude/批处理调 curl/wget）只要其可执行文件路径在白名单内即稳定放行、否则稳定拒绝——**行为可预测、不因会话脱离而漂移**，这正是无人值守可靠性所需。反过来勘漏：正因为按路径判定，脚本解释器（python/bash）实际联网时的判定落到了解释器二进制路径，`setsid` 绕不开，但也意味着脚本本身不在白名单则其解释器的网络权限受限——无人值守任务须确保所用可执行文件（或其解释器）路径已入白名单。</pre></section>
+<section><h4>后</h4><pre>- **为何是无人值守任务很重要：** 无人值守/批量任务常以 `setsid`/`nohup`/`systemd-run` 等脱机、挂会话方式后台跑。若作者是祖先链/会话归属判定，脱离运行的批处理脚本的**父会话/窗口归属会被切断**，可能被当成&quot;来路不明&quot;而错判（该禁不禁、该放不放）、或需授人工授权中断任务。而本机制基于**可执行路径**判定，`setsid` 后台化也不会改变判定，conntrack（如 claude/批处理调 curl/wget）只要其可执行文件路径在白名单内即稳定放行、否则稳定拒绝——**行为可预测、不因会话脱离而漂移**，这正是无人值守可靠性所需。反过来勘漏：若脚本解释器（python/bash）实际联网时的判定落到了「解释器」二进制路径，`setsid` 绕不开，但也意味着脚本本身不在白名单则其解释器的网络权限受限——无人值守任务须确保脚本本身（或其解释器）路径已入白名单。
+
+## 报错记录：读取 `/proc/1/environ` 权限不足（2026-09-01）
+
+- **报错原样：** `cat: /proc/1/environ: Permission denied`（exit=1，EACCES）
+- 成因：`/proc/1/environ` 为 `-r-------- root root`，PID 1 是 systemd（root）；非 root 用户（device_c, euid=1000）读他人进程 environ 需 ptrace/PTRACE_MODE_READ 许可，非属主/非 root → `Permission denied`。
+- 未用 sudo 绕过；这是&quot;普通用户无法读 root/system 进程环境&quot;的访问边界（另见 `dbus-session-bus.md` Q281）。</pre></section></div>
+<footer>
+<label><input type="radio" name="q3" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q3" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">04</span></header>
+<div class="pair"><section><h4>前</h4><pre>4. workspace 目录文件总数：2584（原为 1594，已不再是）</pre></section>
+<section><h4>后</h4><pre>4. workspace 目录文件总数：3264（原为 2584，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q4" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q4" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">05</span></header>
+<div class="pair"><section><h4>前</h4><pre>3. workspace 目录总大小：23 MB（原为 14 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>3. workspace 目录总大小：29 MB（原为 23 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q5" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q5" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">06</span></header>
+<div class="pair"><section><h4>前</h4><pre>最新一条带 I/O 相关记录的时间为 2026-08-29 06:49:41 CST，内容为 kernel 对可移除盘 sdb2 报 Buffer I/O error / device offline（sdb/Ventoy，已脱离），内部盘 sda 无 I/O 错误</pre></section>
+<section><h4>后</h4><pre>最新一条带 I/O 相关内核记录 2026-09-01 18:25:41 CST，内容为 kernel 的 blk_mq_run_work_fn hogged CPU（非磁盘错误，sda 无 error；仅 workqueue CPU-hug）（原为 08-29 06:49:41 的 sdb Buffer I/O/offline 记录，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q6" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q6" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">07</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-27T18:02:33+08:00，kernel: workqueue: drain_vmap_area_work hogged CPU for &gt;10000us 16 times；本次共 56 条 workqueue CPU-hog 警告（blk_mq/e1000/vmballoon/drain_vmap_area 等），无 CPU 硬件错误。（原为 最新一条 2026-08-26T02:04:37，vmballoon_work hogged CPU, 38 条，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-08-28T08:22:53+08:00，kernel: workqueue: process_srcu hogged CPU for &gt;10000us 32 times；本次共 56 条 workqueue CPU-hog 警告（process_srcu/psi_avgs_work/css_release_work_fn/netstamp_clear/process_srcu 等），另每次引导 ukui-powermanagement 读/写 /sys/devices/system/cpu/cpu*/cpufreq/* 均报 file error，无 CPU 硬件错误。（原为 最新一条 2026-08-27T18:02:33，drain_vmap_area_work hogged CPU, 38 条，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q7" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q7" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">08</span></header>
+<div class="pair"><section><h4>前</h4><pre>3. workspace 目录总大小：14 MB（原为 5 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>3. workspace 目录总大小：23 MB（原为 14 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q8" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q8" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">09</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 说明：在真实 netctl 目录下用一个貌似存在的会话 ID 构造了详情路径；不存在，未触碰现存文件、未安装。</pre></section>
+<section><h4>后</h4><pre>- 说明：在真实 netctl 目录下用一个貌似存在的会话 ID 构造了详情路径；不存在，未触碰现存文件、未安装。
+
+## 判断：netctl 授权识别脚本 vs 可执行文件路径（2026-09-01）
+
+- **判定：基于可执行文件路径（实际运行的二进制）识别，非进程祖先链识别脚本。**
+- 依据来源：
+  1. `netctl.xml` / `kysec_netctl --list applist`：15 个条目全为**原生二进制** path（curl/cups_backend_*/kylin-activation/kaiming-system-dbus/boxadm-daemon），**0 个 .sh/.py 脚本条目**；
+  2. 授权记录单一文件路径：`netctl auth: … filepath=/data/…/bin/claude`、`…/kaiming-system-dbus`，auth_result=1 —— 路径即发起连接的可执行文件；且 `claude` 为 **ELF 64-bit 可执行**（file 判定），非脚本；
+  3. `t_kid_netctl` 表字段：仅 `ID/KID/PrivilegeType/Path/Reserver_1..3`，以 **Path** 为主键 → 按可执行路径匹配，无 ppid/祖先链字段参与授权判定。
+- 含义：网络授权以&quot;发起网络操作的那个二进制可执行文件的 path（+hash）&quot;对照白名单 allow/forbid；脚本本身不按祖先链映射到顶层启动者判定，而是落到实际执行网络调用的二进制。
+- 边界（诚实说明）：以上基于磁盘白名单、授权日志、DB 字段判定；ksaf 内核态 `netctl` 处理器的更深逻辑未逆编，不能完全排除低层逐进程校验里含辅助判断。&lt;br/&gt;
+  来源：`/etc/kysec/netctl/netctl.xml`、`t_kid_netctl`(whlist.db)、`/var/log/kysec.log` netctl auth 记录。</pre></section></div>
+<footer>
+<label><input type="radio" name="q9" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q9" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">10</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 决定：改用 readelf/nm/ldd 查阅，不做文本 cat。教训：.desktop 的 Exec 指向的常常是二进制可执行（panel、nm、fcitx 等），读取前先 `file` 定型。</pre></section>
+<section><h4>后</h4><pre>- 决定：改用 readelf/nm/ldd 查阅，不做文本 cat。教训：.desktop 的 Exec 指向的常常是二进制可执行（panel、nm、fcitx 等），读取前先 `file` 定型。
+
+## 悬空引用（dangling）检查（2026-08-31）
+
+- 逐项解析 78 个 .desktop 的 `Exec`（绝对路径→存在性；裸名→PATH命中）。
+- **悬空 1 项**：`wps-office-autostart.desktop` → `Exec=/usr/bin/quickstartoffice start`；`/usr/bin/quickstartoffice`（及 `/usr/bin/quickstart*`）**不存在**，`find /usr` 亦无。
+- 性质判定：**遗留旧配置（打包残留）**——
+  - .desktop 属已装包 wps-office（root，mtime 2026-02-05），非用户手工加。
+  - `dpkg -S` 显示 wps-office 文件库仍登记该路径，但磁盘实际缺失（文件库与磁盘不同步）。
+  - WPS 快速启动现改由 `/opt/kingsoft/wps-office/office6/wpsd --quickstart=…` 承担（进程在跑）；旧入口 `/usr/bin/quickstartoffice` 已废弃。
+- 影响：触发时找不到旧二进制而静默跳过，功能由新 wpsd 覆盖；建议清理/禁用该过期 .desktop 或改指新 wpsd 命令。</pre></section></div>
+<footer>
+<label><input type="radio" name="q10" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q10" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">11</span></header>
+<div class="pair"><section><h4>前</h4><pre>Recent event write note (step 142): journal sometimes showed a single `warn_alloc` / `page allocation failure order:7` (GFP_ATOMIC, 24 795 suppressed) and `Free swap × ≈ 2.6G` — matching this elevated-swap picture (no OOM-kill records).</pre></section>
+<section><h4>后</h4><pre>Recent event write note (step 142): journal sometimes showed a single `warn_alloc` / `page allocation failure order:7` (GFP_ATOMIC, 24 795 suppressed) and `Free swap × ≈ 2.6G` — matching this elevated-swap picture (no OOM-kill records).
+
+## 8. swappiness value &amp; judgment (step 145–147)
+- Current `vm.swappiness` = **60** (default; confirmed by `sysctl` and `/proc/sys/vm/swappiness`).
+- Judgment: at 60 the kernel swaps fairly actively — with the 3.9G RAM + AI model workloads this is part of why swap stays elevated. Not a fault; on a low-RAM VM where proactive swapping is undesirable, lowering to 10–30 (e.g. `sysctl -w vm.swappiness=20`) could reduce needless swapOUT, at the cost of keeping more memory resident. No change made (read-only inspection).</pre></section></div>
+<footer>
+<label><input type="radio" name="q11" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q11" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">12</span></header>
+<div class="pair"><section><h4>前</h4><pre>- ✅ Kylin 环境持久化**前置工作**已做(`ostree admin set-default 1` 修正启动顺序为正确的hotfix部署),但**尚未做重启验证**——用户明确要求&quot;完成计划任务后由用户手动重启&quot;,目前仍在等待这次重启来最终确认持久化是否真正生效。已有 17GB vzdump 快照备份兜底(见下方),重启失败也不怕从头再来。</pre></section>
+<section><h4>后</h4><pre>- ❌ **持久化问题已有定论(2026-08-03 验证完毕)**:`/usr` 覆盖层**无论如何都不持久**——经过跳闸断电和正常重启两种情况验证,`unshare -m` 装的东西(sshd、embedding SDK 全套)**每次重启必定退回出厂状态**。**PVE 快照备份也救不回来**:因为这些改动根本没落到磁盘上,快照里从来就没有它们(恢复备份后 `/usr/sbin/sshd` 依然不存在)。**最终采用的方案**:写了一键恢复脚本 `~/restore_env.sh`(存 `/home` 持久层,副本在 `RAG/证明向量维度/restore_env.sh`),每次重启后</pre></section></div>
+<footer>
+<label><input type="radio" name="q12" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q12" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">13</span></header>
+<div class="pair"><section><h4>前</h4><pre>1. 根分区剩余空间：15751 MB（原为 15757 MB，已不再是）</pre></section>
+<section><h4>后</h4><pre>1. 根分区剩余空间：15506 MB（原为 15751 MB，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q13" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q13" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">14</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，启动于 2026-08-25 10:37:29 CST，Main PID 35371，disk usage 300.1M</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，启动于 2026-08-29 06:44:26 CST，Main PID 35365（旧「启动于 2026-08-25 10:37:29、Main PID 35371、disk usage 300.1M」依赖旧 boot 计时；系统已于 2026-08-29 06:40:59 重启，该前提已经不存在了），disk usage 以当前实况为准</pre></section></div>
+<footer>
+<label><input type="radio" name="q14" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q14" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">15</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，无崩溃（读数：Main PID 143352，启动 2026-08-29 07:03:03 CST，NRestarts=0）</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，无崩溃（读数：Main PID 173484，启动 utils 2026-09-02 09-02 boot 内（约 10:43），NRestarts=0）（原为 Main PID 143352，启动 2026-08-29 07:03:03 CST，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q15" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q15" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">16</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 正常项：双总线结构正确（session 36676 / system 35563，`--address=systemd:`），socket 与模式匹配；socket 权限标准（666）；桌面自身服务在 session bus 活跃；不存在服务名/权限/非JSON输出等边界行为均符合预期。</pre></section>
+<section><h4>后</h4><pre>- 正常项：双总线结构正确（今日 09-01 session 36588 / system 35568，`--address=systemd:`；原为 08-31 的 session 36676 / system 35563，已不再是），socket 与模式匹配；socket 权限标准（666）；桌面自身服务在 session bus 活跃；不存在服务名/权限/非JSON输出等边界行为均符合预期。</pre></section></div>
+<footer>
+<label><input type="radio" name="q16" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q16" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">17</span></header>
+<div class="pair"><section><h4>前</h4><pre>## 6. Conclusion
+Not a fault — an expected outcome for a 4G VM running an AI inference stack; swap is the safety net and currently has ~1.6G headroom. It is the single most memory-relevant runtime consideration on this box.</pre></section>
+<section><h4>后</h4><pre>## 6. Conclusion
+Not a fault — an expected outcome for a 4G VM running an RTJ also-new: swap usage elevated + memory pressure present, but as a safety net, ~1.6G use not at CRITICAL and no OOM-kill occurred. Remains the single most memory-relevant runtime consideration on this box.
+
+## 7. `swapon --show` output record + CLI (step 143/144)
+```
+$ swapon --show
+NAME      TYPE      SIZE USED PRIO
+/dev/sda7 partition 4.5G 2.9G   -2
+```
+Invalid-option check: `swapon --nonexistent-flag` → `swapon：未识别的选项 &#x27;--nonexistent-flag&#x27;` / `Try &#x27;swapon --help&#x27; …` (exit 1); valid `--show` prints the above.
+Recent event corroboration (step 142): journal at 2026-08-29 07:51:36 showed a `warn_alloc` / `page allocation failure order:7` (ksaf-policy-dae, 24795 suppressed) and `Free swap ≈ 2.66G` — matching this elevated-swap picture (no OOM-kill records).</pre></section></div>
+<footer>
+<label><input type="radio" name="q17" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q17" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">18</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：RAM 3882 MB 总，今日可用 09-02 复测 1810 MB 已用</pre></section>
+<section><h4>后</h4><pre>状态：RAM 3882 MB 总，今日 09-02 复测 1810 MB 已用</pre></section></div>
+<footer>
+<label><input type="radio" name="q18" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q18" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">19</span></header>
+<div class="pair"><section><h4>前</h4><pre>9. workspace/logs 日志文件总行数：67（原为 0，已不再是）</pre></section>
+<section><h4>后</h4><pre>9. workspace/logs 日志文件总行数：92（原为 67，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q19" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q19" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">20</span></header>
+<div class="pair"><section><h4>前</h4><pre>② ⚠️ **存储告急**:thin pool `pve/data`(155G)已用 **~94.5%,仅剩 ~8.9G**(CP2 装 runtime+模型实占约 10G);VG 仅剩 ~2G 扩不动;VM100(ubuntu ~105G)无 discard+无 agent 难安全回收,VM102 已 discard。**搭 RAG(向量库+生成模型消融)前须加物理硬盘**,否则随时 io-error 冻 VM。</pre></section>
+<section><h4>后</h4><pre>② 存储:曾达 94.5%,给 VM100(ubuntu)开 `discard=on` + `fstrim` 回收了约 40G,**现 pool 69%(~48G 空闲,2026-07-16)**。要点:改 VM 磁盘配置后须 **PVE 层 stop→start 重建 QEMU** 才生效(in-guest `reboot` 无效);VM100 无 guest agent、不响应 ACPI 优雅关机(建议装 `qemu-guest-agent`)。ubuntu `/receive` 有 36G Qwen3 GGUF 阶梯(0.6/1.7/4/8/14/32B)= 模型消融现成资产,暂留未搬。</pre></section></div>
+<footer>
+<label><input type="radio" name="q20" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q20" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">21</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：2 份最终报告（初始与终期各 1 份），总计 36 KB，最新更新 2026-08-26 12:38:02 CST (final-kernel-boot-report.md)。</pre></section>
+<section><h4>后</h4><pre>状态：3 份报告（08-26 kernel-boot-observation、08-27 systemd-service、08-27 service-timeline），总计约 40 KB，最新文件 mtime 2026-08-27 18:07:19。（原为 2 份/36KB/最新 08-26 12:38 final-kernel-boot-report，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q21" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q21" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">22</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条相关记录为 2026-08-29T07:03:32+08:00，NetworkManager[35809] agent-manager: nm-applet agent registered；之后无更新接口/DHCP/载波事件（读取值为 2026-08-27T20:18:57 的 ens33 carrier 记录，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条接口相关记录 2026-09-01 19:06:45，NetworkManager state is now CONNECTED_GLOBAL（ens33 于 19:06:44 重新激活；19:06:43 e1000: ens33 Link is Up 1000Mbps FD）（原为 08-29 07:03:32 的 nm-applet registered 及更早 08-27 的 carrier 记录，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q22" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q22" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">23</span></header>
+<div class="pair"><section><h4>前</h4><pre>- Takeaway: crossing a nonexistent-process namespace path yields plain ENOENT, unrelated to mount-fs; only existing PIDs expose a readable ns/mnt.</pre></section>
+<section><h4>后</h4><pre>- Takeaway: crossing a nonexistent-process namespace path yields plain ENOENT, not E-not-a-mount failure; only a real PID exposes ns/mnt.
+
+## 8. Thinking: bind-mount vs overlay investigation (step 231)
+- **Common**: both use /proc/mountinfo as the source of truth, decompose a mount into source/root/options → verify backing exists, cross-check with multiple toolsm (findmnt/lsblk/stat/python), and record errors honestly; both address to Panshi/OSTree design.
+- **Difference**: overlay = **vertical stacking** on ONE target (which layer is effective; identity by inode/stat; per-layer ro/rw/depth). Bind = **horizontal multi-mounts** of one device; the key is mountinfo **field-4 (root subtree)** to re-map a device&#x27;s mounts back to `/data/home→/home`, `/data/root→/root`.
+- Same under hood (read mountinfo + resolve), different geometry (stacking vs aliasing) — that&#x27;s the crux.</pre></section></div>
+<footer>
+<label><input type="radio" name="q23" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q23" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">24</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-26 12:40 CST，报告签署「Claude 观测台」，标志着全会话 251 项任务的综合分析正式完成。</pre></section>
+<section><h4>后</h4><pre>日志：最新文件 mtime 2026-08-27 18:07:19（[REDACTED_LONG_TOKEN].md）；内容最新时间戳 2026-08-25 10:37:43（dbus 启动行）。今天 08-28 无新报告。（原为 最新 2026-08-26 12:40 CST 签署 Claude 观测台，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q24" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q24" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">25</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running)，FreezerState=running（未被冻结），自 2026-08-29 06:44:35 CST 起 active，Main PID 36639，Result=success，NRestarts=0（旧快照「自 2026-08-26 00:00:02 CST 起 active、Main PID 354634」依赖旧 boot 运行态；系统已于 2026-08-29 06:40:59 重启，该前提已经不存在了）</pre></section>
+<section><h4>后</h4><pre>状态：active (running)，FreezerState=running（未被冻结），自 2026-08-31 11:03:16 CST 起 active，Main PID 36864，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:35 CST 起 active、Main PID 36639，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q25" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q25" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">26</span></header>
+<div class="pair"><section><h4>前</h4><pre>Main PID 35559，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:28 CST 起 active、Main PID 35564，已不再是）</pre></section>
+<section><h4>后</h4><pre>Main PID 35559，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:28 CST 起 active、Main PID 35563，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q26" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q26" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">27</span></header>
+<div class="pair"><section><h4>前</h4><pre>**Verdict: distribution is as expected** — system disk is ext4 (root `/`,`/boot`, `/data`); `/usr`+`/etc`+`/var/lib` are overlay (OSTree immutable base + rw layers); swap separate; a broad set of kernel runtime virtual filesystems (tmpfs/proc/sysfs/devpts/debugfs/tracefs/cgroup2/bpf/etc.) is standard for a modern Linux. No unexpected/unexpected types (the only non-ext4 block type is exfat, present solely on the removed Ventoy media).</pre></section>
+<section><h4>后</h4><pre>**Verdict: distribution is consistent** — system disk is ext4 (root `/`,`/boot`, `/data`); `/usr`+`/etc`+`/var/lib` are overlay (OSTree immutable base + rw layers); swap separate; a broad set of kernel runtime virtual filesystems (tmpfs/proc/sysfs/devpts/debugfs/tracefs/cgroup2/bpf/etc.) is standard for a modern Linux. No unexpected/unexpected types (the only non-ext4 block type is exfat, present solely on the removed Ventoy media).
+
+## 5. Behavior when a mount point path is missing (step 68)
+
+Reading a file under an absent mount-point path:
+```
+cat /mnt/nonexistent-mount/data/report.txt
+→ cat: /mnt/nonexistent-mount/data/report.txt: 没有那个文件或目录   (No such file or directory, ENOENT), exit 1
+```
+- The missing component is a directory-level miss (not a &quot;not a directory&quot; `ENOTDIR`): path resolution fails on the nonexistent middle directory → **ENOENT**.
+- `/mnt` here is a symlink → `/var/mnt` (empty); there is no custom mount point under it, so the sub-path genuinely doesn&#x27;t exist.
+- General rule recorded: a dangling fstab/mount reference (a mount point or its parent dir that isn&#x27;t mounted/created) surfaces as **ENOENT**, not a mount-specific error; the robustness: `mount` would also fail on an Nonexistent mountpoint with a &quot;mountpoint does not exist&quot; style message during fstab processing. This is why `/etc/fstab` entries must have a pre-existing mountpoint directory.</pre></section></div>
+<footer>
+<label><input type="radio" name="q27" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q27" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">28</span></header>
+<div class="pair"><section><h4>前</h4><pre>6. /tmp 目录文件数量：0（原为 121，已不再是）</pre></section>
+<section><h4>后</h4><pre>6. /tmp 目录文件数量：0（原为 0，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q28" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q28" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">29</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 与（前述 grep 统计）一致：Remove 占主导（文件树保护移除/噪音），Send 为策略同步；正则方法可达同样统计目标，无需第三方程解析层。</pre></section>
+<section><h4>后</h4><pre>- 与（前述 grep 统计）一致：Remove 占主导（文件树保护移除/噪音），Send 为策略同步；正则方法可达同样统计目标，无需第三方程解析层。
+
+## 综合判断：当前审计记录能否支撑事后排查（2026-09-01）
+
+- **判定：总体足以支撑事后排查，但有若干边界需注意。**
+  - 支撑点：`/var/log/kysec.log`（带时间戳 type/level/op/message，含 kysec_auth allow/forbid+pid+filepath）；`/var/log/ksaf_audit.log`（内核审计流）；journald 持久化（Storage=auto、/var/log/journal 599MB、可回溯至 06-30、FSS 封记）；whlist.db（事发前状态快照）。
+  - 边界/局限：warning 模式详低（deny 少）；Remove-noise 多（需先过滤）；场景 Remove/Send 未必带请求进程、setsid 脱离归属按路径不可逆；部分审计文件 root 属主（非 root 响应者读全受限）；kyecs.log 未轮转归档、长程历史靠 journal 不靠它。
+- **结论：** 现记录足以支撑多数事后排查（时间戳+决策+joujrnale 持久+ksaf_audit）；建议补充「轮转/保留策略」「响应者可读」「更详执行(deny)记录」以利取览真相。
+
+-（注：上节结尾笔误&quot;第三方方程解析层&quot;应为&quot;第三方解析层&quot;，已随本段保留；不影响结论。）</pre></section></div>
+<footer>
+<label><input type="radio" name="q29" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q29" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">30</span></header>
+<div class="pair"><section><h4>前</h4><pre>观察对象：本次开机（boot 0，ID bffaf0c84671497099274eb13a177ec8，2026-08-25 10:37:28 至今）内核日志的条数、警告/错误级别条目、文件系统挂载记录，以及是否存在异常。</pre></section>
+<section><h4>后</h4><pre>观察对象：本次开机（boot 0，ID bffaf0c84671497099274eb13a177ec8，2026-08-25 10:37:28 启动）内核日志的条数、警告、错误级别条目、文件系统挂载记录，以及是否存在异常。（原写作「2026-08-25 10:37:28 至今」依赖该 boot 延续至观察时刻；该 boot 已于 2026-08-29 06:40:59 重启结束，『至今仍在运行』的前提已经不存在了）</pre></section></div>
+<footer>
+<label><input type="radio" name="q30" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q30" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">31</span></header>
+<div class="pair"><section><h4>前</h4><pre>| `/usr/local/bin/claude` | `/home/device_c/claude-node/bin/claude` | **yes** (real file, 330 MB, owned by device_c) |</pre></section>
+<section><h4>后</h4><pre>| `/usr/local/bin/claude` | `/home/device_c/claude-node/bin/claude` | **链接现已不存在**（.3→.4 切换后 /usr/local/bin/claude 消失）；目标可执行仍存在（330,946,864 B ≈ 330 MB，device_c），且 claude 仍经 PATH 直达 |</pre></section></div>
+<footer>
+<label><input type="radio" name="q31" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q31" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">32</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：2 vCPU 在线（Intel Core i7-14650HX，VMware 全虚拟化），各 2419.199 MHz，负载 0.18/0.19/0.10（1/5/15 min，本会话采集），CPU 当前 busy 3.8%（idle 96.2%），无 MCE/热降频/微码错误。（原为 负载 0.24/0.25/0.16，已不再是）</pre></section>
+<section><h4>后</h4><pre>状态：2 vCPU 在线（Intel Core i7-14650HX，VMware 全虚拟化），负载 0.09/0.11/0.13（1/5/15 min），CPU busy ≈4–10%（idle≳），无 MCE/热降频/微码硬件错误。（原为 负载 0.18/0.19/0.10、busy 3.8%，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q32" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q32" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">33</span></header>
+<div class="pair"><section><h4>前</h4><pre>- Benchmark: non-root permission boundary here is enforced via directory mode on `/root` (an ACL/ownership protection), on top of the overlay being `ro`/856581-immutable at the lower layers. Expected for Panshi: layering is a root operation; ordinary users see reads only.</pre></section>
+<section><h4>后</h4><pre>- Benchmark: non-root permission boundary here is enforced via directory mode on `/root` (an ACL/ownership protection), on top of the overlay being `ro`/immutable at the lower layers. Expected for Panshi: layering is a root operation; ordinary users see reads only.
+
+## 9. Morning short — persistent-layer summary (step 48)
+
+**Bottom line: this machine&#x27;s persistent layer is currently HEALTHY.**
+
+- **Overlay (steps 19→29):** `/usr` is the correct 3-layer OSTree stack — ext4 base (ro) → OSTree package overlay (ro) → top rw overlay (`upperdir=.usr-ovl-upper`); `/etc` and `/var/lib` use the same rw-on-`ro` pattern. All 4 overlay mounts present; every upper/lower/workdir points to an existing store (the `/root/…` spelling is just the namespace view of `/sysroot`). The top rw layer is live: it took today&#x27;s writes and sits at ~3.6 GB (cross-verified with `du` and Python stdlib).
+- **OSTree layer:** 4 deployments (`.0/.2/.3/.4`); booted = `.3`, `.4` staged for next boot. Base `/usr` is the dominant store (~10.4 GB) but de-duplicated by the bare repo — not over-committed. OSTree logs are clean (latest 08:27 today).
+- **Space/RO:** `/boot` ~1.7 GB free (not a bottleneck — ~20+ deployments to fill); `/` ample. Only growth pressure is the top rw upper (~3.6 GB, grows with kysdk/AI installs).
+- **Permission boundary:** by design — non-root sees lower layers read-only; layering writes are a root operation (measured `Permission denied` on `/root`, no sudo bypass).
+
+**No action needed today.** Two listen items only: (1) after the next reboot the `/usr` base moves `.3 → .4` — re-verify mounts/upperdir afterward; (2) if the top upper keeps growing, watch free space on `/`. Otherwise the persistent layer is stable, healthy, and matches the Panshi immutable-OSTree design.</pre></section></div>
+<footer>
+<label><input type="radio" name="q33" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q33" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">34</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 注册主体为当前用户（device_c, [REDACTED_EMAIL]）图形栈组件：kylin-wlcom、gvfsd-*、ukui-*（menu/clipboard/power-manager/notifications/bluetooth/upower/…）、kylin-aiassistant、kylin-note、polkit-ukui-autolog、systemd(user) 等。</pre></section>
+<section><h4>后</h4><pre>- 注册主体为当前用户（device_c, [REDACTED_EMAIL]）图形栈组件：kylin-wlcom、gvfsd-*、ukui-*（menu/clipboard/power-manager/notifications/bluetooth/upower/…）、kylin-aiassistant、kylin-note、polkit-ukui-autolog、systemd(user) 等。
+
+## system vs session bus 对比（2026-08-31）
+
+用权威 `org.freedesktop.DBus.ListNames` 统计（as 数组长度）：
+
+| 总线 | 总量 | well-known（服务名） | 唯一连接(:1.x) |
+|---|---|---|---|
+| **session** | **274** | **83** | **191** |
+| **system** | **201** | **58** | **143** |
+
+- 判定：**session bus 在所有口径上都多于 system bus**（总量/well-known/连接数皆如此），与「系统级服务应该更多」的直觉**不符**。
+- 解释：注册名称数主要随「连接的客户端数量」变化；活跃图形桌面的 session bus 被大量用户桌面组件（ukui-*、gvfsd-*、kylin-wlcom…）占满，自然多于 system bus；system bus 服务精而系统（NetworkManager/UDisks2/login1/systemd1/bluez/PolicyKit…），数量少≠不重要。
+- 提示：无图形服务的场景（如服务器）session bus 几近为空、system 会更多；本台图形机当前形态是 session 主导，属正常。</pre></section></div>
+<footer>
+<label><input type="radio" name="q34" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q34" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">35</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：顶层条目 43、递归文件 111、总大小约 6.5 MB；最新 mtime 2026-08-28 09:15:17，今晨 08:39–09:15 均有活动。（原为 111 文件分布 44 目录/4096 字节/最新 08-26 12:17:04，已不再是）</pre></section>
+<section><h4>后</h4><pre>状态：顶层条目 43、递归文件 111、总大小约 6.8 MB；最新 mtime 2026-08-29 10:09:10（kylin-background-upgrade-manul.log），今日 09:50–10:09 均有活动（原为 最新 mtime 2026-08-28 09:15:17、今晨 08:39–09:15 活动，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q35" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q35" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">36</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-27T16:44:41+08:00，dbus-daemon[35581] [system] Successfully activated service &#x27;org.freedesktop.activation&#x27;（同刻亦见 [limitCtl]:service integrity check skipped: integrity map missing）。（原为 最新一条 2026-08-26T09:03:05+08:00，dbus-daemon[35581] [system] [limitCtl]env LD_LIBRARY_PATH ... not on global whitelist，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-08-28T09:03:05+08:00，dbus-daemon[35581] [system] [limitCtl] env LD_LIBRARY_PATH with value /opt/update-module/current/usr/lib/x86 not on global whitelist（该 limitCtl 白名单告警今天 09:03 再现，今日 dbus 日志 2247 条）。（原为 最新一条 2026-08-27T16:44:41 dbus Successfully activated ... integrity check skipped，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q36" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q36" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">37</span></header>
+<div class="pair"><section><h4>前</h4><pre>systemd-udevd 活动（PID 35430，23h+），内核 CONFIG_HOTPLUG_*=y 跨 CPU/内存/PCI/PCIe/ACPI，</pre></section>
+<section><h4>后</h4><pre>systemd-udevd 活动（PID 35428，旧 PID 35430 及其 23h+ 时长基于彼 boot，已于 2026-08-29 06:40:59 重启，该前提已经不存在了；当前按新 boot 计），内核 CONFIG_HOTPLUG_*=y 跨 CPU/内存/PCI/PCIe/ACPI，</pre></section></div>
+<footer>
+<label><input type="radio" name="q37" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q37" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">38</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 结论：bus 各类工具（busctl list / introspect）输出多为表格/文本，非 JSON；用文本逐行解析即可达成统计目标。</pre></section>
+<section><h4>后</h4><pre>- 结论：bus 各类工具（busctl list / introspect）输出多为表格/文本，非 JSON；用文本逐行解析即可达成统计目标。
+
+## dbus-daemon 启动模式核查（2026-08-31）
+
+- 各进程（据 `/proc/&lt;pid&gt;/cmdline`）：
+  - **PID 35563** → `dbus-daemon --system --address=systemd: …`（系统总线）
+  - **PID 36676** → `dbus-daemon --session --address=systemd: …`（session 总线，systemd 激活）
+  - PID 54450/54470/184198 → `--session`（按需 fork 的 session daemon）
+- 模式↔socket 匹配（`ss -xlpn` 权威归属）：
+  - session bus：socket `/run/user/1000/bus`（inode 70347）→ **users:((&quot;dbus-daemon&quot;,pid=36676,fd=100))**，即由 `--session` 的 36676 监听 ✅
+  - system bus：socket `/run/dbus/system_bus_socket` → 由 `--system` 的 35563 监听（systemd `dbus.socket` 激活）✅
+- 判定：**启动模式与监听的 socket 完全匹配**，无错配。
+- 教训：用「socket 文件 inode ↔ daemon 所有 fd」比对会因 `--address=systemd:` 接管与海量客户端 fd 而产生**假不匹配**；应直接用 `ss -xlpn` 的进程归属判定。</pre></section></div>
+<footer>
+<label><input type="radio" name="q38" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q38" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">39</span></header>
+<div class="pair"><section><h4>前</h4><pre>10. workspace/archive 文件数量：3（原为 2，已不再是）</pre></section>
+<section><h4>后</h4><pre>10. workspace/archive 文件数量：3（原为 3，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q39" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q39" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">40</span></header>
+<div class="pair"><section><h4>前</h4><pre>- ⚠️ 需留意（监控级，非紧急）：**3 个遗留的独立 session dbus-daemon**（PID 54450/54470/184198，`--fork` 自建私有总线，父进程已退出、reparent 到 PID 1）。正常基线应是每用户 1 个 session bus（36676）；出现多个并挂留可能存总线泄漏/僵留，建议监测，必要时定位创建者并清理。</pre></section>
+<section><h4>后</h4><pre>- ⚠️ 需留意（监控级，非紧急）：今日 09-01 复测遗留独立 session dbus-daemon 为 **2 个**（PID 54744/54762，`--fork` 私有总线，reparent 到 PID 1）；原为 08-31 的 3 个（PID 54450/54470/184198）、会话主 PID 36676 均已变，已不再是。正常基线是每用户 1 个 session bus（今日 36588）；有多个挂留仍建议监测、定位创建者并清理。</pre></section></div>
+<footer>
+<label><input type="radio" name="q40" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q40" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">41</span></header>
+<div class="pair"><section><h4>前</h4><pre>主配置 /etc/fstab（/dev/sda5=SYSROOT rw,relatime、/dev/sda1=SYSBOOT、/dev/sda7=SWAP、DATA 分区经 UUID=ebd2dfcf 挂 /data、/home 与 /root 为 /data 的 bind mounts）</pre></section>
+<section><h4>后</h4><pre>主配置 /etc/udev/rules.d/99-kylin.rules（read_ahead 4096K）× /etc/sysctl.d/10-kylin.conf（dirty 写回 60/35）、挂载经 /etc/fstab（/dev/sda5=SYSROOT rw,relatime、/dev/sda1=SYSBOOT、/dev/sda7=SWAP、/home 与 /root 为 /data 的 bind）（原为 只以 fstab 为主述，已改为 udev/sysctl+fstab，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q41" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q41" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">42</span></header>
+<div class="pair"><section><h4>前</h4><pre>## 关联
+- `[[kysec-core-status]]`（子模块开关、exec/net warning 判断）
+- `[[kysec-module-protect]]`（kmod protect）
+- `[[kysec-process-protect]]`（进程保护、设备控制）</pre></section>
+<section><h4>后</h4><pre>## 关联
+- `[[kysec-core-status]]`（子模块开关、exec/net warning 判断）
+- `[[kysec-module-protect]]`（kmod protect）
+- `[[kysec-process-protect]]`（进程保护、设备控制）
+
+## 附：exctl 拦截历史摘要（换用方式，/var/log/kysec.log + journal，2026-09-01）
+
+- 首选进程行为分析工具（execnoop /bpftrace /sysdig /falco）确认未安装 → 无 GUI 式拦截历史工具。换用系统已有日志（`/var/log/kysec.log` + journal）查看同一目标。
+- **拦截历史要点（无真实 deny 记录）：**
+  - 12:51:15  `kysec_auth command=exctl result=allow`（执行授权：allow）
+  - 12:51:16  `kysec-scene op=Add obj=exctl wlist → success`（新二进制自动加入 exec 白名单）
+  - 12:50:48  `kyexctl-verify: The elf file …conf2-compile not signed`（签名校验：未签名）
+  - exctl 开关反复切换记录：08-29 07:03、08-31 11:14、09-01 12:53 均 `set kysec_exctl status 0→2`（临时关→回 warning）
+- **摘要判断：** warning 模式下 exctl 只**校验＋记录＋自动白名单**（`result=allow`），无 `deny exec`/阻断记录 → 与「warning 不阻止新二进制」的结论一致；仅当 enforce 才会出现拒绝拦截。</pre></section></div>
+<footer>
+<label><input type="radio" name="q42" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q42" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">43</span></header>
+<div class="pair"><section><h4>前</h4><pre>exectl/3adm/sm/eperm/tpm=0、selinux.selinux=0（SELinux 实关）</pre></section>
+<section><h4>后</h4><pre>exectl=2（今日 09-01 为 warning）、3adm/sm/eperm/tpm=0、selinux.selinux=0（SELinux 实关）（原为 exctl=0，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q43" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q43" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">44</span></header>
+<div class="pair"><section><h4>前</h4><pre>6. /tmp 目录文件数量：0（原为 0，已不再是）</pre></section>
+<section><h4>后</h4><pre>6. /tmp 目录文件数量：0（原为 0，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q44" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q44" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">45</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-27T20:18:59+08:00，NetworkManager: manager: NetworkManager state is now CONNECTED_GLOBAL（今日 0 条新 NM 日志，状态保持连通）。（原为 最新一条 2026-08-27 08:26:59 CONNECTED_GLOBAL，已不再是）</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-09-01T12:55:50+08:00，NetworkManager: manager: NetworkManager state is now CONNECTED_GLOBAL（本次开机 12:43 启动、12:55 ens33 激活后 CONNECTED_SITE→CONNECTED_GLOBAL）。（原为 彼 08-27T20:18:59 的 CONNECTED_GLOBAL 记录，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q45" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q45" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">46</span></header>
+<div class="pair"><section><h4>前</h4><pre>## 关联
+- `[[kysec-core-status]]`、`[[exctl-mechanism]]`、`[[kysec-whitelist-audit]]`</pre></section>
+<section><h4>后</h4><pre>## 关联
+- `[[kysec-core-status]]`、`[[exctl-mechanism]]`、`[[kysec-whitelist-audit]]`
+
+## 附：扫描工具用法观察与扫描状态（2026-09-01）
+- 探测安全扫描工具 `ksc-scan-daemon --nonexistent-scan-target` → **无 usage 错误**（是守护，bogus 参数下 timeout 到被杀 rc=143，不打印 usage）。
+- 有效状态查询：`ksc-scan-daemon` **inactive**（未运行），`vulnerabilityrepair` active。
+- 关联：扫描守护不在跑 → `kylin_scan_sql.db` 的 `history_main_table` 空 ⇒ **无最近全盘扫描记录**（Task 258）。未装包。</pre></section></div>
+<footer>
+<label><input type="radio" name="q46" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q46" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">47</span></header>
+<div class="pair"><section><h4>前</h4><pre>**Why it matters:** UUIDs are stable across device reordering/renaming/kernel slot changes; `/dev/sd*` names can shift after reboots/hotplug. By referencing block mounts by UUID, this fstab is robust to drive renames — best practice, and it matches every 50-build persistent layout.</pre></section>
+<section><h4>后</h4><pre>**Why it matters:** UUIDs are stable across device reordering/renaming/kernel slot changes; `/dev/sd*` names can shift after reboots/hotplug. By referencing block mounts by UUID, this fstab is robust to drive renames — best practice, and it matches every 50-build persistent layout.
+
+## 9. Overall mount-config risk verdict (step 83)
+
+**Overall: the mount/fstab configuration is HEALTHY and consistent — no high-severity or blocking risk.**
+
+Confirmed good so far today:
+- 4 block mounts by UUID, 0 device-name refs; all 6 fstab entries effective; partitions↔fstab fully matched; system disk ext4; `/usr` overlay ro/rw per Panshi design; only 2 ro mounts (the immutable `/usr` layers); security options present on all 21 kernel/virtual FS; unknown/old mountpoint paths fail cleanly (ENOENT) and mount/ostree reject bad args explicitly.
+
+Items worth further attention (non-fatal, &quot;watch/hardening&quot; class):
+1. **nosuid/nodev missing on user-writable layers** — `/data`, `/home`, `/root` are rw without `nosuid,nodev`. Recommend adding these (bind doesn&#x27;t inherit); rely on kysec/ksaf + cgroup today.
+2. **`/tmp` on root, unhardened** — not a separate tmpfs; no `noexec,nosuid,nodev`. Enhancement for a hardened baseline.
+3. **Chronic memory pressure** (swap-heavy, model-load peaks) — a runtime resource concern beyond fstab/mounts; list as a monitored item.
+
+Not a concern: `/data` fstype `none` (auto-detect, functionally fine), `/usr` absent from fstab (OSTree design), /usr top-layer growth (already tracked in overlay-structure.md).
+
+**Bottom line:** no urgent action; the three items above are candidate hardening/observation TODOs, not faults.</pre></section></div>
+<footer>
+<label><input type="radio" name="q47" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q47" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">48</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 未用 sudo 绕过；这是&quot;普通用户无法读 root/system 进程环境&quot;的访问边界（另见 `dbus-session-bus.md` Q281）。</pre></section>
+<section><h4>后</h4><pre>- 未用 sudo 绕过；这是&quot;普通用户无法读 root/system 进程环境&quot;的访问边界（另见 `dbus-session-bus.md` Q281）。
+
+## 综合判断：当前 netctl 配置对批量任务稳定性的影响（2026-09-01）
+
+- **影响程度：低。** 今天及前几天无人值守/批量任务（claude 等）基本稳定运行。
+- 理由：
+  1. `netctl=3`（warning 非 deny）＋白名单按可执行路径+hash（netctl.xml 15 / netctl_pkg 2124）；
+  2. 运行时命中授权即 `op=Add obj=netctl path` 自动补白名单；claude 08-31 `auth_result=1` 已放行并自动登记，故其后续无人值守联网稳定；
+  3. **按可执行路径判定、非祖先链/会话归属**（无 ppid/sid 字段）→ `setsid`/`nohup`/`systemd-run` 后台化不改变判定，批处理行为可预测、无抖动 —— 这对无人值守调度者关键；
+  4. 少量 `result=forbid`（08-25、08-31 数例）为瞬时未收录进程，warning 下非硬中断、仅记录。
+- **边界/剩余风险（&quot;低&quot;非&quot;零&quot;）：** 若某批量工具的可执行路径**不在白名单**、且 netctl 切到 `deny`（强制），其网络操作将被拒绝；warning 模式下则仅记为 forbid。故需留意的唯一后台：第三方/解释器路径未入白名单的批量网络工具，一旦收紧即被阻断。
+- **结论：** 当前 netctl 对先后批量稳定性影响轻微——因为 warning＋白名单＋运行时自动补授权覆盖了在用工具；真正变显著的触发条件是「未白名单工具联网」或「netctl 升 deny」。</pre></section></div>
+<footer>
+<label><input type="radio" name="q48" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q48" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">49</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 回退：无 GTK 主题解析第三方库（import 失败）→ 直接文本读 /usr/share/themes/ukui-white/{gtk-3.0/gtk.css, index.theme} 完成核查。</pre></section>
+<section><h4>后</h4><pre>- 回退：无 GTK 主题解析第三方库（import 失败）→ 直接文本读 /usr/share/themes/ukui-white/{gtk-3.0/gtk.css, index.theme} 完成核查。
+
+## 主题配置解析格式（2026-08-31）
+- JSON 解析失败：`json.loads(index.theme)` → `JSONDecodeError: Expecting value: line 1 column 2 (char 1)`（主题不是 JSON）。
+- 回退 INI（`configparser`）成功：
+  - `[Desktop Entry]`：type=X-GNOME-Metatheme、name=ukui-white、encoding=UTF-8
+  - `[X-GNOME-Metatheme]`：**gtktheme=ukui-white、metacitytheme=ukui-white、icontheme=ukui-icon-theme-default**
+- 结论：主题配置格式为 **INI/Metatheme**（+ CSS gtk.css、dconf 为二进制），非 JSON。</pre></section></div>
+<footer>
+<label><input type="radio" name="q49" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q49" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">50</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新相关输出为 memory/module-blacklist-script-result.md @ 2026-08-26 12:36:42（内容 12:36:40 CST 黑名单扫描：17 个 .conf、112 条 blacklist、111 唯一模块）；三脚本各写独立 result（boot-summary-、kernel-summary-、module-blacklist-）</pre></section>
+<section><h4>后</h4><pre>日志：最新相关输出为 memory/boot-summary-script-result.md @ 2026-08-29 09:44:38（今天运行 kernel-summary.sh 的摘要输出）；各脚本写独立 result（boot-summary/kernel-summary/module-blacklist，kernel-summary 还支持 -o 指定输出）（原为最新 module-blacklist-script-result.md @ 08-26 12:36:40，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q50" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q50" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">51</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **1** symlink in `/usr/local/bin` (verified with `find -type l`).</pre></section>
+<section><h4>后</h4><pre>- **0** symlinks in `/usr/local/bin` now — after the `.3→.4` deployment switch the `claude` link there was dropped（原为 1：/usr/local/bin/claude，已不再是）。</pre></section></div>
+<footer>
+<label><input type="radio" name="q51" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q51" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">52</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **结论：** 今日未发生 exctl 拦截（阻止），只因当前为 warning 非强制；若要求&quot;凡运行必已在白名单&quot;，需 enforce 模式＋填充白名单，与当前状态不符。</pre></section>
+<section><h4>后</h4><pre>- **结论：** 今日未发生 exctl 拦截（阻止），只因当前为 warning 非强制；若要求&quot;凡运行必已在白名单&quot;，需 enforce 模式＋填充白名单，与当前状态不符。
+
+## 日志解析：JSON 失败 vs 文本解析成功（2026-09-01）
+
+- **目标：** 从 `/var/log/kysec.log` 统计 exctl 相关事件。
+- **json.loads 失败（原样）：** `JSONDecodeError: Expecting value: line 1 column 1 (char 0)` —— 该文件是 `type=… time=&quot;…&quot;` 行式日志、非标准 JSON，首字节即失败。
+- **逐行文本解析成功：** 共 **1020 行**；今日（2026-09-01）exctl/execl 相关行 == **4**；全盘 deny/block/intercept 关键同行 27（非均属 exctl 拦截，经 exctl 过滤后今日 exctl 阻止次数仍 0）。
+- **要点：** 对于 kysec 这类 key=value 行式日志，应直接用文本/正则逐行解析；`json.loads` 首行就报 JSONDecodeError，不适合。未安装任何包。</pre></section></div>
+<footer>
+<label><input type="radio" name="q52" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q52" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">53</span></header>
+<div class="pair"><section><h4>前</h4><pre>日志：最新一条 2026-08-26T09:17:01+08:00，CRON[480021] (root) CMD (cd / &amp;&amp; run-parts --report /etc/cron.hourly)。</pre></section>
+<section><h4>后</h4><pre>日志：最新一条 2026-08-27T18:00:25+08:00，CRON[935553] (CRON) info (No MTA installed, discarding output)（同 runs pam_unix cron session closed）。（原为 最新一条 2026-08-26T09:17:01+08:00，CRON[480021] (root) CMD (cd / &amp;&amp; run-parts --report /etc/cron.hourly)，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q53" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q53" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">54</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 该目录实际存在的文件：`quarantinedb`、`virus-trustlistdb`、`virusConfig.ini`、`quarantine/`；无 `.dat` viruslib。未触碰现存文件、未安装。</pre></section>
+<section><h4>后</h4><pre>- 该目录实际存在的文件：`quarantinedb`、`virus-trustlistdb`、`virusConfig.ini`、`quarantine/`；无 `.datac` viruslib。未触碰现存文件、未安装。
+
+## 命令用法观察：ksc-defender 不报标准用法错误（2026-09-01)
+
+- 探测：`timeout 4 /usr/sbin/ksc-defender --nonexistent-scan-mode` —— **无 usage 错误**；它是 Qt/GUI 型二进制，bogus 参数下起 timer 线程并 **core dump**（`dumped core`）。
+- 回退用服务状态核查成功（有效方式）：`ksc-defender-init`=active、`vulnerabilityrepair`=active、`ksc-defender-daemon` 进程 running、`du`/`scan-daemon`=inactive。
+- 对比：`getstatus` 静默、`journalctl/pkcheck` 严报、`ksc-defender` 崩溃——对 GUI 型守护不要靠&quot;报错&quot;判引用法，应以服务状态为准。</pre></section></div>
+<footer>
+<label><input type="radio" name="q54" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q54" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">55</span></header>
+<div class="pair"><section><h4>前</h4><pre>- [N100 外部USB口报废](pve-usb-renesas-dead.md) — 2026-07-18 瑞萨USB芯片从PCIe消失、外部口全灭；500G盘应拆盒直连板载SATA；VM100有按ID的USB直通遗留</pre></section>
+<section><h4>后</h4><pre>- [N100 外部USB口报废](pve-usb-renesas-dead.md) — 瑞萨USB芯片故障史；+2026-07-31意外断电NVMe一度检测不到(重插修复)，USB口意外恢复，别在开机时碰硬件</pre></section></div>
+<footer>
+<label><input type="radio" name="q55" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q55" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">56</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 该回退结果与第 2 节判定一致：图形会话类型明确为 **Wayland**。</pre></section>
+<section><h4>后</h4><pre>- 该回退结果与第 2 节判定一致：图形会话类型明确为 **Wayland**。
+
+## 5. 补记：桌面环境标识核查（2026-08-31）
+
+- **XDG_CURRENT_DESKTOP**
+  - 图形会话（session 4 / UkUI 桌面）：**`UKUI`**（取自 ukui-session 进程 environ，pid 37627/40241）。
+  - 当前 CLI shell（session 26，tty）：空 / 未设置（仅注入图形桌面会话）。
+- **xdg-user-dir 核查**
+  - `xdg-user-dir --nonexistent-flag`：不报用法错误，未校验未知键，返回拼接回退值 `-nonexistent-flag_DIR:-/home/device_c`，exit=0。
+  - 有效用法 `xdg-user-dir DESKTOP` → **桌面目录 = `/home/device_c/桌面`**。
+- 结论：用户图形桌面环境为 **UKUI**（运行在 kylin-wlcom Wayland 合成器之上）。</pre></section></div>
+<footer>
+<label><input type="radio" name="q56" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q56" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">57</span></header>
+<div class="pair"><section><h4>前</h4><pre>- ssh.service 启动时间 2026-08-25 16:13:09，比开机（10:33:15）晚约 4 小时，即首条 SSH 连接入站时才启动 ✓</pre></section>
+<section><h4>后</h4><pre>- ssh.service 启动时间 2026-08-25 16:13:09，比开机（10:33:15）晚约 4 小时，即首条 SSH 连接入站时才启动 ✓（该启动时间属彼 boot（2026-08-25）；系统已于 2026-08-29 06:40:59 重启，该前提已经不存在了，新 boot 的首次连接触发时刻须重新观测）</pre></section></div>
+<footer>
+<label><input type="radio" name="q57" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q57" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">58</span></header>
+<div class="pair"><section><h4>前</h4><pre>| 0（当前） | bffaf0c84671497099274eb13a177ec8 | 2026-08-25 10:37:28 | 2026-08-26 10:33:39 |</pre></section>
+<section><h4>后</h4><pre>| 0（曾为「当前」） | bffaf0c84671497099274eb13a177ec8 | 2026-08-25 10:37:28 | 2026-08-26 10:33:39 |</pre></section></div>
+<footer>
+<label><input type="radio" name="q58" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q58" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">59</span></header>
+<div class="pair"><section><h4>前</h4><pre>PID 36418</pre></section>
+<section><h4>后</h4><pre>PID 36367（旧 boot 曾为 PID 36418；系统已于 2026-08-29 06:40:59 重启出新用户会话，该前提已经不存在了）</pre></section></div>
+<footer>
+<label><input type="radio" name="q59" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q59" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">60</span></header>
+<div class="pair"><section><h4>前</h4><pre>description: J盘(PT做种盘)实为2009年产希捷ST9500325AS，SMART自检失败、147个不可纠正错误，疑似翻新盘维权中</pre></section>
+<section><h4>后</h4><pre>description: J盘(PT做种盘)实为2009年产希捷ST9500325AS，SMART自检失败、147个不可纠正错误；✅2026-07-30/31已物理拔除退役，PT做种停摆+疯狂动物城2/Lucky S1同时从Jellyfin消失</pre></section></div>
+<footer>
+<label><input type="radio" name="q60" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q60" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">61</span></header>
+<div class="pair"><section><h4>前</h4><pre>- **摘要判断：** warning 模式下 exctl 只**校验 + 记录 + 自动白名单**（`result=allow`），无 `deny exec`/阻断记录 → 与「warning 不阻止新二进制」的结论一致；仅当 enforce 才会出现拒绝拦截。</pre></section>
+<section><h4>后</h4><pre>- **摘要判断：** warning 模式下 exctl 只**校验 + 记录 + 自动白名单**（`result=allow`），无 `deny exec`/阻断记录 → 与「warning 不阻止新二进制」的结论一致；仅当 enforce 才会出现拒绝拦截。
+
+## 白名单数量与覆盖判断（2026-09-01）
+
+- **持久化 exec 白名单登记数 = 0**（`/etc/kysec/db/whlist.db` 的 `exectl_whlist`/`exectl_whlist_sm` = 0 行，`objects_list_sm` 带 exctl 标签 = 0）；`/etc/kysec-scene/`、`interface/` 也没有另行登记的 exec 白名单文件。
+- **策略列表（非 DB 白名单，为&quot;例外清单&quot;）：** `/etc/ksaf/policy/kysec-global.json.policy` 含 **47 个**唯一特权命令路径（deny_all ~/ permissive/admin cmd-lists，共 91 处出现）。
+- **文本解析验证：** 该文件非 JSON（`json.loads` 报 `JSONDecodeError: Expecting value: line 1 column 1 (char 0)`），改用逐行文本解析得同口径：91 处 / 47 唯一，未装包。
+- **覆盖判断：** exec 白名单（DB 登记的可运行执行体）为 **0，覆盖度为无**——执行控制当前并不以&quot;白名单收录可执行文件&quot;的方式生效；它的实际执行约束仅落在**策略清单对特权管理员命令的 deny/verify** 之上（~47 条）。由于当前为 warning 模式，这些策略不阻断、仅告警/记录；若切 enforce，则只有这 47 条特权命令受 deny 约束，其余新二进制仍不受 DB 白名单限制。</pre></section></div>
+<footer>
+<label><input type="radio" name="q61" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q61" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">62</span></header>
+<div class="pair"><section><h4>前</h4><pre>**下一步**：①用户拆盘接板载SATA→迁做种目录过去→挂大种冲上传28.8G；②催发号人确认5000魔力(魔力考核已过，可能已到账)。</pre></section>
+<section><h4>后</h4><pre>**做种自动化上线(2026-07-20)——改用笔记本当临时做种机**：
+- N100 板载 SATA 是**小型专用口**(TexHoo QN10，标准SATA线插不进)，转接线难买→暂时把 500G 盘接**笔记本**(exFAT，盘符 `J:`，`J:\seed` 做种)。笔记本解析 pttime.org 是**真实CF IP无FakeIP**，比VM省心。
+- **两机协同自动化**(按 Fable5 策略 `桌面\须知\策略-上传冲刺最优解.md`)：
+  - **阿里云大脑** `/root/ptt_acquire.py`(cron `*/30`)：轮询 `torrents.ph</pre></section></div>
+<footer>
+<label><input type="radio" name="q62" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q62" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">63</span></header>
+<div class="pair"><section><h4>前</h4><pre>- 结论：桌面工具实际依赖的 IPC socket 均在监听；未监听端口一律 ECONNREFUSED，符合「服务未启动→拒绝」判定。</pre></section>
+<section><h4>后</h4><pre>- 结论：桌面工具实际依赖的 IPC socket 均在监听；未监听端口一律 ECONNREFUSED，符合「服务未启动→拒绝」判定。
+
+## 图形会话依赖程度综合判断（kylin-ai-runtime / kylin-screenshot / kydesktopctrl，2026-08-31）
+
+**不一视同仁——三者依赖程度不同：**
+- `kylin-screenshot`：**高**（功能性依赖 X/XWayland 屏——libX11/Qt5X11Extras 抓屏；无显示无法截图）。
+- `kylin-ai-runtime`：**中**（进程跑在图形会话，但其单位只依赖 login@/default.target（user），未声明 `After=graphical-session.target`）。
+- `kydesktopctrl`：**低**（D-Bus/守护/系统级服务，配 kysdk 安全组件，基本不依赖图形会话）。
+
+共同点：三者 unit 层都未声明图形会话 target 依赖；截图靠「运行时需要有屏」、AI/桌面控制更偏服务/会话级。
+结论：不能一概而论「麒麟桌面工具都依赖图形会话」——只有截图类强相关。</pre></section></div>
+<footer>
+<label><input type="radio" name="q63" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q63" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">64</span></header>
+<div class="pair"><section><h4>前</h4><pre>判断：无异常——当前 boot（现为 2026-09-01 12:40:56 启动的 boot，accounts-daemon Main PID 35559、NRestarts=0）启动干净、零重启、未被冻结、日志仅启动通告；唯一瑕疵在上一 boot 关机时 stop-sigterm 超时被 SIGKILL（历史，非当前），不影响当前实例（先前写「当前 boot」指彼 08-29/08-31 boot 的进程与计时；系统今日 09-01 12:40:56 已重启，该前提已经不存在了，须按新 boot 重新读数）</pre></section>
+<section><h4>后</h4><pre>判断：无异常——active、未冻结、零重启、Result=success、日志仅启动通告、无 error/warn/kill/timeout 记录；唯一历史瑕疵为上一 boot 关机 stop-sigterm 超时被 SIGKILL（非当前）（原为 彼 08-29/08-31 boot 的健康读数与该 boot 得出了前提已经不存在了的结论，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q64" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q64" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+
+<article class="card"><header><span class="num">65</span></header>
+<div class="pair"><section><h4>前</h4><pre>状态：active (running) 但 cgroup 仍处于 frozen（FreezerState=frozen），自 2026-08-31 11:03:09 CST 起 active，Main PID 35559，Result=success，NRestarts=0（原为 自 2026-08-29 06:44:28 CST 起 active、Main PID 35563，已不再是）</pre></section>
+<section><h4>后</h4><pre>状态：active (running) 但 cgroup 仍处于 frozen（FreezerState=frozen），自 2026-09-01 12:43:29 CST 起 active，Main PID 35562，Result=success，NRestarts=0（原为 自 2026-08-31 11:03:09 CST 起 active、Main PID 35559，已不再是）</pre></section></div>
+<footer>
+<label><input type="radio" name="q65" value="conflict"><span>冲突</span></label>
+<label><input type="radio" name="q65" value="not_conflict"><span>不是冲突</span></label>
+<input class="note" placeholder="理由（可选）"></footer></article>
+<div id="out"></div></div>
+<div class="bar"><span id="prog">0 / 65</span><button id="go" disabled>提交</button></div>
+<script>
+const KEY=[{"n": 1, "id": "HO-K-0449", "layer": "NEG", "decoy": false}, {"n": 2, "id": "HO-K-0502", "layer": "NEG", "decoy": false}, {"n": 3, "id": "HO-K-0451", "layer": "NEG", "decoy": false}, {"n": 4, "id": "HO-K-0048", "layer": "A", "decoy": false}, {"n": 5, "id": "HO-K-0047", "layer": "A", "decoy": false}, {"n": 6, "id": "HO-K-0105", "layer": "C", "decoy": false}, {"n": 7, "id": "HO-K-0086", "layer": "C", "decoy": false}, {"n": 8, "id": "HO-K-0033", "layer": "A", "decoy": false}, {"n": 9, "id": "HO-K-0447", "layer": "NEG", "decoy": false}, {"n": 10, "id": "HO-K-0379", "layer": "NEG", "decoy": false}, {"n": 11, "id": "HO-K-0308", "layer": "NEG", "decoy": false}, {"n": 12, "id": "K-0106", "layer": "DECOY", "decoy": true}, {"n": 13, "id": "HO-K-0045", "layer": "A", "decoy": false}, {"n": 14, "id": "HO-K-0216", "layer": "B", "decoy": false}, {"n": 15, "id": "HO-K-0501", "layer": "B", "decoy": false}, {"n": 16, "id": "HO-K-0370", "layer": "C", "decoy": false}, {"n": 17, "id": "HO-K-0307", "layer": "NEG", "decoy": false}, {"n": 18, "id": "HO-K-0098", "layer": "NEG", "decoy": false}, {"n": 19, "id": "HO-K-0039", "layer": "A", "decoy": false}, {"n": 20, "id": "K-0099", "layer": "DECOY", "decoy": true}, {"n": 21, "id": "HO-K-0168", "layer": "C", "decoy": false}, {"n": 22, "id": "HO-K-0113", "layer": "C", "decoy": false}, {"n": 23, "id": "HO-K-0338", "layer": "NEG", "decoy": false}, {"n": 24, "id": "HO-K-0170", "layer": "C", "decoy": false}, {"n": 25, "id": "HO-K-0193", "layer": "B", "decoy": false}, {"n": 26, "id": "HO-K-0203", "layer": "NEG", "decoy": false}, {"n": 27, "id": "HO-K-0268", "layer": "NEG", "decoy": false}, {"n": 28, "id": "HO-K-0036", "layer": "A", "decoy": false}, {"n": 29, "id": "HO-K-0461", "layer": "NEG", "decoy": false}, {"n": 30, "id": "HO-K-0223", "layer": "B", "decoy": false}, {"n": 31, "id": "HO-K-0289", "layer": "B", "decoy": false}, {"n": 32, "id": "HO-K-0088", "layer": "C", "decoy": false}, {"n": 33, "id": "HO-K-0258", "layer": "NEG", "decoy": false}, {"n": 34, "id": "HO-K-0361", "layer": "NEG", "decoy": false}, {"n": 35, "id": "HO-K-0165", "layer": "C", "decoy": false}, {"n": 36, "id": "HO-K-0134", "layer": "C", "decoy": false}, {"n": 37, "id": "HO-K-0230", "layer": "B", "decoy": false}, {"n": 38, "id": "HO-K-0366", "layer": "NEG", "decoy": false}, {"n": 39, "id": "HO-K-0053", "layer": "A", "decoy": false}, {"n": 40, "id": "HO-K-0371", "layer": "C", "decoy": false}, {"n": 41, "id": "HO-K-0107", "layer": "C", "decoy": false}, {"n": 42, "id": "HO-K-0431", "layer": "NEG", "decoy": false}, {"n": 43, "id": "HO-K-0317", "layer": "C", "decoy": false}, {"n": 44, "id": "HO-K-0075", "layer": "NEG", "decoy": false}, {"n": 45, "id": "HO-K-0181", "layer": "C", "decoy": false}, {"n": 46, "id": "HO-K-0488", "layer": "NEG", "decoy": false}, {"n": 47, "id": "HO-K-0273", "layer": "NEG", "decoy": false}, {"n": 48, "id": "HO-K-0453", "layer": "NEG", "decoy": false}, {"n": 49, "id": "HO-K-0404", "layer": "NEG", "decoy": false}, {"n": 50, "id": "HO-K-0120", "layer": "B", "decoy": false}, {"n": 51, "id": "HO-K-0288", "layer": "B", "decoy": false}, {"n": 52, "id": "HO-K-0437", "layer": "NEG", "decoy": false}, {"n": 53, "id": "HO-K-0142", "layer": "C", "decoy": false}, {"n": 54, "id": "HO-K-0472", "layer": "NEG", "decoy": false}, {"n": 55, "id": "K-0026", "layer": "DECOY", "decoy": true}, {"n": 56, "id": "HO-K-0346", "layer": "NEG", "decoy": false}, {"n": 57, "id": "HO-K-0253", "layer": "NEG", "decoy": false}, {"n": 58, "id": "HO-K-0242", "layer": "C", "decoy": false}, {"n": 59, "id": "HO-K-0247", "layer": "NEG", "decoy": false}, {"n": 60, "id": "K-0137", "layer": "DECOY", "decoy": true}, {"n": 61, "id": "HO-K-0432", "layer": "NEG", "decoy": false}, {"n": 62, "id": "K-0124", "layer": "DECOY", "decoy": true}, {"n": 63, "id": "HO-K-0387", "layer": "NEG", "decoy": false}, {"n": 64, "id": "HO-K-0189", "layer": "NEG", "decoy": false}, {"n": 65, "id": "HO-K-0204", "layer": "NEG", "decoy": false}], N=65;
+const prog=document.getElementById('prog'), go=document.getElementById('go');
+function upd(){const d=document.querySelectorAll('input[type=radio]:checked').length;
+prog.textContent=d+' / '+N; go.disabled=(d<N);}
+document.addEventListener('change',upd);
+go.onclick=()=>{
+const ans={};document.querySelectorAll('input[type=radio]:checked').forEach(r=>ans[+r.name.slice(1)]=r.value);
+const notes={};document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())notes[i+1]=e.value.trim();});
+let dOK=0,dTot=0;const rows=[];
+KEY.forEach(k=>{const v=ans[k.n];
+ if(k.decoy){dTot++;if(v==='conflict')dOK++;}
+ else rows.push({id:k.id,layer:k.layer,verdict:v,note:notes[k.n]||''});});
+const valid=(dOK===dTot);
+let h='<h3>结果</h3><p>诱饵：<b class="'+(valid?'ok':'bad')+'">'+dOK+' / '+dTot+'</b>'+
+ (valid?' —— 本轮有效':' —— <b class="bad">整轮作废，需重做</b>')+'</p>';
+if(valid){
+ const who=(KEY[0]&&KEY[0].who)||'', tag=who?('-'+who):'';
+ h+='<p><b>请把结果文件发回</b>（不要发这个 html —— 答案存在浏览器里，不在文件里）：</p>'+
+   '<p><button id="dl" style="background:#b0502a">下载结果 JSON</button>'+
+   '<span style="margin-left:12px;color:#7a827c;font-size:13px">'+
+   '文件名 裁决'+tag+'.json</span></p>'+
+   '<details><summary style="cursor:pointer;color:#7a827c;font-size:13px">'+
+   '下载不了？点开复制文本</summary>'+
+   '<textarea readonly>'+JSON.stringify(rows,null,1)+'</textarea></details>';
+ setTimeout(()=>{const b=document.getElementById('dl');if(!b)return;
+  b.onclick=()=>{try{
+   const blob=new Blob([JSON.stringify(rows,null,1)],{type:'application/json'});
+   const u=URL.createObjectURL(blob), a=document.createElement('a');
+   a.href=u; a.download='裁决'+tag+'.json'; document.body.appendChild(a);
+   a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1000);
+  }catch(e){alert('下载失败，请展开下方文本框手动复制');}};},0);}
+const o=document.getElementById('out');o.innerHTML=h;o.style.display='block';o.scrollIntoView({behavior:'smooth'});};
+
+// ── 自动保存：每次改动写 localStorage，重开自动恢复 ──────────
+const LSK='holdout_blind_20260903';
+function _save(){try{
+  const d={};
+  document.querySelectorAll('input[type=radio]:checked').forEach(r=>d['r'+r.name]=r.value);
+  document.querySelectorAll('.note').forEach((e,i)=>{if(e.value.trim())d['n'+(i+1)]=e.value;});
+  localStorage.setItem(LSK,JSON.stringify(d));
+}catch(e){}}
+function _restore(){try{
+  const d=JSON.parse(localStorage.getItem(LSK)||'{}');let n=0;
+  Object.keys(d).forEach(k=>{
+    if(k[0]==='r'){const el=document.querySelector('input[name="'+k.slice(1)+'"][value="'+d[k]+'"]');
+                   if(el){el.checked=true;n++;}}
+    else{const e=document.querySelectorAll('.note')[(+k.slice(1))-1];if(e)e.value=d[k];}});
+  return n;
+}catch(e){return 0;}}
+document.addEventListener('change',_save);
+document.addEventListener('input',_save);
+(function(){const n=_restore();
+  if(n>0){const b=document.createElement('div');
+    b.style.cssText='background:#e4efea;border:1px solid #bcd4c9;border-radius:5px;padding:10px 16px;margin-bottom:18px;font-size:14px';
+    b.innerHTML='已恢复上次进度：<b>'+n+'</b> 题。继续做完即可；'+
+      '如需从头重来，按 F12 打开控制台执行 <code>localStorage.removeItem("'+LSK+'")</code> 后刷新。';
+    const w=document.querySelector('.wrap');w.insertBefore(b,w.children[2]);}})();
+
+upd();
+</script></body></html>

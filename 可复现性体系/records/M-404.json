@@ -1,0 +1,62 @@
+{
+  "record_id": "M-404",
+  "title": "偏好提取：跨场景（windows/kylin）支持度分布披露",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_preferences.py",
+  "script_sha256": null,
+  "command": "python measure_preferences.py M-404",
+  "started_at": "2026-08-27T06:39:51.057498+00:00",
+  "duration_sec": 1.745,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "84ad7a4a7c82d52d3414ab787ee1eb3b022302789f91549c8db99fdcd2cce9ee",
+      "bytes": 21459731,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "scenario_windows_count": {
+      "value": 474,
+      "unit": "次",
+      "repeats": 1
+    },
+    "scenario_kylin_count": {
+      "value": 0,
+      "unit": "次",
+      "repeats": 1
+    },
+    "scenario_unknown_count": {
+      "value": 1468,
+      "unit": "次",
+      "repeats": 1
+    },
+    "scenario_windows_ratio": {
+      "value": 0.2441,
+      "unit": "",
+      "repeats": 1
+    },
+    "scenario_kylin_ratio": {
+      "value": 0.0,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "本项目老数据集（Windows笔记本真实开发记录）几乎全部是 windows 场景，kylin 场景样本量不足以做有统计意义的跨场景对比——与知识冲突模块 §一.2 记录的同一条环境边界（'新的Kylin目标机数据冲突尚未长出'）。scenario.n_by_scenario 字段与detect_scenario() 机制已就绪、可直接用，卡的是数据积累时间，不是机制未实现。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-404] 偏好提取：跨场景（windows/kylin）支持度分布披露  (层级 L1) =====\n场景分布：{'windows': 474, 'unknown': 1468}\nwindows占比=24.4% kylin占比=0.0%\n  [note] 本项目老数据集（Windows笔记本真实开发记录）几乎全部是 windows 场景，kylin 场景样本量不足以做有统计意义的跨场景对比——与知识冲突模块 §一.2 记录的同一条环境边界（'新的Kylin目标机数据冲突尚未长出'）。scenario.n_by_scenario 字段与detect_scenario() 机制已就绪、可直接用，卡的是数据积累时间，不是机制未实现。\n"
+}

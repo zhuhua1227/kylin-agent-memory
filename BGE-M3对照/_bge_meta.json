@@ -1,0 +1,30 @@
+{
+  "model": "BAAI/bge-m3",
+  "flagembedding_version": "?",
+  "torch_version": "2.14.0+cpu",
+  "dense_only": true,
+  "instruction_prefix": null,
+  "max_length": 8192,
+  "use_fp16": false,
+  "normalize_here": false,
+  "doc_token_len": {
+    "min": 25,
+    "median": 129,
+    "max": 393,
+    "over_8192": 0,
+    "over_512": 0
+  },
+  "query_token_len": {
+    "min": 11,
+    "median": 26,
+    "max": 62
+  },
+  "docs_shape": [
+    86,
+    1024
+  ],
+  "queries_shape": [
+    227,
+    1024
+  ]
+}

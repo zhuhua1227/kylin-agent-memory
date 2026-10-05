@@ -1,0 +1,158 @@
+<svg viewBox="0 0 910 578" role="img"
+     aria-label="系统总体架构四层图：数据层产出 9807 条标准化记录，绕过向量层直接供给记忆能力层的挖掘器；记忆能力层离线把知识单元送入向量与存储层建索引，在线取回 doc_id 与相似度再向对外服务层返回结果；向量与存储层中 VectorStore 抽象接口下挂官方麒麟向量引擎与轻量 numpy 两个可一键切换的后端，原文由独立的 DocStore 保管，与向量索引分离。"
+     style="max-width:100%;height:auto"
+     font-family="'IBM Plex Sans','Noto Sans SC','Microsoft YaHei',system-ui,sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+
+  <g fill="currentColor">
+
+    <!-- ============ L4 对外服务层 ============ -->
+    <text x="60" y="26" font-size="12" opacity=".62">L4　对外服务层</text>
+    <rect x="60" y="34" width="820" height="62" rx="3"
+          fill="currentColor" fill-opacity=".035"
+          stroke="currentColor" stroke-opacity=".28"/>
+    <g stroke="currentColor" stroke-opacity=".55" fill="none">
+      <rect x="80"  y="46" width="244" height="38" rx="3"/>
+      <rect x="348" y="46" width="244" height="38" rx="3"/>
+      <rect x="616" y="46" width="244" height="38" rx="3"/>
+    </g>
+    <g font-size="13" text-anchor="middle">
+      <text x="202" y="70">知识检索接口</text>
+      <text x="470" y="70">精准遗忘接口</text>
+      <text x="738" y="70">Agent 注入钩子</text>
+    </g>
+
+    <!-- L3 → L4 -->
+    <line x1="470" y1="128" x2="470" y2="100" stroke="currentColor"
+          stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="482" y="118" font-size="10.5" opacity=".72">命中结果 + 适用边界</text>
+
+    <!-- ============ L3 记忆能力层 ============ -->
+    <text x="60" y="124" font-size="12" opacity=".62">L3　记忆能力层</text>
+    <rect x="60" y="132" width="820" height="96" rx="3"
+          fill="currentColor" fill-opacity=".035"
+          stroke="currentColor" stroke-opacity=".28"/>
+    <g stroke="currentColor" stroke-opacity=".55" fill="none">
+      <rect x="80"  y="146" width="181" height="66" rx="3"/>
+      <rect x="279" y="146" width="181" height="66" rx="3"/>
+      <rect x="478" y="146" width="181" height="66" rx="3"/>
+      <rect x="677" y="146" width="181" height="66" rx="3"/>
+    </g>
+    <g text-anchor="middle">
+      <g font-size="13">
+        <text x="170" y="172">偏好提取</text>
+        <text x="369" y="172">知识检索</text>
+        <text x="568" y="172">冲突处理</text>
+        <text x="767" y="172">关联检索</text>
+      </g>
+      <g font-size="10.5" opacity=".72">
+        <text x="170" y="192">习惯 / 风格 / 安全策略</text>
+        <text x="369" y="192">案例 / 流程 / 模板</text>
+        <text x="568" y="192">T1~T4 判定</text>
+        <text x="767" y="192">先验 / MMR / BM25</text>
+      </g>
+      <g font-size="10.5" opacity=".72">
+        <text x="170" y="206">留出期行为预测</text>
+        <text x="369" y="206">86 条知识单元</text>
+        <text x="568" y="206">裁决 / 回溯</text>
+        <text x="767" y="206">消融四轴</text>
+      </g>
+    </g>
+
+    <!-- L3 ⇄ L2：离线建索引（下行） / 在线检索（上行） -->
+    <line x1="300" y1="232" x2="300" y2="258" stroke="currentColor"
+          stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="312" y="250" font-size="10.5" opacity=".72">离线：知识单元 → 向量</text>
+
+    <line x1="660" y1="258" x2="660" y2="232" stroke="currentColor"
+          stroke-width="1.4" marker-end="url(#ar)"/>
+    <text x="672" y="250" font-size="10.5" opacity=".72">在线：doc_id + 相似度 → 原文</text>
+
+    <!-- ============ L2 向量与存储层 ============ -->
+    <text x="60" y="278" font-size="12" opacity=".62">L2　向量与存储层</text>
+    <rect x="60" y="286" width="820" height="164" rx="3"
+          fill="currentColor" fill-opacity=".035"
+          stroke="currentColor" stroke-opacity=".28"/>
+
+    <g stroke="currentColor" stroke-opacity=".55" fill="none">
+      <rect x="80"  y="300" width="230" height="44" rx="3"/>
+      <rect x="360" y="300" width="250" height="44" rx="3"/>
+      <rect x="640" y="300" width="220" height="44" rx="3"/>
+    </g>
+    <g text-anchor="middle">
+      <text x="195" y="318" font-size="13">KYSDK Embedding</text>
+      <text x="195" y="334" font-size="10.5" opacity=".72">768 维 · 官方常驻 runtime</text>
+      <text x="485" y="318" font-size="13">VectorStore 抽象接口</text>
+      <text x="485" y="334" font-size="10.5" opacity=".72">doc_id → 向量</text>
+      <text x="750" y="318" font-size="13">DocStore</text>
+      <text x="750" y="334" font-size="10.5" opacity=".72">doc_id → 原文</text>
+    </g>
+
+    <!-- Embedding → VectorStore -->
+    <line x1="314" y1="322" x2="356" y2="322" stroke="currentColor"
+          stroke-width="1.4" marker-end="url(#ar)"/>
+
+    <!-- VectorStore 下挂两个可切换后端（本图的重点，用强调色） -->
+    <g stroke="#4a90a8" stroke-width="1.4" fill="none">
+      <path d="M485,348 L485,368 M420,368 L600,368 M420,368 L420,382 M600,368 L600,382"
+            />
+      <rect x="340" y="384" width="160" height="46" rx="3"/>
+      <rect x="520" y="384" width="160" height="46" rx="3"/>
+    </g>
+    <g text-anchor="middle" fill="#4a90a8">
+      <text x="420" y="403" font-size="12.5">KylinEngineStore</text>
+      <text x="420" y="419" font-size="10.5">官方引擎 · 默认</text>
+      <text x="600" y="403" font-size="12.5">NumpyStore</text>
+      <text x="600" y="419" font-size="10.5">轻量 · 内存 40%</text>
+    </g>
+    <text x="510" y="444" font-size="10.5" fill="#4a90a8" text-anchor="middle">两后端接口等价，改一个字符串即切换</text>
+
+    <!-- DocStore 与向量索引分离 -->
+    <text x="750" y="372" font-size="10.5" opacity=".72" text-anchor="middle">与向量索引分离，</text>
+    <text x="750" y="388" font-size="10.5" opacity=".72" text-anchor="middle">两后端职责因此对称</text>
+
+    <!-- ============ L1 数据层 ============ -->
+    <text x="60" y="476" font-size="12" opacity=".62">L1　数据层</text>
+    <rect x="60" y="484" width="820" height="66" rx="3"
+          fill="currentColor" fill-opacity=".035"
+          stroke="currentColor" stroke-opacity=".28"/>
+    <g stroke="currentColor" stroke-opacity=".55" fill="none">
+      <rect x="80"  y="498" width="106" height="34" rx="3"/>
+      <rect x="214" y="498" width="106" height="34" rx="3"/>
+      <rect x="348" y="498" width="106" height="34" rx="3"/>
+      <rect x="482" y="498" width="106" height="34" rx="3"/>
+      <rect x="616" y="498" width="106" height="34" rx="3"/>
+      <rect x="750" y="498" width="106" height="34" rx="3"/>
+    </g>
+    <g font-size="11" text-anchor="middle">
+      <text x="133" y="519">多源接入</text>
+      <text x="267" y="519">清洗</text>
+      <text x="401" y="519">时间归一</text>
+      <text x="535" y="519">脱敏</text>
+      <text x="669" y="519">去重</text>
+      <text x="803" y="519">质检</text>
+    </g>
+    <g stroke="currentColor" stroke-width="1.2" marker-end="url(#ar)">
+      <line x1="190" y1="515" x2="210" y2="515"/>
+      <line x1="324" y1="515" x2="344" y2="515"/>
+      <line x1="458" y1="515" x2="478" y2="515"/>
+      <line x1="592" y1="515" x2="612" y2="515"/>
+      <line x1="726" y1="515" x2="746" y2="515"/>
+    </g>
+    <text x="60" y="566" font-size="10.5" opacity=".72">
+      输入：工具执行结果 / 用户行为数据 / 手动配置信息（三类异构数据，四个来源）
+    </text>
+
+    <!-- L1 → L3 旁路：数据层直接供给挖掘器，不经过向量层 -->
+    <path d="M60,515 L36,515 L36,180 L56,180" fill="none"
+          stroke="currentColor" stroke-width="1.4" marker-end="url(#ar)"/>
+    <text font-size="10.5" opacity=".72" text-anchor="middle"
+          transform="rotate(-90 24 348)" x="24" y="348">9,807 条标准化记录</text>
+
+  </g>
+</svg>

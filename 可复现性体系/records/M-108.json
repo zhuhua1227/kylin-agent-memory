@@ -1,0 +1,62 @@
+{
+  "record_id": "M-108",
+  "title": "流程切分：用户意图关联的工作流程产出量",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_workflows.py",
+  "script_sha256": null,
+  "command": "python mine_workflows.py",
+  "started_at": "2026-08-15T06:20:36.281761+00:00",
+  "duration_sec": 0.123,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\多源数据整合\\dataset\\memory_source_records.jsonl",
+      "sha256": "45863d4ed5489ef2ce1c704e269409fbbb9b5f2f41f245a7ed2987ab0a241258",
+      "bytes": 21459925,
+      "lines": 9807
+    }
+  ],
+  "metrics": {
+    "shared_sessions": {
+      "value": 18,
+      "unit": "条",
+      "repeats": 1
+    },
+    "total_user_inputs_in_shared": {
+      "value": 69,
+      "unit": "条",
+      "repeats": 1
+    },
+    "workflows_found": {
+      "value": 54,
+      "unit": "条",
+      "repeats": 1
+    },
+    "empty_sequence_skipped": {
+      "value": 15,
+      "unit": "条",
+      "repeats": 1
+    },
+    "truncated": {
+      "value": 1,
+      "unit": "条",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "独立评审 K-3 指出：原判断'72%无法归类'只对意图关键词聚类成立，可复用性体现在操作序列的重复上、不在措辞的重复上——改按(失败工具→修复工具)与(工具序列)签名聚合后确有信号，见 M-110（mine_templates.py）"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-108] 流程切分：用户意图关联的工作流程产出量  (层级 L1) =====\n会话交集 18 个，交集内用户输入 69 条\n挖出工作流程：54 条 (空序列跳过 15，超长截断 1)\n  [note] 独立评审 K-3 指出：原判断'72%无法归类'只对意图关键词聚类成立，可复用性体现在操作序列的重复上、不在措辞的重复上——改按(失败工具→修复工具)与(工具序列)签名聚合后确有信号，见 M-110（mine_templates.py）\n"
+}

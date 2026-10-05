@@ -1,0 +1,52 @@
+{
+  "record_id": "M-304",
+  "title": "知识冲突回溯完整性（retrieve_old）",
+  "layer": "L1",
+  "script": "C:\\Users\\device_a\\Desktop\\RAG\\知识检索\\mine_conflicts.py",
+  "script_sha256": null,
+  "command": "python measure_conflicts.py M-304",
+  "started_at": "2026-09-02T11:23:52.294691+00:00",
+  "duration_sec": 0.003,
+  "random_seed": null,
+  "environment": {
+    "hostname": "device_a",
+    "os": "Windows 11",
+    "kernel": "11",
+    "arch": "AMD64",
+    "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+    "cpu_count": 24,
+    "mem_total_mb": 16091,
+    "python": "3.14.0",
+    "numpy": "2.4.0"
+  },
+  "inputs": [
+    {
+      "path": "..\\知识检索\\conflicts.jsonl",
+      "sha256": "c50be811aadb675e9b3dd8ed8474396d3d7f7bb416656694847414124bfdf745",
+      "bytes": 382031,
+      "lines": 149
+    }
+  ],
+  "metrics": {
+    "eval_pairs_checked": {
+      "value": 34,
+      "unit": "对",
+      "repeats": 1
+    },
+    "eval_pairs_both_sides_retrievable": {
+      "value": 34,
+      "unit": "对",
+      "repeats": 1
+    },
+    "missing_key_raises": {
+      "value": true,
+      "unit": "",
+      "repeats": 1
+    }
+  },
+  "notes": [
+    "这是数据层的回溯完整性（stable_key索引到原始记录），不是检索侧的回溯（supersedes/superseded_by接入索引后按查询返回旧版本），后者是第3天检索侧集成的范畴，另在报告里说明边界。"
+  ],
+  "succeeded": true,
+  "raw_stdout": "===== [M-304] 知识冲突回溯完整性（retrieve_old）  (层级 L1) =====\n评测集里 34/34 对的新旧两侧都能按 stable_key 回溯取回\n故意查一个不存在的 stable_key，是否正确报错：True\n  [note] 这是数据层的回溯完整性（stable_key索引到原始记录），不是检索侧的回溯（supersedes/superseded_by接入索引后按查询返回旧版本），后者是第3天检索侧集成的范畴，另在报告里说明边界。\n"
+}

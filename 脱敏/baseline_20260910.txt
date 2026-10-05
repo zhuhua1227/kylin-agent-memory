@@ -1,0 +1,34 @@
+已跟踪文件 255，冻结（binary）17，测试夹具跳过 2
+
+真实姓名/主机名              2 文件 / 23 处（冻结内 0，设计内公开 23）  🔴应清零
+       20  可复现性体系/anchor_issue_snapshot.json ✅设计内公开（GitHub issue 锚定快照：URL 与作者字段必须可被第三方公开核验）
+        3  评测集/说明报告.md ✅设计内公开（正文引用上述锚定 issue 的地址，同上）
+
+内网 192.168.x         18 文件 / 21 处（冻结内 2，设计内公开 2）  （可保留,需登记）
+        3  银河麒麟V11-KYSDK-Embedding-部署报告.md
+        2  评测集/generate_eval_candidates.py
+        1  可复现性体系/anchor_issue_snapshot.json ✅设计内公开（GitHub issue 锚定快照：URL 与作者字段必须可被第三方公开核验）
+        1  可复现性体系/vectors/fixed_vectors_manifest.json
+        1  可复现性体系/vectors/query.tsv 🔒冻结
+        1  向量化常驻服务/说明报告.md
+        1  知识检索/向量引擎接入报告.md
+        1  知识检索/存储后端选型对比报告.md
+        1  端到端最小管线/说明报告.md
+        1  证明向量维度/restore_env.sh
+        1  证明向量维度/前置步骤-不可变系统解锁与KYSDK部署命令手册.md
+        1  证明向量维度/证明向量维度-KYSDK-Embedding-768-代码执行报告.md
+        1  评测集/eval_set_frozen.json 🔒冻结
+        1  评测集/generation_audit.json
+        1  评测集/recall_results_numpy.jsonl
+        1  评测集/review_and_freeze.py
+        1  评测集/召回率实测报告.md
+        1  评测集/说明报告.md ✅设计内公开（正文引用上述锚定 issue 的地址，同上）
+
+HEX 20/40 位           6 文件 / 16 处（冻结内 11，设计内公开 0）   ⚠️敏感,掩码  （可保留,需登记）
+        4  知识检索/cases.jsonl 🔒冻结
+        4  评测集/generation_raw_log.jsonl
+        3  评测集/eval_candidates.jsonl 🔒冻结
+        3  评测集/eval_set.jsonl 🔒冻结
+        1  可复现性体系/test_detectors.py
+        1  可复现性体系/vectors/docs.tsv 🔒冻结
+
